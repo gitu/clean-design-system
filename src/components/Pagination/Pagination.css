@@ -1,0 +1,98 @@
+.cds-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cds-space-3);
+  font-family: var(--cds-font-sans);
+  font-variant-numeric: tabular-nums;
+  padding-block: var(--cds-space-3);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cds-pagination__step,
+.cds-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cds-space-1);
+  border: var(--cds-border-width) solid transparent;
+  border-radius: var(--cds-radius-sm);
+  color: var(--cds-color-text-muted);
+  font-weight: var(--cds-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard),
+    border-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-pagination--sm .cds-pagination__step,
+.cds-pagination--sm .cds-pagination__page {
+  height: var(--cds-control-height-sm);
+  font-size: var(--cds-text-xs);
+}
+.cds-pagination--md .cds-pagination__step,
+.cds-pagination--md .cds-pagination__page {
+  height: var(--cds-control-height-md);
+  font-size: var(--cds-text-sm);
+}
+
+.cds-pagination__step {
+  padding-inline: var(--cds-space-2);
+  border-color: var(--cds-color-rule-strong);
+}
+.cds-pagination__step:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+  border-color: var(--cds-color-rule-heavy);
+}
+.cds-pagination__step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cds-pagination__page {
+  min-width: var(--cds-control-height-md);
+  padding-inline: var(--cds-space-2);
+}
+.cds-pagination--sm .cds-pagination__page {
+  min-width: var(--cds-control-height-sm);
+}
+.cds-pagination__page:hover:not(.is-current) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+
+/* The current page is underscored in accent rather than filled — it stays a
+ * number you can read, and the rule echoes the rest of the system. */
+.cds-pagination__page.is-current {
+  color: var(--cds-color-text-strong);
+  font-weight: var(--cds-weight-semibold);
+  box-shadow: inset 0 -2px 0 0 var(--cds-color-accent);
+  border-radius: 0;
+}
+
+.cds-pagination__gap {
+  padding-inline: var(--cds-space-1);
+  color: var(--cds-color-text-subtle);
+  user-select: none;
+}
+
+.cds-pagination__summary {
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text-muted);
+}
+
+@media (max-width: 640px) {
+  .cds-pagination__step-label {
+    display: none;
+  }
+}

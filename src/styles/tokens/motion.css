@@ -1,0 +1,21 @@
+/* Motion. Short and mechanical — nothing in a search UI should feel bouncy. */
+
+:root {
+  --cds-duration-instant: 60ms;
+  --cds-duration-fast: 120ms;
+  --cds-duration-normal: 180ms;
+  --cds-duration-slow: 280ms;
+
+  --cds-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --cds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --cds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --cds-duration-instant: 0ms;
+    --cds-duration-fast: 0ms;
+    --cds-duration-normal: 0ms;
+    --cds-duration-slow: 0ms;
+  }
+}

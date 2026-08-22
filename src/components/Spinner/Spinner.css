@@ -1,0 +1,47 @@
+.cds-spinner {
+  display: inline-block;
+  flex: none;
+  border-radius: var(--cds-radius-pill);
+  border: 1.5px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
+  animation: cds-spin 620ms linear infinite;
+}
+
+.cds-spinner--sm {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+}
+.cds-spinner--md {
+  width: 16px;
+  height: 16px;
+}
+.cds-spinner--lg {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+@keyframes cds-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reduced motion still needs a "working" signal, so fade instead of spin. */
+@media (prefers-reduced-motion: reduce) {
+  .cds-spinner {
+    animation: cds-pulse 1.2s ease-in-out infinite;
+    border-top-color: color-mix(in srgb, currentColor 22%, transparent);
+    border-color: currentColor;
+  }
+  @keyframes cds-pulse {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}

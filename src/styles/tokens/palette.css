@@ -1,0 +1,63 @@
+/* ---------------------------------------------------------------------------
+ * Primitive palette — raw values only. Never reference these directly in a
+ * component; go through the semantic tokens in `theme.css` so themes work.
+ *
+ * The neutrals are warm (paper, not screen-grey): every step carries a little
+ * yellow so the surface reads as newsprint stock rather than plastic.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --cds-neutral-0: #ffffff;
+  --cds-neutral-25: #fbfaf8;
+  --cds-neutral-50: #f6f4f1;
+  --cds-neutral-100: #edeae5;
+  --cds-neutral-200: #e0dcd5;
+  --cds-neutral-300: #c9c3b9;
+  --cds-neutral-400: #a8a196;
+  --cds-neutral-500: #857e73;
+  --cds-neutral-600: #666057;
+  --cds-neutral-700: #4a453e;
+  --cds-neutral-800: #302c27;
+  --cds-neutral-900: #1c1a17;
+  --cds-neutral-950: #100f0d;
+
+  /* The one loud colour in the system. Everything else is desaturated so this
+   * red always means "here" — brand, selection, focus, live state. */
+  --cds-red-50: #fdf2f2;
+  --cds-red-100: #fadedf;
+  --cds-red-200: #f3bcbe;
+  --cds-red-300: #e6878c;
+  --cds-red-400: #d4525a;
+  --cds-red-500: #c4111b;
+  --cds-red-600: #a80d17;
+  --cds-red-700: #8a0a12;
+  --cds-red-800: #6b080e;
+  --cds-red-900: #4d060a;
+
+  /* Masthead red — brighter, for large brand marks only. Fails small-text
+   * contrast on white by design; never use it for body copy. */
+  --cds-red-masthead: #e3120b;
+
+  /* Support hues, deliberately muted. Status must never out-shout the accent. */
+  --cds-green-50: #eff5f1;
+  --cds-green-100: #d7e7de;
+  --cds-green-500: #1d6b47;
+  --cds-green-600: #175738;
+  --cds-green-300: #6aa585;
+
+  --cds-amber-50: #faf3e4;
+  --cds-amber-100: #f2e3c2;
+  --cds-amber-500: #9a6700;
+  --cds-amber-600: #7d5300;
+  --cds-amber-300: #cfa955;
+
+  --cds-blue-50: #eef3f8;
+  --cds-blue-100: #d5e2ee;
+  --cds-blue-500: #1f5c8f;
+  --cds-blue-600: #194a73;
+  --cds-blue-300: #6d9ac0;
+
+  /* Highlighter yellow for matched search terms. */
+  --cds-highlight-light: #fff2a8;
+  --cds-highlight-dark: #6b5a00;
+}

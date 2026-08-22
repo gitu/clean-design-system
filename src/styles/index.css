@@ -1,0 +1,16 @@
+/* ---------------------------------------------------------------------------
+ * Entry point for the token and base layers. Component styles are imported by
+ * the components themselves and land after these, which is the order the
+ * cascade needs.
+ *
+ * Self-hosted faces live in a separate file so a consumer can skip them:
+ *   import 'clean-design-system/fonts/fonts.css'
+ * ------------------------------------------------------------------------- */
+
+@import './tokens/palette.css';
+@import './tokens/theme.css';
+@import './tokens/typography.css';
+@import './tokens/space.css';
+@import './tokens/motion.css';
+@import './base/reset.css';
+@import './base/typography.css';

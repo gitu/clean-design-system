@@ -1,0 +1,98 @@
+.cds-switch {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--cds-space-3);
+  cursor: pointer;
+  font-family: var(--cds-font-sans);
+  color: var(--cds-color-text);
+}
+
+.cds-switch--label-start {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.cds-switch.is-disabled {
+  cursor: not-allowed;
+  color: var(--cds-color-text-disabled);
+}
+
+.cds-switch__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.cds-switch__track {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 2px;
+  background-color: var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-pill);
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-switch--sm .cds-switch__track {
+  width: 26px;
+  height: 15px;
+  margin-top: 2px;
+}
+.cds-switch--md .cds-switch__track {
+  width: 32px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+.cds-switch__thumb {
+  display: block;
+  height: 100%;
+  aspect-ratio: 1;
+  background-color: var(--cds-color-surface);
+  border-radius: var(--cds-radius-pill);
+  box-shadow: var(--cds-shadow-sm);
+  transition: transform var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-switch__input:checked + .cds-switch__track {
+  background-color: var(--cds-color-accent);
+}
+.cds-switch--sm .cds-switch__input:checked + .cds-switch__track .cds-switch__thumb {
+  transform: translateX(11px);
+}
+.cds-switch--md .cds-switch__input:checked + .cds-switch__track .cds-switch__thumb {
+  transform: translateX(14px);
+}
+
+.cds-switch__input:focus-visible + .cds-switch__track {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+.cds-switch.is-disabled .cds-switch__track {
+  background-color: var(--cds-color-rule);
+}
+
+.cds-switch__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.cds-switch__label {
+  font-size: var(--cds-text-md);
+  line-height: var(--cds-leading-snug);
+}
+.cds-switch--sm .cds-switch__label {
+  font-size: var(--cds-text-sm);
+}
+
+.cds-switch__description {
+  font-size: var(--cds-text-xs);
+  line-height: var(--cds-leading-snug);
+  color: var(--cds-color-text-subtle);
+}

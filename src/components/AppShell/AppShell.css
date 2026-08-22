@@ -1,0 +1,88 @@
+.cds-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--cds-color-canvas);
+  color: var(--cds-color-text);
+}
+
+/* The masthead rule: a hairline plus the accent bar underneath it. This is the
+ * one place the brand red appears as a block, and it anchors the whole page. */
+.cds-shell__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--cds-z-sticky);
+  background-color: var(--cds-color-canvas);
+  border-bottom: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  box-shadow: inset 0 -3px 0 -1px var(--cds-color-accent);
+}
+
+.cds-shell__main {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  width: 100%;
+  max-width: var(--cds-shell-max, var(--cds-content-max));
+  margin-inline: auto;
+  min-width: 0;
+}
+
+.cds-shell__sidebar {
+  flex: none;
+  width: var(--cds-shell-sidebar, var(--cds-sidebar-width));
+  align-self: stretch;
+  border-inline-end: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+/* Sticky within its own column so filters stay reachable while results scroll. */
+.cds-shell__sidebar-inner {
+  position: sticky;
+  top: var(--cds-header-height);
+  max-height: calc(100dvh - var(--cds-header-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--cds-space-4);
+}
+
+.cds-shell__content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--cds-space-4) var(--cds-space-6) var(--cds-space-16);
+}
+
+.cds-shell__aside {
+  flex: none;
+  width: var(--cds-shell-aside, 22rem);
+  align-self: stretch;
+  border-inline-start: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-shell__aside-inner {
+  position: sticky;
+  top: var(--cds-header-height);
+  max-height: calc(100dvh - var(--cds-header-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--cds-space-4);
+}
+
+.cds-shell__footer {
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  background-color: var(--cds-color-surface-sunken);
+}
+
+@media (max-width: 1100px) {
+  .cds-shell__aside {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .cds-shell__sidebar {
+    display: none;
+  }
+  .cds-shell__content {
+    padding-inline: var(--cds-space-4);
+  }
+}

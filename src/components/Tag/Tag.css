@@ -1,0 +1,73 @@
+.cds-tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  font-family: var(--cds-font-sans);
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--cds-border-width) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-sm);
+  background-color: var(--cds-color-surface);
+  color: var(--cds-color-text);
+}
+
+.cds-tag--sm {
+  height: 22px;
+  font-size: var(--cds-text-2xs);
+}
+.cds-tag--md {
+  height: 26px;
+  font-size: var(--cds-text-xs);
+}
+
+.cds-tag--accent {
+  border-color: var(--cds-color-accent-muted);
+  background-color: var(--cds-color-accent-subtle);
+  color: var(--cds-color-text-accent);
+}
+
+/* The facet name is set as a kicker so an applied filter reads as
+ * "SECTION · Politics" — dimension first, value second. */
+.cds-tag__facet {
+  padding-inline: var(--cds-space-2) var(--cds-space-1);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-semibold);
+  letter-spacing: var(--cds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-tag__sep {
+  width: var(--cds-hairline);
+  align-self: stretch;
+  background-color: var(--cds-color-rule);
+  margin-block: 3px;
+}
+
+.cds-tag__value {
+  padding-inline: var(--cds-space-2);
+  font-weight: var(--cds-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cds-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex: none;
+  width: 20px;
+  margin-inline-start: calc(-1 * var(--cds-space-1));
+  color: var(--cds-color-text-subtle);
+  border-start-end-radius: var(--cds-radius-sm);
+  border-end-end-radius: var(--cds-radius-sm);
+  cursor: pointer;
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-tag__remove:hover {
+  background-color: var(--cds-color-danger-bg);
+  color: var(--cds-color-danger);
+}

@@ -1,0 +1,69 @@
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { cx } from '../../utils/cx'
+import { Spinner } from '../Spinner/Spinner'
+import './Button.css'
+
+export type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger'
+export type ButtonSize = 'sm' | 'md' | 'lg'
+
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'> {
+  /**
+   * `primary` is a solid ink fill — the one obvious action on a view.
+   * `accent` is the red fill, reserved for the search/submit action itself.
+   * `secondary` is ruled, `ghost` is bare, `danger` is ruled in red.
+   */
+  variant?: ButtonVariant
+  size?: ButtonSize
+  /** Stretch to the width of the container. */
+  fullWidth?: boolean
+  /** Swap the leading icon for a spinner and block interaction. */
+  loading?: boolean
+  /** Icon shown before the label. */
+  iconStart?: ReactNode
+  /** Icon shown after the label — chevrons, external-link marks. */
+  iconEnd?: ReactNode
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    variant = 'secondary',
+    size = 'md',
+    fullWidth = false,
+    loading = false,
+    iconStart,
+    iconEnd,
+    disabled,
+    className,
+    children,
+    type = 'button',
+    ...rest
+  },
+  ref
+) {
+  const spinnerSize = size === 'lg' ? 'md' : 'sm'
+  return (
+    <button
+      ref={ref}
+      type={type}
+      className={cx(
+        'cds-btn',
+        `cds-btn--${variant}`,
+        `cds-btn--${size}`,
+        fullWidth && 'cds-btn--full',
+        loading && 'is-loading',
+        className
+      )}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      {...rest}
+    >
+      {loading ? (
+        <Spinner size={spinnerSize} label={null} className="cds-btn__spinner" />
+      ) : (
+        iconStart && <span className="cds-btn__icon">{iconStart}</span>
+      )}
+      {children != null && children !== false && <span className="cds-btn__label">{children}</span>}
+      {iconEnd && !loading && <span className="cds-btn__icon">{iconEnd}</span>}
+    </button>
+  )
+})

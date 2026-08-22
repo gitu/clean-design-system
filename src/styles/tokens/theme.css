@@ -1,0 +1,222 @@
+/* ---------------------------------------------------------------------------
+ * Semantic colour tokens. These are the ONLY colour tokens components may use.
+ *
+ * Theme resolution, in order of precedence:
+ *   [data-cds-theme="dark"]   — explicit dark, wins everywhere
+ *   [data-cds-theme="light"]  — explicit light, opts out of the media query
+ *   (nothing)                 — follows prefers-color-scheme
+ * ------------------------------------------------------------------------- */
+
+:root,
+[data-cds-theme='light'] {
+  color-scheme: light;
+
+  /* Ground */
+  --cds-color-canvas: var(--cds-neutral-0);
+  --cds-color-surface: var(--cds-neutral-0);
+  --cds-color-surface-sunken: var(--cds-neutral-50);
+  --cds-color-surface-raised: var(--cds-neutral-0);
+  --cds-color-surface-hover: var(--cds-neutral-50);
+  --cds-color-surface-active: var(--cds-neutral-100);
+  --cds-color-surface-selected: var(--cds-red-50);
+  --cds-color-surface-disabled: var(--cds-neutral-50);
+
+  /* Ink */
+  --cds-color-text: var(--cds-neutral-900);
+  --cds-color-text-strong: var(--cds-neutral-950);
+  --cds-color-text-muted: var(--cds-neutral-600);
+  --cds-color-text-subtle: var(--cds-neutral-500);
+  --cds-color-text-disabled: var(--cds-neutral-400);
+  --cds-color-text-inverse: var(--cds-neutral-0);
+  --cds-color-text-accent: var(--cds-red-500);
+  --cds-color-text-link: var(--cds-red-500);
+  --cds-color-text-link-hover: var(--cds-red-700);
+
+  /* Rules — the primary structural device in this system */
+  --cds-color-rule: var(--cds-neutral-200);
+  --cds-color-rule-subtle: var(--cds-neutral-100);
+  --cds-color-rule-strong: var(--cds-neutral-300);
+  --cds-color-rule-heavy: var(--cds-neutral-900);
+  --cds-color-rule-accent: var(--cds-red-500);
+
+  /* Accent */
+  --cds-color-accent: var(--cds-red-500);
+  --cds-color-accent-hover: var(--cds-red-600);
+  --cds-color-accent-active: var(--cds-red-700);
+  --cds-color-accent-subtle: var(--cds-red-50);
+  --cds-color-accent-muted: var(--cds-red-100);
+  --cds-color-on-accent: var(--cds-neutral-0);
+  --cds-color-brand-mark: var(--cds-red-masthead);
+
+  /* Ink fill — the maximum-contrast solid, used by primary buttons */
+  --cds-color-ink: var(--cds-neutral-900);
+  --cds-color-ink-hover: var(--cds-neutral-800);
+  --cds-color-ink-active: var(--cds-neutral-950);
+  --cds-color-on-ink: var(--cds-neutral-0);
+
+  /* Interaction */
+  --cds-color-focus-ring: var(--cds-red-500);
+  --cds-color-selection-bg: var(--cds-red-100);
+  --cds-color-selection-text: var(--cds-neutral-950);
+  --cds-color-highlight-bg: var(--cds-highlight-light);
+  --cds-color-highlight-text: var(--cds-neutral-950);
+  --cds-color-overlay: rgba(28, 26, 23, 0.42);
+
+  /* Status */
+  --cds-color-success: var(--cds-green-500);
+  --cds-color-success-bg: var(--cds-green-50);
+  --cds-color-success-border: var(--cds-green-100);
+  --cds-color-warning: var(--cds-amber-500);
+  --cds-color-warning-bg: var(--cds-amber-50);
+  --cds-color-warning-border: var(--cds-amber-100);
+  --cds-color-danger: var(--cds-red-600);
+  --cds-color-danger-bg: var(--cds-red-50);
+  --cds-color-danger-border: var(--cds-red-100);
+  --cds-color-info: var(--cds-blue-500);
+  --cds-color-info-bg: var(--cds-blue-50);
+  --cds-color-info-border: var(--cds-blue-100);
+
+  /* Elevation — deliberately sparse. Rules carry structure; shadow is reserved
+   * for things that genuinely float above the page. */
+  --cds-shadow-sm: 0 1px 2px rgba(28, 26, 23, 0.06);
+  --cds-shadow-md: 0 2px 8px rgba(28, 26, 23, 0.1), 0 0 0 1px rgba(28, 26, 23, 0.05);
+  --cds-shadow-lg: 0 8px 28px rgba(28, 26, 23, 0.14), 0 0 0 1px rgba(28, 26, 23, 0.06);
+}
+
+/* Dark — the night edition. Not an inversion: the ground stays warm-black and
+ * the ink stays off-white, so the page still reads as printed matter. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-cds-theme='light']) {
+    color-scheme: dark;
+
+    --cds-color-canvas: #131211;
+    --cds-color-surface: #1a1917;
+    --cds-color-surface-sunken: #0e0d0c;
+    --cds-color-surface-raised: #232120;
+    --cds-color-surface-hover: #232120;
+    --cds-color-surface-active: #2b2926;
+    --cds-color-surface-selected: rgba(233, 88, 95, 0.14);
+    --cds-color-surface-disabled: #1c1b19;
+
+    --cds-color-text: #eae7e1;
+    --cds-color-text-strong: #faf8f5;
+    --cds-color-text-muted: #a8a196;
+    --cds-color-text-subtle: #857e73;
+    --cds-color-text-disabled: #5b554d;
+    --cds-color-text-inverse: #131211;
+    --cds-color-text-accent: #e9585f;
+    --cds-color-text-link: #e9585f;
+    --cds-color-text-link-hover: #f3868b;
+
+    --cds-color-rule: #302c27;
+    --cds-color-rule-subtle: #232120;
+    --cds-color-rule-strong: #45403a;
+    --cds-color-rule-heavy: #6f685e;
+    --cds-color-rule-accent: #e9585f;
+
+    --cds-color-accent: #e9585f;
+    --cds-color-accent-hover: #f3868b;
+    --cds-color-accent-active: #f8aaad;
+    --cds-color-accent-subtle: rgba(233, 88, 95, 0.12);
+    --cds-color-accent-muted: rgba(233, 88, 95, 0.22);
+    --cds-color-on-accent: #16110f;
+    --cds-color-brand-mark: #ff4a43;
+
+    --cds-color-ink: #eae7e1;
+    --cds-color-ink-hover: #faf8f5;
+    --cds-color-ink-active: #ffffff;
+    --cds-color-on-ink: #131211;
+
+    --cds-color-focus-ring: #e9585f;
+    --cds-color-selection-bg: rgba(233, 88, 95, 0.3);
+    --cds-color-selection-text: #faf8f5;
+    --cds-color-highlight-bg: var(--cds-highlight-dark);
+    --cds-color-highlight-text: #fff6cf;
+    --cds-color-overlay: rgba(6, 5, 5, 0.66);
+
+    --cds-color-success: #6aa585;
+    --cds-color-success-bg: rgba(106, 165, 133, 0.13);
+    --cds-color-success-border: rgba(106, 165, 133, 0.28);
+    --cds-color-warning: #cfa955;
+    --cds-color-warning-bg: rgba(207, 169, 85, 0.13);
+    --cds-color-warning-border: rgba(207, 169, 85, 0.28);
+    --cds-color-danger: #e9585f;
+    --cds-color-danger-bg: rgba(233, 88, 95, 0.13);
+    --cds-color-danger-border: rgba(233, 88, 95, 0.28);
+    --cds-color-info: #6d9ac0;
+    --cds-color-info-bg: rgba(109, 154, 192, 0.13);
+    --cds-color-info-border: rgba(109, 154, 192, 0.28);
+
+    --cds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --cds-shadow-md: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 250, 240, 0.07);
+    --cds-shadow-lg: 0 10px 34px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 250, 240, 0.09);
+  }
+}
+
+/* Explicit dark — identical body, so a toggle beats the media query in both
+ * directions. Generated from the block above; keep them in sync. */
+[data-cds-theme='dark'] {
+  color-scheme: dark;
+
+  --cds-color-canvas: #131211;
+  --cds-color-surface: #1a1917;
+  --cds-color-surface-sunken: #0e0d0c;
+  --cds-color-surface-raised: #232120;
+  --cds-color-surface-hover: #232120;
+  --cds-color-surface-active: #2b2926;
+  --cds-color-surface-selected: rgba(233, 88, 95, 0.14);
+  --cds-color-surface-disabled: #1c1b19;
+
+  --cds-color-text: #eae7e1;
+  --cds-color-text-strong: #faf8f5;
+  --cds-color-text-muted: #a8a196;
+  --cds-color-text-subtle: #857e73;
+  --cds-color-text-disabled: #5b554d;
+  --cds-color-text-inverse: #131211;
+  --cds-color-text-accent: #e9585f;
+  --cds-color-text-link: #e9585f;
+  --cds-color-text-link-hover: #f3868b;
+
+  --cds-color-rule: #302c27;
+  --cds-color-rule-subtle: #232120;
+  --cds-color-rule-strong: #45403a;
+  --cds-color-rule-heavy: #6f685e;
+  --cds-color-rule-accent: #e9585f;
+
+  --cds-color-accent: #e9585f;
+  --cds-color-accent-hover: #f3868b;
+  --cds-color-accent-active: #f8aaad;
+  --cds-color-accent-subtle: rgba(233, 88, 95, 0.12);
+  --cds-color-accent-muted: rgba(233, 88, 95, 0.22);
+  --cds-color-on-accent: #16110f;
+  --cds-color-brand-mark: #ff4a43;
+
+  --cds-color-ink: #eae7e1;
+  --cds-color-ink-hover: #faf8f5;
+  --cds-color-ink-active: #ffffff;
+  --cds-color-on-ink: #131211;
+
+  --cds-color-focus-ring: #e9585f;
+  --cds-color-selection-bg: rgba(233, 88, 95, 0.3);
+  --cds-color-selection-text: #faf8f5;
+  --cds-color-highlight-bg: var(--cds-highlight-dark);
+  --cds-color-highlight-text: #fff6cf;
+  --cds-color-overlay: rgba(6, 5, 5, 0.66);
+
+  --cds-color-success: #6aa585;
+  --cds-color-success-bg: rgba(106, 165, 133, 0.13);
+  --cds-color-success-border: rgba(106, 165, 133, 0.28);
+  --cds-color-warning: #cfa955;
+  --cds-color-warning-bg: rgba(207, 169, 85, 0.13);
+  --cds-color-warning-border: rgba(207, 169, 85, 0.28);
+  --cds-color-danger: #e9585f;
+  --cds-color-danger-bg: rgba(233, 88, 95, 0.13);
+  --cds-color-danger-border: rgba(233, 88, 95, 0.28);
+  --cds-color-info: #6d9ac0;
+  --cds-color-info-bg: rgba(109, 154, 192, 0.13);
+  --cds-color-info-border: rgba(109, 154, 192, 0.28);
+
+  --cds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --cds-shadow-md: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 250, 240, 0.07);
+  --cds-shadow-lg: 0 10px 34px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 250, 240, 0.09);
+}

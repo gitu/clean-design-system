@@ -1,0 +1,120 @@
+.cds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cds-space-2);
+  font-family: var(--cds-font-sans);
+  font-weight: var(--cds-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--cds-border-width) solid transparent;
+  border-radius: var(--cds-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    border-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cds-btn--full {
+  width: 100%;
+}
+
+.cds-btn__icon,
+.cds-btn__spinner {
+  display: inline-flex;
+  flex: none;
+}
+
+/* --- Sizes --- */
+
+.cds-btn--sm {
+  height: var(--cds-control-height-sm);
+  padding-inline: var(--cds-space-2);
+  font-size: var(--cds-text-sm);
+  gap: var(--cds-space-1);
+}
+.cds-btn--md {
+  height: var(--cds-control-height-md);
+  padding-inline: var(--cds-space-3);
+  font-size: var(--cds-text-md);
+}
+.cds-btn--lg {
+  height: var(--cds-control-height-lg);
+  padding-inline: var(--cds-space-4);
+  font-size: var(--cds-text-md);
+}
+
+/* --- Variants --- */
+
+.cds-btn--primary {
+  background-color: var(--cds-color-ink);
+  color: var(--cds-color-on-ink);
+}
+.cds-btn--primary:hover:not(:disabled) {
+  background-color: var(--cds-color-ink-hover);
+}
+.cds-btn--primary:active:not(:disabled) {
+  background-color: var(--cds-color-ink-active);
+}
+
+.cds-btn--accent {
+  background-color: var(--cds-color-accent);
+  color: var(--cds-color-on-accent);
+}
+.cds-btn--accent:hover:not(:disabled) {
+  background-color: var(--cds-color-accent-hover);
+}
+.cds-btn--accent:active:not(:disabled) {
+  background-color: var(--cds-color-accent-active);
+}
+
+.cds-btn--secondary {
+  background-color: var(--cds-color-surface);
+  border-color: var(--cds-color-rule-strong);
+  color: var(--cds-color-text);
+}
+.cds-btn--secondary:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  border-color: var(--cds-color-rule-heavy);
+}
+.cds-btn--secondary:active:not(:disabled) {
+  background-color: var(--cds-color-surface-active);
+}
+
+.cds-btn--ghost {
+  background-color: transparent;
+  color: var(--cds-color-text-muted);
+}
+.cds-btn--ghost:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+.cds-btn--ghost:active:not(:disabled) {
+  background-color: var(--cds-color-surface-active);
+}
+
+.cds-btn--danger {
+  background-color: transparent;
+  border-color: var(--cds-color-danger-border);
+  color: var(--cds-color-danger);
+}
+.cds-btn--danger:hover:not(:disabled) {
+  background-color: var(--cds-color-danger-bg);
+  border-color: var(--cds-color-danger);
+}
+
+/* Pressed/selected toolbar buttons, e.g. an active view mode. Only the two
+ * quiet variants take a pressed treatment — a filled button is already loud
+ * enough that changing its ground would read as a different button. */
+.cds-btn--ghost[aria-pressed='true'],
+.cds-btn--ghost[aria-expanded='true'],
+.cds-btn--secondary[aria-pressed='true'] {
+  background-color: var(--cds-color-surface-active);
+  color: var(--cds-color-text-strong);
+}

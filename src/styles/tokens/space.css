@@ -1,0 +1,50 @@
+/* Spacing, radius, borders and layout metrics. Everything sits on a 4px grid. */
+
+:root {
+  --cds-space-0: 0;
+  --cds-space-px: 1px;
+  --cds-space-1: 0.25rem; /* 4 */
+  --cds-space-2: 0.5rem; /* 8 */
+  --cds-space-3: 0.75rem; /* 12 */
+  --cds-space-4: 1rem; /* 16 */
+  --cds-space-5: 1.25rem; /* 20 */
+  --cds-space-6: 1.5rem; /* 24 */
+  --cds-space-8: 2rem; /* 32 */
+  --cds-space-10: 2.5rem; /* 40 */
+  --cds-space-12: 3rem; /* 48 */
+  --cds-space-16: 4rem; /* 64 */
+  --cds-space-20: 5rem; /* 80 */
+  --cds-space-24: 6rem; /* 96 */
+
+  /* Corners stay nearly square — this system is set with rules, not pills. */
+  --cds-radius-none: 0;
+  --cds-radius-sm: 2px;
+  --cds-radius-md: 3px;
+  --cds-radius-lg: 4px;
+  --cds-radius-pill: 999px;
+
+  --cds-hairline: 1px;
+  --cds-border-width: 1px;
+  --cds-border-width-heavy: 2px;
+
+  /* Control heights — the whole system snaps to these four. */
+  --cds-control-height-sm: 26px;
+  --cds-control-height-md: 32px;
+  --cds-control-height-lg: 40px;
+  --cds-control-height-xl: 48px; /* the primary search field */
+
+  --cds-focus-ring-width: 2px;
+  --cds-focus-ring-offset: 2px;
+
+  --cds-sidebar-width: 264px;
+  --cds-header-height: 56px;
+  --cds-content-max: 1440px;
+  --cds-measure: 68ch; /* comfortable reading width for lede/snippet copy */
+
+  --cds-z-base: 0;
+  --cds-z-sticky: 100;
+  --cds-z-drawer: 200;
+  --cds-z-overlay: 300;
+  --cds-z-popover: 400;
+  --cds-z-toast: 500;
+}

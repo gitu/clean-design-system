@@ -1,0 +1,173 @@
+.cds-cmdk-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--cds-z-popover);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--cds-space-16) var(--cds-space-4) var(--cds-space-4);
+  background: none;
+}
+
+.cds-cmdk__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--cds-color-overlay);
+  animation: cds-cmdk-fade var(--cds-duration-fast) var(--cds-ease-out);
+}
+
+.cds-cmdk {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 34rem;
+  max-height: min(28rem, 70vh);
+  background-color: var(--cds-color-surface-raised);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-lg);
+  box-shadow: var(--cds-shadow-lg);
+  overflow: hidden;
+  animation: cds-cmdk-rise var(--cds-duration-normal) var(--cds-ease-out);
+}
+
+@keyframes cds-cmdk-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes cds-cmdk-rise {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.cds-cmdk__search {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  flex: none;
+  padding: var(--cds-space-3);
+  border-bottom: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-cmdk__search-icon {
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-base);
+  color: var(--cds-color-text);
+}
+.cds-cmdk__input::placeholder {
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--cds-space-2) var(--cds-space-2) var(--cds-space-3);
+}
+
+.cds-cmdk__empty {
+  padding: var(--cds-space-8) var(--cds-space-4);
+  text-align: center;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__group + .cds-cmdk__group {
+  margin-top: var(--cds-space-2);
+  padding-top: var(--cds-space-2);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule-subtle);
+}
+
+.cds-cmdk__group-name {
+  padding: var(--cds-space-1) var(--cds-space-2) var(--cds-space-2);
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__item {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-2);
+  border-radius: var(--cds-radius-sm);
+  cursor: pointer;
+  color: var(--cds-color-text);
+}
+
+/* The active row is marked with an accent edge, not a fill — the palette can
+ * show a dozen rows at once and a filled bar would dominate the dialog. */
+.cds-cmdk__item.is-active {
+  background-color: var(--cds-color-surface-hover);
+  box-shadow: inset 2px 0 0 0 var(--cds-color-accent);
+}
+
+.cds-cmdk__item.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cds-cmdk__item-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cds-cmdk__item-label {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-md);
+  line-height: var(--cds-leading-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cds-cmdk__item-description {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  line-height: var(--cds-leading-snug);
+  color: var(--cds-color-text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cds-cmdk__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cds-space-3);
+  flex: none;
+  padding: var(--cds-space-2) var(--cds-space-3);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  background-color: var(--cds-color-surface-sunken);
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-cmdk__hints {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-1);
+}

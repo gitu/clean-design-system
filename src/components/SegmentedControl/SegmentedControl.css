@@ -1,0 +1,71 @@
+.cds-segmented {
+  display: inline-flex;
+  align-items: stretch;
+  background-color: var(--cds-color-surface);
+  border: var(--cds-border-width) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-sm);
+  overflow: hidden;
+}
+
+.cds-segmented--full {
+  display: flex;
+  width: 100%;
+}
+
+.cds-segmented__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cds-space-1);
+  flex: 1;
+  white-space: nowrap;
+  font-family: var(--cds-font-sans);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text-muted);
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+/* Hairlines between segments rather than gaps — the control stays one object. */
+.cds-segmented__item + .cds-segmented__item {
+  border-inline-start: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-segmented--sm .cds-segmented__item {
+  height: calc(var(--cds-control-height-sm) - 2px);
+  padding-inline: var(--cds-space-2);
+  font-size: var(--cds-text-xs);
+}
+.cds-segmented--md .cds-segmented__item {
+  height: calc(var(--cds-control-height-md) - 2px);
+  padding-inline: var(--cds-space-3);
+  font-size: var(--cds-text-sm);
+}
+
+.cds-segmented__item:hover:not(:disabled):not(.is-selected) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+
+.cds-segmented__item:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Selection is an ink fill: unmistakable at a glance in a dense toolbar, and it
+ * keeps the accent red free to mean "applied filter" elsewhere on the page. */
+.cds-segmented__item.is-selected {
+  background-color: var(--cds-color-ink);
+  color: var(--cds-color-on-ink);
+}
+
+.cds-segmented__item:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.cds-segmented__icon {
+  display: inline-flex;
+}

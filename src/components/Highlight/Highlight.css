@@ -1,0 +1,7 @@
+.cds-mark {
+  background-color: var(--cds-color-highlight-bg);
+  color: var(--cds-color-highlight-text);
+  padding-inline: 1px;
+  border-radius: 1px;
+  font-weight: var(--cds-weight-medium);
+}

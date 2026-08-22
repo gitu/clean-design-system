@@ -1,0 +1,68 @@
+.cds-divider {
+  border: 0;
+  flex: none;
+  background-color: var(--cds-color-rule);
+}
+
+.cds-divider--horizontal {
+  width: 100%;
+  height: var(--cds-hairline);
+}
+.cds-divider--vertical {
+  width: var(--cds-hairline);
+  align-self: stretch;
+  min-height: 1em;
+}
+
+.cds-divider--subtle {
+  background-color: var(--cds-color-rule-subtle);
+}
+.cds-divider--strong {
+  background-color: var(--cds-color-rule-strong);
+}
+.cds-divider--accent {
+  background-color: var(--cds-color-rule-accent);
+}
+.cds-divider--horizontal.cds-divider--accent {
+  height: var(--cds-border-width-heavy);
+}
+
+.cds-divider--space-sm {
+  margin-block: var(--cds-space-2);
+}
+.cds-divider--space-md {
+  margin-block: var(--cds-space-4);
+}
+.cds-divider--space-lg {
+  margin-block: var(--cds-space-6);
+}
+
+/* --- Labelled rule --- */
+
+.cds-divider-labelled {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+  width: 100%;
+}
+
+.cds-divider-labelled__line {
+  flex: 1;
+  height: var(--cds-hairline);
+  background-color: var(--cds-color-rule);
+}
+.cds-divider--subtle .cds-divider-labelled__line,
+.cds-divider-labelled.cds-divider--subtle .cds-divider-labelled__line {
+  background-color: var(--cds-color-rule-subtle);
+}
+.cds-divider-labelled.cds-divider--strong .cds-divider-labelled__line {
+  background-color: var(--cds-color-rule-strong);
+}
+.cds-divider-labelled.cds-divider--accent .cds-divider-labelled__line {
+  background-color: var(--cds-color-rule-accent);
+  height: var(--cds-border-width-heavy);
+}
+
+.cds-divider-labelled__label {
+  flex: none;
+}

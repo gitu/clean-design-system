@@ -1,0 +1,85 @@
+.cds-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  aspect-ratio: 1;
+  border: var(--cds-border-width) solid transparent;
+  border-radius: var(--cds-radius-sm);
+  cursor: pointer;
+  color: var(--cds-color-text-muted);
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    border-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.cds-icon-btn--sm {
+  width: var(--cds-control-height-sm);
+  height: var(--cds-control-height-sm);
+}
+.cds-icon-btn--md {
+  width: var(--cds-control-height-md);
+  height: var(--cds-control-height-md);
+}
+.cds-icon-btn--lg {
+  width: var(--cds-control-height-lg);
+  height: var(--cds-control-height-lg);
+}
+
+.cds-icon-btn--bare {
+  width: auto;
+  height: auto;
+  padding: var(--cds-space-1);
+}
+
+.cds-icon-btn--ghost:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+.cds-icon-btn--ghost:active:not(:disabled) {
+  background-color: var(--cds-color-surface-active);
+}
+
+.cds-icon-btn--secondary {
+  background-color: var(--cds-color-surface);
+  border-color: var(--cds-color-rule-strong);
+  color: var(--cds-color-text);
+}
+.cds-icon-btn--secondary:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  border-color: var(--cds-color-rule-heavy);
+}
+
+.cds-icon-btn--primary {
+  background-color: var(--cds-color-ink);
+  color: var(--cds-color-on-ink);
+}
+.cds-icon-btn--primary:hover:not(:disabled) {
+  background-color: var(--cds-color-ink-hover);
+}
+
+.cds-icon-btn--accent {
+  background-color: var(--cds-color-accent);
+  color: var(--cds-color-on-accent);
+}
+.cds-icon-btn--accent:hover:not(:disabled) {
+  background-color: var(--cds-color-accent-hover);
+}
+
+.cds-icon-btn--danger {
+  color: var(--cds-color-danger);
+}
+.cds-icon-btn--danger:hover:not(:disabled) {
+  background-color: var(--cds-color-danger-bg);
+}
+
+.cds-icon-btn--ghost[aria-pressed='true'],
+.cds-icon-btn--ghost[aria-expanded='true'] {
+  background-color: var(--cds-color-surface-active);
+  color: var(--cds-color-text-strong);
+}

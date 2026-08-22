@@ -1,0 +1,80 @@
+.cds-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--cds-space-3);
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+.cds-empty--sm {
+  padding-block: var(--cds-space-8);
+}
+.cds-empty--md {
+  padding-block: var(--cds-space-16);
+}
+
+.cds-empty__icon {
+  color: var(--cds-color-text-subtle);
+  margin-bottom: var(--cds-space-1);
+}
+
+.cds-empty__title {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-xl);
+  line-height: var(--cds-leading-snug);
+  font-weight: var(--cds-weight-semibold);
+  letter-spacing: var(--cds-tracking-tight);
+  color: var(--cds-color-text-strong);
+}
+.cds-empty--sm .cds-empty__title {
+  font-size: var(--cds-text-lg);
+}
+
+.cds-empty__description {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-normal);
+  color: var(--cds-color-text-muted);
+}
+
+/* Suggestions are set flush-left inside a centred block: a list of things to
+ * try reads as a list, not as centred prose. */
+.cds-empty__suggestions {
+  list-style: none;
+  margin: 0;
+  padding: var(--cds-space-3) 0 0;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  width: 100%;
+}
+
+.cds-empty__suggestion {
+  position: relative;
+  padding-inline-start: var(--cds-space-4);
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text-muted);
+}
+.cds-empty__suggestion::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.62em;
+  width: 6px;
+  height: var(--cds-hairline);
+  background-color: var(--cds-color-accent);
+}
+
+.cds-empty__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cds-space-2);
+  flex-wrap: wrap;
+  margin-top: var(--cds-space-2);
+}

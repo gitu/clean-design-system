@@ -1,0 +1,25 @@
+/* Storybook's own canvas is not part of the design system — this only makes the
+ * preview frame pleasant and never leaks into dist/. */
+body {
+  margin: 0;
+}
+
+.sb-canvas {
+  min-height: 100vh;
+  background-color: var(--cds-color-canvas);
+  color: var(--cds-color-text);
+}
+
+.sb-canvas[data-layout='padded'] {
+  padding: var(--cds-space-6);
+}
+
+.sb-canvas[data-layout='fullscreen'] {
+  padding: 0;
+}
+
+.sb-canvas[data-layout='centered'] {
+  display: grid;
+  place-items: center;
+  padding: var(--cds-space-8);
+}

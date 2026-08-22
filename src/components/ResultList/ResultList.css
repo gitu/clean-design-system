@@ -1,0 +1,23 @@
+.cds-result-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.cds-result-list__item {
+  min-width: 0;
+}
+
+.cds-result-list--ruled > .cds-result-list__item + .cds-result-list__item {
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-result-list__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  padding-block: var(--cds-space-4);
+}

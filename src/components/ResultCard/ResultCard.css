@@ -1,0 +1,133 @@
+/* Results are separated by rules, not boxed in cards — a list of results should
+ * read as one column of text, the way a page of search results in print would. */
+.cds-result {
+  position: relative;
+  display: flex;
+  gap: var(--cds-space-4);
+  padding-block: var(--cds-space-4);
+  padding-inline: var(--cds-space-3);
+  margin-inline: calc(-1 * var(--cds-space-3));
+  border-radius: var(--cds-radius-sm);
+  transition: background-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-result--compact {
+  padding-block: var(--cds-space-3);
+  gap: var(--cds-space-3);
+}
+
+.cds-result.is-linked:hover {
+  background-color: var(--cds-color-surface-hover);
+}
+
+/* Selection is marked with an accent edge in the margin — it survives hover,
+ * scrolling and printing, where a background tint alone would not. */
+.cds-result.is-selected {
+  background-color: var(--cds-color-surface-selected);
+}
+.cds-result.is-selected::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 2px;
+  background-color: var(--cds-color-accent);
+  border-radius: var(--cds-radius-pill);
+}
+
+.cds-result__leading,
+.cds-result__trailing {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cds-space-2);
+}
+
+.cds-result__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+}
+.cds-result--compact .cds-result__body {
+  gap: var(--cds-space-1);
+}
+
+.cds-result__kicker {
+  color: var(--cds-color-text-accent);
+}
+
+.cds-result__title {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-lg);
+  line-height: var(--cds-leading-snug);
+  font-weight: var(--cds-weight-semibold);
+  letter-spacing: var(--cds-tracking-tight);
+  color: var(--cds-color-text-strong);
+}
+.cds-result--compact .cds-result__title {
+  font-size: var(--cds-text-base);
+}
+
+.cds-result__link {
+  color: inherit;
+  text-decoration: none;
+}
+.cds-result__link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  text-decoration-color: var(--cds-color-accent);
+}
+
+/* Stretched hit area: the whole row is clickable, but the link text is still
+ * the only thing in the tab order. */
+.cds-result__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.cds-result__snippet {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-base);
+  line-height: var(--cds-leading-relaxed);
+  color: var(--cds-color-text-muted);
+  max-width: var(--cds-measure);
+}
+.cds-result--compact .cds-result__snippet {
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-normal);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cds-result__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--cds-space-2);
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  color: var(--cds-color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Metadata items are separated by middots rather than pipes or bullets. */
+.cds-result__meta-item + .cds-result__meta-item::before {
+  content: '·';
+  margin-inline-end: var(--cds-space-2);
+  color: var(--cds-color-rule-strong);
+}
+
+.cds-result__tags {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-1);
+  position: relative;
+  z-index: 1;
+  margin-inline-start: var(--cds-space-1);
+}

@@ -1,0 +1,25 @@
+.cds-stack {
+  display: flex;
+  gap: var(--cds-stack-gap, var(--cds-space-4));
+  min-width: 0;
+}
+
+.cds-stack--column {
+  flex-direction: column;
+}
+.cds-stack--row {
+  flex-direction: row;
+}
+.cds-stack--wrap {
+  flex-wrap: wrap;
+}
+
+/* Rules sit in the gap, so spacing stays symmetrical around them. */
+.cds-stack--dividers.cds-stack--column > * + * {
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  padding-top: var(--cds-stack-gap, var(--cds-space-4));
+}
+.cds-stack--dividers.cds-stack--row > * + * {
+  border-inline-start: var(--cds-hairline) solid var(--cds-color-rule);
+  padding-inline-start: var(--cds-stack-gap, var(--cds-space-4));
+}

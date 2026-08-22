@@ -1,0 +1,96 @@
+.cds-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  background-color: var(--cds-color-surface);
+  border: var(--cds-border-width) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-sm);
+  color: var(--cds-color-text);
+  transition: border-color var(--cds-duration-fast) var(--cds-ease-standard),
+    box-shadow var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-select:hover:not(.is-disabled) {
+  border-color: var(--cds-color-rule-heavy);
+}
+
+.cds-select:focus-within {
+  border-color: var(--cds-color-accent);
+  box-shadow: 0 0 0 var(--cds-focus-ring-width)
+    color-mix(in srgb, var(--cds-color-accent) 26%, transparent);
+}
+
+.cds-select.is-invalid {
+  border-color: var(--cds-color-danger);
+}
+
+.cds-select.is-disabled {
+  background-color: var(--cds-color-surface-disabled);
+  border-color: var(--cds-color-rule);
+  color: var(--cds-color-text-disabled);
+}
+
+.cds-select--bare {
+  border-color: transparent;
+  background-color: transparent;
+  width: auto;
+}
+.cds-select--bare:hover:not(.is-disabled) {
+  background-color: var(--cds-color-surface-hover);
+  border-color: transparent;
+}
+
+.cds-select--sm {
+  height: var(--cds-control-height-sm);
+  font-size: var(--cds-text-sm);
+}
+.cds-select--md {
+  height: var(--cds-control-height-md);
+  font-size: var(--cds-text-md);
+}
+.cds-select--lg {
+  height: var(--cds-control-height-lg);
+  font-size: var(--cds-text-base);
+}
+
+.cds-select__control {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding-inline: var(--cds-space-2) calc(var(--cds-space-6) + var(--cds-space-1));
+  background: transparent;
+  border: 0;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  text-overflow: ellipsis;
+}
+
+.cds-select__control:disabled {
+  cursor: not-allowed;
+}
+
+.cds-select__icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding-inline-start: var(--cds-space-2);
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-select__chevron {
+  position: absolute;
+  inset-inline-end: var(--cds-space-2);
+  pointer-events: none;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-select__control option {
+  color: var(--cds-color-text);
+  background-color: var(--cds-color-surface);
+}

@@ -1,0 +1,31 @@
+.cds-kbd {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cds-kbd__key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cds-font-sans);
+  font-weight: var(--cds-weight-medium);
+  line-height: 1;
+  color: var(--cds-color-text-subtle);
+  background-color: var(--cds-color-surface-sunken);
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-sm);
+}
+
+.cds-kbd--sm .cds-kbd__key {
+  min-width: 16px;
+  height: 16px;
+  padding-inline: 4px;
+  font-size: var(--cds-text-2xs);
+}
+.cds-kbd--md .cds-kbd__key {
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 5px;
+  font-size: var(--cds-text-xs);
+}

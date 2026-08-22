@@ -1,0 +1,116 @@
+.cds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-1);
+  font-family: var(--cds-font-sans);
+  font-weight: var(--cds-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--cds-border-width) solid transparent;
+  border-radius: var(--cds-radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.cds-badge--sm {
+  height: 18px;
+  padding-inline: var(--cds-space-1);
+  font-size: var(--cds-text-2xs);
+}
+.cds-badge--md {
+  height: 22px;
+  padding-inline: var(--cds-space-2);
+  font-size: var(--cds-text-xs);
+}
+
+.cds-badge__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--cds-radius-pill);
+  background-color: currentColor;
+  flex: none;
+}
+
+/* --- soft (default) --- */
+.cds-badge--soft.cds-badge--neutral {
+  background-color: var(--cds-color-surface-sunken);
+  color: var(--cds-color-text-muted);
+  border-color: var(--cds-color-rule);
+}
+.cds-badge--soft.cds-badge--accent {
+  background-color: var(--cds-color-accent-subtle);
+  color: var(--cds-color-text-accent);
+  border-color: var(--cds-color-accent-muted);
+}
+.cds-badge--soft.cds-badge--success {
+  background-color: var(--cds-color-success-bg);
+  color: var(--cds-color-success);
+  border-color: var(--cds-color-success-border);
+}
+.cds-badge--soft.cds-badge--warning {
+  background-color: var(--cds-color-warning-bg);
+  color: var(--cds-color-warning);
+  border-color: var(--cds-color-warning-border);
+}
+.cds-badge--soft.cds-badge--danger {
+  background-color: var(--cds-color-danger-bg);
+  color: var(--cds-color-danger);
+  border-color: var(--cds-color-danger-border);
+}
+.cds-badge--soft.cds-badge--info {
+  background-color: var(--cds-color-info-bg);
+  color: var(--cds-color-info);
+  border-color: var(--cds-color-info-border);
+}
+
+/* --- outline --- */
+.cds-badge--outline {
+  background-color: transparent;
+  border-color: var(--cds-color-rule-strong);
+  color: var(--cds-color-text-muted);
+}
+.cds-badge--outline.cds-badge--accent {
+  border-color: var(--cds-color-accent);
+  color: var(--cds-color-text-accent);
+}
+.cds-badge--outline.cds-badge--success {
+  border-color: var(--cds-color-success);
+  color: var(--cds-color-success);
+}
+.cds-badge--outline.cds-badge--warning {
+  border-color: var(--cds-color-warning);
+  color: var(--cds-color-warning);
+}
+.cds-badge--outline.cds-badge--danger {
+  border-color: var(--cds-color-danger);
+  color: var(--cds-color-danger);
+}
+.cds-badge--outline.cds-badge--info {
+  border-color: var(--cds-color-info);
+  color: var(--cds-color-info);
+}
+
+/* --- solid --- */
+.cds-badge--solid.cds-badge--neutral {
+  background-color: var(--cds-color-ink);
+  color: var(--cds-color-on-ink);
+}
+.cds-badge--solid.cds-badge--accent {
+  background-color: var(--cds-color-accent);
+  color: var(--cds-color-on-accent);
+}
+.cds-badge--solid.cds-badge--success {
+  background-color: var(--cds-color-success);
+  color: var(--cds-color-text-inverse);
+}
+.cds-badge--solid.cds-badge--warning {
+  background-color: var(--cds-color-warning);
+  color: var(--cds-color-text-inverse);
+}
+.cds-badge--solid.cds-badge--danger {
+  background-color: var(--cds-color-danger);
+  color: var(--cds-color-text-inverse);
+}
+.cds-badge--solid.cds-badge--info {
+  background-color: var(--cds-color-info);
+  color: var(--cds-color-text-inverse);
+}

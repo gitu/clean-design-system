@@ -1,0 +1,43 @@
+/* ---------------------------------------------------------------------------
+ * Type. Two voices, strictly divided:
+ *   serif — editorial content: headlines, result titles, lede paragraphs
+ *   sans  — interface chrome: controls, labels, table data, navigation
+ * Mixing them inside one role is the fastest way to break the look.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --cds-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --cds-font-serif: 'Source Serif 4', 'Iowan Old Style', Georgia, 'Times New Roman',
+    serif;
+  --cds-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  /* A tight scale — dense interfaces need small steps, not a display ladder. */
+  --cds-text-2xs: 0.6875rem; /* 11px — counts, table micro-labels */
+  --cds-text-xs: 0.75rem; /* 12px — kickers, metadata */
+  --cds-text-sm: 0.8125rem; /* 13px — dense controls, table cells */
+  --cds-text-md: 0.875rem; /* 14px — default UI text */
+  --cds-text-base: 0.9375rem; /* 15px — reading copy */
+  --cds-text-lg: 1.0625rem; /* 17px — result titles, lede */
+  --cds-text-xl: 1.25rem; /* 20px — section headings */
+  --cds-text-2xl: 1.5rem; /* 24px — page titles */
+  --cds-text-3xl: 1.875rem; /* 30px — article headlines */
+  --cds-text-4xl: 2.375rem; /* 38px — display */
+
+  --cds-leading-none: 1;
+  --cds-leading-tight: 1.2;
+  --cds-leading-snug: 1.35;
+  --cds-leading-normal: 1.5;
+  --cds-leading-relaxed: 1.65;
+
+  --cds-weight-regular: 400;
+  --cds-weight-medium: 500;
+  --cds-weight-semibold: 600;
+  --cds-weight-bold: 700;
+
+  --cds-tracking-tight: -0.014em;
+  --cds-tracking-normal: 0;
+  --cds-tracking-wide: 0.02em;
+  --cds-tracking-kicker: 0.09em; /* uppercase section labels */
+}

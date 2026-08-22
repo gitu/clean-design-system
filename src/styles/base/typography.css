@@ -1,0 +1,180 @@
+/* ---------------------------------------------------------------------------
+ * Type roles. This is the complete class vocabulary for text in this system —
+ * apply a role class rather than setting font-size/weight by hand, so a page
+ * built by hand and a page built from components read identically.
+ * ------------------------------------------------------------------------- */
+
+/* --- Editorial voice (serif) --- */
+
+.cds-display {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-4xl);
+  line-height: var(--cds-leading-tight);
+  font-weight: var(--cds-weight-bold);
+  letter-spacing: var(--cds-tracking-tight);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-headline {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-3xl);
+  line-height: var(--cds-leading-tight);
+  font-weight: var(--cds-weight-bold);
+  letter-spacing: var(--cds-tracking-tight);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-title {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-2xl);
+  line-height: var(--cds-leading-tight);
+  font-weight: var(--cds-weight-semibold);
+  letter-spacing: var(--cds-tracking-tight);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-subtitle {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-lg);
+  line-height: var(--cds-leading-snug);
+  font-weight: var(--cds-weight-semibold);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-lede {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-lg);
+  line-height: var(--cds-leading-relaxed);
+  font-weight: var(--cds-weight-regular);
+  color: var(--cds-color-text);
+  max-width: var(--cds-measure);
+}
+
+.cds-body {
+  font-family: var(--cds-font-serif);
+  font-size: var(--cds-text-base);
+  line-height: var(--cds-leading-relaxed);
+  color: var(--cds-color-text);
+  max-width: var(--cds-measure);
+}
+
+/* --- Interface voice (sans) --- */
+
+.cds-body-sm {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-normal);
+  color: var(--cds-color-text-muted);
+}
+
+.cds-ui {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-md);
+  line-height: var(--cds-leading-normal);
+  color: var(--cds-color-text);
+}
+
+.cds-ui-sm {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-normal);
+  color: var(--cds-color-text);
+}
+
+.cds-label {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-snug);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text);
+}
+
+/* The section marker of this system: uppercase, tracked, small, usually sitting
+ * directly on a hairline rule. Borrowed straight from a newspaper standfirst. */
+.cds-kicker {
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  line-height: var(--cds-leading-snug);
+  font-weight: var(--cds-weight-semibold);
+  letter-spacing: var(--cds-tracking-kicker);
+  text-transform: uppercase;
+  color: var(--cds-color-text-muted);
+}
+
+.cds-mono {
+  font-family: var(--cds-font-mono);
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-normal);
+  font-variant-ligatures: none;
+}
+
+/* Tabular figures — mandatory anywhere numbers stack: counts, tables, facets. */
+.cds-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* --- Tone modifiers --- */
+
+.cds-text-muted {
+  color: var(--cds-color-text-muted);
+}
+.cds-text-subtle {
+  color: var(--cds-color-text-subtle);
+}
+.cds-text-accent {
+  color: var(--cds-color-text-accent);
+}
+.cds-text-inverse {
+  color: var(--cds-color-text-inverse);
+}
+
+.cds-link {
+  color: var(--cds-color-text-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
+  transition: color var(--cds-duration-fast) var(--cds-ease-standard),
+    text-decoration-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-link:hover {
+  color: var(--cds-color-text-link-hover);
+  text-decoration-color: currentColor;
+}
+
+/* For links in dense contexts — table cells, result titles, breadcrumbs — where
+ * a column of red underlined text would overwhelm the data it sits in. Reads as
+ * ordinary ink until pointed at. */
+.cds-link-quiet {
+  color: var(--cds-color-text);
+  text-decoration: none;
+  transition: color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-link-quiet:hover {
+  color: var(--cds-color-text-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* --- Rules --- */
+
+.cds-rule {
+  border: 0;
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  margin: 0;
+}
+.cds-rule-strong {
+  border: 0;
+  border-top: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  margin: 0;
+}
+/* The masthead rule — a heavy accent bar, used once per view at most. */
+.cds-rule-accent {
+  border: 0;
+  border-top: var(--cds-border-width-heavy) solid var(--cds-color-rule-accent);
+  margin: 0;
+}

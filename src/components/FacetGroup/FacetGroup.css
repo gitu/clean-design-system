@@ -1,0 +1,115 @@
+.cds-facet-group {
+  padding-block: var(--cds-space-4);
+  border-bottom: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-facet-group:last-child {
+  border-bottom: 0;
+}
+
+.cds-facet-group__header {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  min-height: 20px;
+}
+
+.cds-facet-group__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  text-align: start;
+  color: var(--cds-color-text-muted);
+  transition: color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+.cds-facet-group__toggle:hover {
+  color: var(--cds-color-text);
+}
+
+.cds-facet-group__title {
+  flex: 1;
+  min-width: 0;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cds-facet-group__chevron {
+  flex: none;
+  color: var(--cds-color-text-subtle);
+  transition: transform var(--cds-duration-fast) var(--cds-ease-standard);
+}
+.cds-facet-group.is-collapsed .cds-facet-group__chevron {
+  transform: rotate(-90deg);
+}
+
+/* Active-selection count sits in the accent, so a collapsed group still says
+ * "there are filters in here". */
+.cds-facet-group__selected {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  flex: none;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-semibold);
+  color: var(--cds-color-on-accent);
+  background-color: var(--cds-color-accent);
+  border-radius: var(--cds-radius-sm);
+}
+
+.cds-facet-group__clear {
+  flex: none;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text-subtle);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  transition: color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+.cds-facet-group__clear:hover {
+  color: var(--cds-color-text-accent);
+}
+
+.cds-facet-group__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  margin-top: var(--cds-space-3);
+}
+
+.cds-facet-group__search {
+  margin-bottom: var(--cds-space-1);
+}
+
+.cds-facet-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 21rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.cds-facet-group__more {
+  align-self: flex-start;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text-accent);
+  cursor: pointer;
+  padding-block: var(--cds-space-1);
+}
+.cds-facet-group__more:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
