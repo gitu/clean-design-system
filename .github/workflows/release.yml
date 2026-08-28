@@ -5,18 +5,17 @@
 # Uses npm's trusted publishing (OIDC) rather than a long-lived NPM_TOKEN: the
 # `id-token: write` permission below lets npm verify the publish came from this
 # workflow, in this repository, and nowhere else. It also means every published
-# tarball carries a provenance attestation automatically — cryptographic proof
-# of the commit and the run that built it — with no `--provenance` flag.
+# tarball carries a provenance attestation — cryptographic proof of the commit
+# and the run that built it.
 #
 # One-time setup, and it has to happen in this order:
 #
 #   1. `npm publish` once from a laptop. npm cannot attach a trusted publisher
 #      to a package name that does not exist yet.
-#   2. On npmjs.com → the package → Settings → Trusted Publisher, add:
-#        organization/user: gitu
-#        repository:        clean-design-system
-#        workflow:          release.yml
-#        allowed actions:   npm publish
+#   2. Point npm at this workflow, from a laptop with npm >= 12:
+#        npm trust github clean-design-system \
+#          --repo gitu/clean-design-system --file release.yml --allow-publish
+#      (or npmjs.com → the package → Settings → Trusted Publisher)
 #   3. Every release after that is a tag.
 #
 # Until step 2 is done this workflow will fail at the publish step, which is the
@@ -43,12 +42,18 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # Trusted publishing needs Node >= 22.14 and npm >= 11.5.1. setup-node
-          # ships an older npm with every Node line, so it is upgraded
-          # explicitly rather than left to chance.
-          node-version: 22
+          # Trusted publishing needs npm >= 11.5.1, and reports of it failing on
+          # Node 22 are common enough that 24 is the safer floor. setup-node
+          # ships an older npm with every Node line, so npm is upgraded
+          # explicitly rather than left to whatever came bundled.
+          #
+          # Deliberately no `registry-url`. It writes an .npmrc containing
+          # `_authToken=${NODE_AUTH_TOKEN}`, and with no token in the
+          # environment npm sends an empty credential and authenticates as
+          # nobody — which surfaces as a 404 on a package that plainly exists.
+          # OIDC needs no .npmrc at all.
+          node-version: 24
           cache: pnpm
-          registry-url: https://registry.npmjs.org
 
       - run: npm install -g npm@latest
       - run: npm --version
@@ -84,5 +89,10 @@ jobs:
           echo "publishing $PKG"
 
       # `--ignore-scripts`: prepublishOnly has already run above, step by step,
-      # where a failure says which gate failed rather than which script did.
-      - run: npm publish --ignore-scripts
+      # where a failure names the gate that failed rather than the script.
+      #
+      # `--provenance` is passed explicitly even though npm documents it as
+      # automatic under trusted publishing. The reports disagree, the flag is a
+      # no-op when it is already on, and the attestation is the entire reason
+      # for publishing this way — so it is stated rather than assumed.
+      - run: npm publish --provenance --ignore-scripts
