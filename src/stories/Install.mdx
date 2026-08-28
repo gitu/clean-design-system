@@ -9,13 +9,21 @@ situations. Both draw on the same source; neither is a fork of the other.
 
 ## As a package
 
+Published to [GitHub Packages](https://github.com/gitu/clean-design-system/pkgs/npm/clean-design-system),
+which requires a token to install even though the package is public — a personal
+access token with `read:packages`, in an `.npmrc`:
+
 ```bash
-npm install clean-design-system
+# ~/.npmrc
+@gitu:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=ghp_your_token
+
+npm install @gitu/clean-design-system
 ```
 
 ```tsx
-import 'clean-design-system/styles.css'
-import { ThemeProvider, Button } from 'clean-design-system'
+import '@gitu/clean-design-system/styles.css'
+import { ThemeProvider, Button } from '@gitu/clean-design-system'
 ```
 
 Take this when you want upgrades to arrive as a version bump and you are content
@@ -119,4 +127,5 @@ the package. Item names are the kebab-cased component name: `Button` → `button
 | Changing markup | fork the project | edit the file |
 | Bundle | one dependency, tree-shaken | only what you installed |
 | Charts | pulls three `@visx/*` packages | same, installed for you |
+| Account needed | a GitHub token, to install | none |
 | Suits | a product that wants a system | a system that wants a product |

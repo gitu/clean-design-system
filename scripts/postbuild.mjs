@@ -7,7 +7,7 @@
  * `dist/` should be a self-contained, relocatable bundle. Two things were wrong
  * with that, both found by reading `npm pack` output rather than the code:
  *
- *   1. It made the faces mandatory. Importing `clean-design-system/styles.css`
+ *   1. It made the faces mandatory. Importing `@gitu/clean-design-system/styles.css`
  *      pulled 396 KB of woff2 whether the consumer wanted them or not — while
  *      the README, `src/index.ts` and `src/styles/index.css` all said, in those
  *      words, that they were optional. The tokens carry real fallbacks
@@ -19,8 +19,8 @@
  *
  * So the faces stay opt-in, as documented:
  *
- *   import 'clean-design-system/styles.css'      // tokens, reset, components
- *   import 'clean-design-system/fonts/fonts.css' // optional, self-hosted faces
+ *   import '@gitu/clean-design-system/styles.css'      // tokens, reset, components
+ *   import '@gitu/clean-design-system/fonts/fonts.css' // optional, self-hosted faces
  */
 import { readFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'

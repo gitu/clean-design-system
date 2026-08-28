@@ -23,10 +23,16 @@ fourteen example applications built from the system.
 
 Two ways, for two different relationships with a design system.
 
-**As a package**, when you want upgrades as a version bump:
+**As a package**, when you want upgrades as a version bump. It is published to
+[GitHub Packages](https://github.com/gitu/clean-design-system/pkgs/npm/clean-design-system),
+which needs a token to install even though the package is public:
 
 ```bash
-npm install clean-design-system
+# ~/.npmrc — a classic PAT with read:packages
+@gitu:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=ghp_your_token
+
+npm install @gitu/clean-design-system
 ```
 
 **As source you own**, when the system is a starting point rather than a
@@ -40,6 +46,9 @@ The [shadcn CLI](https://ui.shadcn.com/docs/registry) installs from any public
 registry URL, so this works without a CLI of our own. Transitive dependencies
 resolve automatically — asking for `date-input` brings the tokens, `cx` and the
 seven components a date field is actually made of.
+
+No account needed for this route, which is the practical difference between the
+two: the registry is plain JSON over HTTPS.
 
 The registry is **generated from `src/` on every build** (`scripts/build-registry.mjs`),
 so it cannot drift from the package. Browse it at
@@ -108,9 +117,9 @@ exchange for keeping the whole system server-renderable and lodash-free.
 ## Use
 
 ```tsx
-import 'clean-design-system/fonts/fonts.css' // optional, self-hosted faces
-import 'clean-design-system/styles.css'
-import { ThemeProvider, SearchInput, ResultCard, ResultList } from 'clean-design-system'
+import '@gitu/clean-design-system/fonts/fonts.css' // optional, self-hosted faces
+import '@gitu/clean-design-system/styles.css'
+import { ThemeProvider, SearchInput, ResultCard, ResultList } from '@gitu/clean-design-system'
 
 export function App() {
   return (
@@ -327,13 +336,15 @@ pnpm version minor && git push --follow-tags
 A `v*` tag runs `.github/workflows/release.yml`, which re-runs every gate,
 checks the tag agrees with `package.json`, and publishes.
 
-Publishing uses npm's [trusted publishing](https://docs.npmjs.com/trusted-publishers/)
-over OIDC rather than a stored `NPM_TOKEN`, so there is no long-lived
-credential in the repository and every tarball carries a provenance attestation
-— cryptographic proof of the commit and workflow run that built it. The setup is
-once, and the order matters: publish manually once (npm cannot attach a trusted
-publisher to a name that does not exist), then add the publisher on npmjs.com
-pointing at `release.yml`.
+It publishes to **GitHub Packages**, authenticated with the `GITHUB_TOKEN` that
+Actions mints for the run — so there is no stored credential to rotate, revoke
+or leak, and no setup beyond pushing the tag.
+
+The trade is that GitHub Packages requires authentication to *install*, even for
+a public package, so consumers need a PAT with `read:packages`. If that is the
+wrong trade later, npmjs.com over OIDC is the alternative; it installs with no
+account but the first publish has to be manual, because npm cannot attach a
+trusted publisher to a package name that does not exist yet.
 
 `prepublishOnly` runs `build`, `smoke` and `check-package` for anyone publishing
 by hand, so the same gates apply either way.

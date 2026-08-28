@@ -3,8 +3,8 @@
  * applications.
  *
  * Import the stylesheet once, at your application's entry point:
- *   import 'clean-design-system/fonts/fonts.css'  // optional, self-hosted faces
- *   import 'clean-design-system/styles.css'
+ *   import '@gitu/clean-design-system/fonts/fonts.css'  // optional, self-hosted faces
+ *   import '@gitu/clean-design-system/styles.css'
  *
  * Then wrap the tree in a <ThemeProvider>. Nothing is styled without it.
  */

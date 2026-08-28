@@ -1,5 +1,5 @@
 {
-  "name": "clean-design-system",
+  "name": "@gitu/clean-design-system",
   "version": "0.1.0",
   "packageManager": "pnpm@11.5.2",
   "description": "A quiet, editorial design system for complex search applications.",
@@ -29,7 +29,8 @@
     "shadcn-registry"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
   "sideEffects": [

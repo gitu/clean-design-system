@@ -1,26 +1,19 @@
-# Publishes to npm when a version tag is pushed.
+# Publishes to GitHub Packages when a version tag is pushed.
 #
 #   pnpm version minor && git push --follow-tags
 #
-# Uses npm's trusted publishing (OIDC) rather than a long-lived NPM_TOKEN: the
-# `id-token: write` permission below lets npm verify the publish came from this
-# workflow, in this repository, and nowhere else. It also means every published
-# tarball carries a provenance attestation — cryptographic proof of the commit
-# and the run that built it.
+# No stored credential. `GITHUB_TOKEN` is minted for this run by Actions, and
+# `packages: write` below is the only permission it needs — which is the whole
+# argument for GitHub Packages over npmjs.com here: nothing long-lived to
+# rotate, revoke or leak.
 #
-# One-time setup, and it has to happen in this order:
+# The cost lands on consumers rather than on us, and it is real: GitHub Packages
+# requires authentication to *install*, even for a public package. Anyone using
+# this as a dependency needs a personal access token with `read:packages` and an
+# .npmrc pointing @gitu at the registry. The README says so.
 #
-#   1. `npm publish` once from a laptop. npm cannot attach a trusted publisher
-#      to a package name that does not exist yet.
-#   2. Point npm at this workflow, from a laptop with npm >= 12:
-#        npm trust github clean-design-system \
-#          --repo gitu/clean-design-system --file release.yml --allow-publish
-#      (or npmjs.com → the package → Settings → Trusted Publisher)
-#   3. Every release after that is a tag.
-#
-# Until step 2 is done this workflow will fail at the publish step, which is the
-# correct failure: nothing should be able to publish that npm has not been told
-# to trust.
+# The unauthenticated route is the shadcn registry on GitHub Pages, which is
+# plain JSON over HTTPS and needs no account at all.
 name: Release
 
 on:
@@ -30,7 +23,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # required for OIDC
+  packages: write
 
 jobs:
   publish:
@@ -42,21 +35,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # Trusted publishing needs npm >= 11.5.1, and reports of it failing on
-          # Node 22 are common enough that 24 is the safer floor. setup-node
-          # ships an older npm with every Node line, so npm is upgraded
-          # explicitly rather than left to whatever came bundled.
-          #
-          # Deliberately no `registry-url`. It writes an .npmrc containing
-          # `_authToken=${NODE_AUTH_TOKEN}`, and with no token in the
-          # environment npm sends an empty credential and authenticates as
-          # nobody — which surfaces as a 404 on a package that plainly exists.
-          # OIDC needs no .npmrc at all.
           node-version: 24
           cache: pnpm
-
-      - run: npm install -g npm@latest
-      - run: npm --version
+          # Writes the .npmrc that points the scope at GitHub Packages and reads
+          # NODE_AUTH_TOKEN. Required here — unlike npmjs.com's OIDC publishing,
+          # GitHub Packages authenticates with a bearer token.
+          registry-url: https://npm.pkg.github.com
+          scope: '@gitu'
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
@@ -71,14 +56,15 @@ jobs:
       - run: pnpm smoke
       - run: pnpm test
 
-      # Packs the tarball, installs it into an empty project and uses it. This
-      # is the only check that exercises the `exports` map and `files` list,
-      # which is where publishing goes wrong.
+      # Packs the tarball, installs it into an empty project and uses it. The
+      # only check that exercises the `exports` map and `files` list, which is
+      # where publishing goes wrong.
       - run: pnpm check-package
 
       # The tag has to agree with package.json, or the registry ends up with a
       # version nobody can find by the tag that produced it.
       - name: Check the tag matches the version
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           TAG="${GITHUB_REF_NAME#v}"
           PKG="$(node -p "require('./package.json').version")"
@@ -86,13 +72,20 @@ jobs:
             echo "tag v$TAG does not match package.json $PKG"
             exit 1
           fi
-          echo "publishing $PKG"
 
-      # `--ignore-scripts`: prepublishOnly has already run above, step by step,
-      # where a failure names the gate that failed rather than the script.
-      #
-      # `--provenance` is passed explicitly even though npm documents it as
-      # automatic under trusted publishing. The reports disagree, the flag is a
-      # no-op when it is already on, and the attestation is the entire reason
-      # for publishing this way — so it is stated rather than assumed.
-      - run: npm publish --provenance --ignore-scripts
+      # Re-running a tag, or dispatching by hand, should not fail on a version
+      # that is already up. It should say so and stop.
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          NAME="$(node -p "require('./package.json').name")"
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION is already published — nothing to do."
+            exit 0
+          fi
+          # prepublishOnly already ran above, step by step, where a failure
+          # names the gate rather than the script.
+          npm publish --ignore-scripts
+          echo "published $NAME@$VERSION"
