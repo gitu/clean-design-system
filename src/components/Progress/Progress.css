@@ -1,0 +1,77 @@
+.cds-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  min-width: 0;
+}
+
+.cds-progress__labels {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--cds-space-3);
+}
+
+.cds-progress__label {
+  color: var(--cds-color-text-muted);
+}
+
+.cds-progress__value {
+  font-size: var(--cds-text-xs);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-progress__track {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background-color: var(--cds-color-surface-active);
+  border-radius: var(--cds-radius-pill);
+}
+
+.cds-progress--sm .cds-progress__track { height: 3px; }
+.cds-progress--md .cds-progress__track { height: 6px; }
+
+.cds-progress__fill {
+  height: 100%;
+  background-color: var(--cds-color-accent);
+  border-radius: inherit;
+  transition: width var(--cds-duration-normal) var(--cds-ease-standard);
+}
+
+.cds-progress--success .cds-progress__fill { background-color: var(--cds-color-success); }
+.cds-progress--warning .cds-progress__fill { background-color: var(--cds-color-warning); }
+.cds-progress--danger  .cds-progress__fill { background-color: var(--cds-color-danger); }
+
+/* Indeterminate: a sweep across the track. The duration is hardcoded because
+ * an infinite animation has no final frame to settle on, which is exactly the
+ * case tokens/motion.css cannot handle — so this owes its own reduced-motion
+ * block, and Spinner's rule applies: replace the motion, don't remove it. */
+.cds-progress__track.is-indeterminate .cds-progress__fill {
+  width: 35%;
+  animation: cds-progress-sweep 1.4s var(--cds-ease-standard) infinite;
+}
+
+@keyframes cds-progress-sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(340%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the fill partial. A full-width bar reads as "complete" — which is
+   * exactly the wrong thing to tell someone about a queued job — so the
+   * indeterminate state stays visibly unfinished and pulses in place. */
+  .cds-progress__track.is-indeterminate .cds-progress__fill {
+    width: 35%;
+    animation: cds-progress-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes cds-progress-pulse {
+    0%, 100% { opacity: 0.3; }
+    50%      { opacity: 0.7; }
+  }
+}
+
+@media (forced-colors: active) {
+  .cds-progress__track { border: var(--cds-hairline) solid CanvasText; }
+  .cds-progress__fill { background-color: Highlight; }
+}

@@ -17,6 +17,9 @@ const withTheme: Decorator = (Story, context) => {
 
 const preview: Preview = {
   decorators: [withTheme],
+  // addon-docs gives every story a Docs tab; this turns on the generated
+  // component page as well, which is where the JSDoc on each prop surfaces.
+  tags: ['autodocs'],
   globalTypes: {
     theme: {
       description: 'Colour theme',
@@ -35,15 +38,27 @@ const preview: Preview = {
   initialGlobals: { theme: 'light' },
   parameters: {
     controls: { expanded: true, matchers: { color: /(background|color)$/i } },
+    // Run the axe rules as part of `pnpm test`, not just as a panel someone
+    // might open. A violation fails the run.
+    a11y: { test: 'error' },
+    docs: {
+      // The page is a reference, not a gallery — a story per section reads
+      // better than every story stacked into one scroll.
+      toc: true,
+    },
     options: {
       storySort: {
         order: [
           'Foundations',
-          ['Introduction', 'Colour', 'Typography', 'Spacing'],
+          ['Introduction', 'Colour', 'Typography', 'Spacing', 'Elevation'],
           'Primitives',
           'Forms',
           'Search',
           'Data',
+          'Charts',
+          ['Overview'],
+          'Prose',
+          'Assistant',
           'Layout',
           'Patterns',
         ],

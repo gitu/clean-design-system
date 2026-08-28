@@ -5,6 +5,15 @@
   --cds-duration-fast: 120ms;
   --cds-duration-normal: 180ms;
   --cds-duration-slow: 280ms;
+  /* Charts only. The scale above was calibrated for chrome, where 280ms is
+   * already the outer limit; a staggered reveal of sixty marks needs more room
+   * than any control ever should. Do not reach for this on a dropdown. */
+  --cds-duration-slower: 420ms;
+
+  /* Per-mark delay step for staggered reveals. Tokenised so chart CSS never
+   * hardcodes a delay — which is what keeps the rule below sufficient, and
+   * means the charts need no reduced-motion block of their own. */
+  --cds-stagger: 12ms;
 
   --cds-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
   --cds-ease-out: cubic-bezier(0, 0, 0.2, 1);
@@ -17,5 +26,7 @@
     --cds-duration-fast: 0ms;
     --cds-duration-normal: 0ms;
     --cds-duration-slow: 0ms;
+    --cds-duration-slower: 0ms;
+    --cds-stagger: 0ms;
   }
 }

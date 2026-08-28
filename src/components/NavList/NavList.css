@@ -1,0 +1,161 @@
+/* Navigation, ruled rather than boxed. The current item is marked by a rule on
+ * its leading edge — the same device the rest of the system uses for "here" —
+ * plus weight, so it does not depend on colour alone. */
+
+.cds-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-5);
+  min-width: 0;
+}
+
+.cds-nav__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-1);
+  min-width: 0;
+}
+
+.cds-nav__group {
+  margin: 0 0 var(--cds-space-1);
+  padding-inline: var(--cds-space-3);
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-px);
+  min-width: 0;
+}
+
+.cds-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+  width: 100%;
+  padding: var(--cds-space-2) var(--cds-space-3);
+  border: 0;
+  border-radius: var(--cds-radius-sm);
+  background: none;
+  font: inherit;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-md);
+  color: var(--cds-color-text-muted);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-nav--sm .cds-nav__item {
+  padding-block: var(--cds-space-1);
+  font-size: var(--cds-text-sm);
+}
+
+.cds-nav__item:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+
+.cds-nav__item:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: calc(var(--cds-focus-ring-offset) * -1);
+}
+
+.cds-nav__item:disabled {
+  color: var(--cds-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.cds-nav__item.is-current {
+  color: var(--cds-color-text-strong);
+  font-weight: var(--cds-weight-medium);
+  background-color: var(--cds-color-surface-selected);
+}
+
+.cds-nav__icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-nav__item.is-current .cds-nav__icon {
+  color: var(--cds-color-accent);
+}
+
+.cds-nav__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cds-nav__count {
+  flex: none;
+  font-size: var(--cds-text-xs);
+  color: var(--cds-color-text-subtle);
+}
+
+/* --- Vertical: a leading rule marks the current page --- */
+
+.cds-nav--vertical .cds-nav__item {
+  border-inline-start: var(--cds-border-width-heavy) solid transparent;
+}
+
+.cds-nav--vertical .cds-nav__item.is-current {
+  border-inline-start-color: var(--cds-color-accent);
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+/* --- Horizontal: a header bar, scrolling sideways rather than wrapping --- */
+
+.cds-nav--horizontal {
+  flex-direction: row;
+  gap: var(--cds-space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cds-nav--horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.cds-nav--horizontal .cds-nav__section {
+  flex-direction: row;
+}
+
+.cds-nav--horizontal .cds-nav__list {
+  flex-direction: row;
+  gap: var(--cds-space-1);
+}
+
+.cds-nav--horizontal .cds-nav__item {
+  width: auto;
+  white-space: nowrap;
+  border-bottom: var(--cds-border-width-heavy) solid transparent;
+  border-radius: var(--cds-radius-sm) var(--cds-radius-sm) 0 0;
+}
+
+.cds-nav--horizontal .cds-nav__item.is-current {
+  background: none;
+  border-bottom-color: var(--cds-color-accent);
+}
+
+.cds-nav--horizontal .cds-nav__label {
+  overflow: visible;
+}
+
+@media (forced-colors: active) {
+  .cds-nav__item.is-current {
+    border-inline-start-color: Highlight;
+    border-bottom-color: Highlight;
+  }
+}

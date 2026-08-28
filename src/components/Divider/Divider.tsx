@@ -4,7 +4,7 @@ import './Divider.css'
 
 export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical'
-  /** `accent` is the heavy red masthead rule — at most once per view. */
+  /** `accent` is the heavy masthead rule — at most once per view. */
   tone?: 'subtle' | 'default' | 'strong' | 'accent'
   /** Optional label set into the rule as a kicker. Horizontal only. */
   label?: ReactNode

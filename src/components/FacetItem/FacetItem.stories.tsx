@@ -11,6 +11,10 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const States: Story = {
+  // WCAG 2.2 SC 1.4.3 exempts text that is part of an inactive control, which
+  // is the whole point of the disabled row here — so the contrast rule is
+  // scoped away from it rather than switched off for the story.
+  parameters: { a11y: { context: { exclude: ['.is-disabled'] } } },
   render: () => (
     <div style={{ maxWidth: 264, display: 'flex', flexDirection: 'column', gap: 1 }}>
       <FacetItem label="Finance" count={1284} defaultChecked onOnly={() => {}} />

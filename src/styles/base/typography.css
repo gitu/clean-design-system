@@ -145,7 +145,7 @@
 }
 
 /* For links in dense contexts — table cells, result titles, breadcrumbs — where
- * a column of red underlined text would overwhelm the data it sits in. Reads as
+ * a column of accented underlined text would overwhelm the data it sits in. Reads as
  * ordinary ink until pointed at. */
 .cds-link-quiet {
   color: var(--cds-color-text);

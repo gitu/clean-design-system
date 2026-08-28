@@ -23,6 +23,8 @@ export * from './components/Kbd'
 export * from './components/Spinner'
 export * from './components/Skeleton'
 export * from './components/Divider'
+export * from './components/Progress'
+export * from './components/Avatar'
 
 /* --- Forms --- */
 export * from './components/Field'
@@ -33,6 +35,12 @@ export * from './components/Checkbox'
 export * from './components/Radio'
 export * from './components/Switch'
 export * from './components/SegmentedControl'
+export * from './components/Calendar'
+export * from './components/DateInput'
+export * from './components/TimeInput'
+export * from './components/DateTimeInput'
+export * from './components/DateRangePicker'
+export * from './components/MarkdownEditor'
 
 /* --- Search --- */
 export * from './components/SearchInput'
@@ -48,6 +56,26 @@ export * from './components/FacetItem'
 export * from './components/RangeFilter'
 export * from './components/CommandPalette'
 
+/* --- Charts --- */
+export * from './components/LineChart'
+export * from './components/AreaChart'
+export * from './components/BarChart'
+export * from './components/Sparkline'
+export * from './components/ChartFrame'
+export * from './components/ChartLegend'
+export * from './components/ChartTooltip'
+export * from './components/ChartGroup'
+// The shared chart types live in exactly one place. Re-exporting them from
+// each chart's index as well would trip isolatedModules on the duplicate.
+export type {
+  ChartKey,
+  ChartMargin,
+  ChartDomain,
+  ChartSeries,
+  ChartDatumEvent,
+  ChartTooltipContext,
+} from './components/Chart/chart-types'
+
 /* --- Data --- */
 export * from './components/DataTable'
 export * from './components/EmptyState'
@@ -59,7 +87,17 @@ export * from './components/Panel'
 export * from './components/Stack'
 export * from './components/Tabs'
 export * from './components/Breadcrumbs'
+export * from './components/NavList'
 export * from './components/Drawer'
+export * from './components/Dialog'
+export * from './components/Menu'
+export * from './components/Toast'
+
+/* --- Prose --- */
+export * from './components/Markdown'
+
+/* --- Assistant --- */
+export * from './components/Chat'
 
 /* --- Utilities --- */
 export { cx } from './utils/cx'

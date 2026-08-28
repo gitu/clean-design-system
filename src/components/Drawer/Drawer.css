@@ -1,8 +1,14 @@
+/* The portal layer carries `cds-root` so tokens resolve inside it — and
+ * `.cds-root` sets `background-color: var(--cds-color-canvas)`. Without this
+ * the layer paints an opaque canvas across the whole viewport and the scrim
+ * below sits on top of *that*, so the page behind is not dimmed but replaced.
+ * `CommandPalette` guards the same way; this one did not. */
 .cds-drawer-layer {
   position: fixed;
   inset: 0;
   z-index: var(--cds-z-drawer);
   display: flex;
+  background: none;
 }
 .cds-drawer-layer--start {
   justify-content: flex-start;
@@ -14,11 +20,21 @@
   align-items: flex-end;
 }
 
+/* A softer scrim than a modal's, plus a slight blur: behind a drawer is a list
+ * the reader was just looking at and will go back to, so it should read as
+ * pushed back rather than switched off. The blur is what lets the scrim stay
+ * light without the two layers competing for attention. */
 .cds-drawer__backdrop {
   position: absolute;
   inset: 0;
-  background-color: var(--cds-color-overlay);
+  background-color: var(--cds-color-overlay-soft);
   animation: cds-drawer-fade var(--cds-duration-fast) var(--cds-ease-out);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .cds-drawer__backdrop {
+    backdrop-filter: blur(2px);
+  }
 }
 
 .cds-drawer {
@@ -29,6 +45,20 @@
   box-shadow: var(--cds-shadow-lg);
   max-width: 100vw;
   outline: none;
+}
+
+/* On a phone every drawer size is wider than the screen, so without this a
+ * side panel becomes a full-screen takeover with no way to see what it came
+ * from. Leaving a strip of the page showing keeps the drawer reading as a
+ * layer over the list rather than a different screen. */
+@media (max-width: 640px) {
+  .cds-drawer-layer--start .cds-drawer,
+  .cds-drawer-layer--end .cds-drawer {
+    max-width: calc(100vw - var(--cds-space-10));
+  }
+  .cds-drawer-layer--bottom .cds-drawer {
+    max-height: 88vh;
+  }
 }
 
 .cds-drawer--start,

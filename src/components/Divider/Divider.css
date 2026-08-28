@@ -14,13 +14,17 @@
   min-height: 1em;
 }
 
-.cds-divider--subtle {
+/* Scoped to `.cds-divider` deliberately. The labelled variant carries the same
+ * tone class on its container, so an unscoped `.cds-divider--accent` filled the
+ * whole row — label included — instead of just the rule, leaving muted text on
+ * an accent ground at 1.35:1. */
+.cds-divider.cds-divider--subtle {
   background-color: var(--cds-color-rule-subtle);
 }
-.cds-divider--strong {
+.cds-divider.cds-divider--strong {
   background-color: var(--cds-color-rule-strong);
 }
-.cds-divider--accent {
+.cds-divider.cds-divider--accent {
   background-color: var(--cds-color-rule-accent);
 }
 .cds-divider--horizontal.cds-divider--accent {

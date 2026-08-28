@@ -1,0 +1,157 @@
+/* Ruled, like a printed calendar page: the grid carries no boxes, and the
+ * selection is a filled square rather than an outline. */
+
+.cds-calendar {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  font-family: var(--cds-font-sans);
+}
+
+.cds-calendar__nav {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  display: flex;
+  gap: var(--cds-space-1);
+  z-index: 1;
+}
+
+.cds-calendar__months {
+  display: flex;
+  gap: var(--cds-space-6);
+  flex-wrap: wrap;
+}
+
+.cds-calendar__grid {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.cds-calendar__caption {
+  caption-side: top;
+  text-align: start;
+  padding-bottom: var(--cds-space-3);
+  color: var(--cds-color-text-muted);
+}
+
+.cds-calendar__weekday {
+  padding-bottom: var(--cds-space-2);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-regular);
+  letter-spacing: var(--cds-tracking-wide);
+  text-transform: uppercase;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-calendar__weekday abbr {
+  text-decoration: none;
+  cursor: default;
+}
+
+.cds-calendar__cell {
+  padding: 0;
+}
+
+.cds-calendar__day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: var(--cds-radius-sm);
+  background: none;
+  font: inherit;
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-calendar__day:hover:not(:disabled) {
+  background-color: var(--cds-color-surface-hover);
+}
+
+.cds-calendar__day:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: -1px;
+}
+
+.cds-calendar__day:disabled {
+  color: var(--cds-color-text-disabled);
+  cursor: not-allowed;
+}
+
+/* A day from the neighbouring month keeps its place — the grid is always six
+ * rows so the buttons never move — but recedes.
+ *
+ * By colour alone, with no opacity on top: `text-subtle` is already the
+ * quietest readable ink in the system, and multiplying it by 0.55 took it to
+ * 2.2:1, which is not "receding" but "unreadable". */
+.cds-calendar__day.is-outside {
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-calendar__day.is-today .cds-calendar__number {
+  font-weight: var(--cds-weight-semibold);
+  box-shadow: inset 0 -2px 0 0 var(--cds-color-accent);
+}
+
+.cds-calendar__day.is-in-range {
+  background-color: var(--cds-color-accent-subtle);
+  border-radius: 0;
+}
+
+.cds-calendar__day.is-selected {
+  background-color: var(--cds-color-accent);
+  color: var(--cds-color-on-accent);
+}
+
+.cds-calendar__day.is-selected.is-today .cds-calendar__number {
+  box-shadow: inset 0 -2px 0 0 var(--cds-color-on-accent);
+}
+
+/* Square off the inner edges so a selected range reads as one bar. */
+.cds-calendar__day.is-range-start { border-end-end-radius: 0; border-start-end-radius: 0; }
+.cds-calendar__day.is-range-end { border-end-start-radius: 0; border-start-start-radius: 0; }
+
+.cds-calendar__extra {
+  font-size: var(--cds-text-2xs);
+  line-height: 1;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-calendar__day.is-selected .cds-calendar__extra {
+  color: var(--cds-color-on-accent);
+}
+
+.cds-calendar__dot {
+  position: absolute;
+  bottom: 4px;
+  width: 3px;
+  height: 3px;
+  border-radius: var(--cds-radius-pill);
+  background-color: var(--cds-color-accent);
+}
+
+.cds-calendar__day.is-selected .cds-calendar__dot {
+  background-color: var(--cds-color-on-accent);
+}
+
+@media (forced-colors: active) {
+  .cds-calendar__day.is-selected {
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  .cds-calendar__day.is-in-range {
+    background-color: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+}

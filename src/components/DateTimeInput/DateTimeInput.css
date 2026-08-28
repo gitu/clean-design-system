@@ -1,0 +1,30 @@
+/* The date takes the slack, the time asks for exactly what it needs — a time
+ * field stretched across half a form reads as an invitation to type an essay. */
+.cds-datetime {
+  display: flex;
+  gap: var(--cds-space-2);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.cds-datetime__date {
+  flex: 1 1 11rem;
+  min-width: 0;
+}
+
+.cds-datetime__time {
+  flex: 0 1 9.5rem;
+  min-width: 0;
+}
+
+/* Below this the two fields would each be too narrow to show their own
+ * placeholder, which is the point at which stacking is the smaller loss. */
+@media (max-width: 420px) {
+  .cds-datetime {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cds-datetime__time {
+    flex: none;
+  }
+}

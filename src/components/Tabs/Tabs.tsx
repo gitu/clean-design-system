@@ -94,7 +94,10 @@ export function Tabs({
               data-value={item.value}
               id={`${uid}-tab-${item.value}`}
               aria-selected={isActive}
-              aria-controls={`${uid}-panel-${item.value}`}
+              // Only the active panel is rendered, and only when there are
+              // children to put in it — so pointing every tab at a panel id
+              // leaves most of them dangling.
+              aria-controls={isActive && children ? `${uid}-panel-${active}` : undefined}
               tabIndex={isActive ? 0 : -1}
               disabled={item.disabled}
               className={cx('cds-tabs__tab', isActive && 'is-active')}

@@ -1,0 +1,109 @@
+/* Entries carry their series colour as `color`, so the swatch is currentColor
+ * and the same markup works in a tooltip, a table cell or a legend. */
+
+.cds-chart-legend {
+  display: flex;
+  gap: var(--cds-space-4);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cds-chart-legend--vertical {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--cds-space-2);
+}
+
+.cds-chart-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--cds-text-xs);
+  color: inherit;
+  text-align: left;
+  transition: opacity var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+button.cds-chart-legend__item {
+  cursor: pointer;
+}
+
+.cds-chart-legend--md .cds-chart-legend__item {
+  font-size: var(--cds-text-sm);
+}
+
+.cds-chart-legend--vertical .cds-chart-legend__item {
+  justify-content: flex-start;
+}
+
+.cds-chart-legend__item:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+  border-radius: var(--cds-radius-sm);
+}
+
+/* A hidden series keeps its position and its colour — it reads as switched
+ * off, not as missing.
+ *
+ * The dimming is applied to the swatch alone. Fading the whole entry took the
+ * label to 1.8:1, which meant the one thing you need in order to switch a
+ * series back on was the thing you could no longer read. */
+.cds-chart-legend__item.is-hidden .cds-chart-legend__swatch {
+  opacity: 0.35;
+}
+.cds-chart-legend__item.is-hidden .cds-chart-legend__label {
+  text-decoration: line-through;
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-chart-legend__item.is-active .cds-chart-legend__label {
+  color: var(--cds-color-text-strong);
+}
+
+.cds-chart-legend__swatch {
+  flex: none;
+  background-color: currentColor;
+}
+
+.cds-chart-legend__swatch--line {
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+.cds-chart-legend__swatch--square {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--cds-radius-sm);
+}
+.cds-chart-legend__swatch--dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--cds-radius-pill);
+}
+
+.cds-chart-legend__swatch.is-dashed {
+  background-color: transparent;
+  background-image: linear-gradient(
+    to right,
+    currentColor 0 4px,
+    transparent 4px 6px,
+    currentColor 6px 10px,
+    transparent 10px 12px
+  );
+}
+
+.cds-chart-legend__label {
+  color: var(--cds-color-text-muted);
+}
+
+.cds-chart-legend__value {
+  margin-left: auto;
+  padding-left: var(--cds-space-3);
+  color: var(--cds-color-text-strong);
+  font-weight: var(--cds-weight-medium);
+}

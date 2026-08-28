@@ -23,3 +23,954 @@ body {
   place-items: center;
   padding: var(--cds-space-8);
 }
+
+/* ---------------------------------------------------------------------------
+ * Chrome for the Patterns stories only. Canvas-only — this file never reaches
+ * dist/, so nothing here is part of the published system.
+ * ------------------------------------------------------------------------- */
+
+.sb-masthead {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3) var(--cds-space-5);
+  flex-wrap: wrap;
+  padding: var(--cds-space-2) var(--cds-space-5);
+  min-height: var(--cds-header-height);
+}
+
+.sb-masthead__brand {
+  font-family: var(--cds-font-mono);
+  font-size: 19px;
+  font-weight: var(--cds-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--cds-color-brand-mark);
+  flex: none;
+}
+
+.sb-masthead__section {
+  color: var(--cds-color-text-muted);
+  flex: none;
+}
+
+/* The wide slot — a search field. It takes the remaining room on a desktop and
+ * the whole of the second row on a phone. */
+.sb-masthead__slot {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.sb-masthead__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  margin-left: auto;
+  flex: none;
+}
+
+/* Below this the section kicker is the first thing worth losing: the wordmark
+ * already says where you are, and the actions are what you came to press. */
+@media (max-width: 560px) {
+  .sb-masthead {
+    gap: var(--cds-space-2) var(--cds-space-3);
+    padding: var(--cds-space-2) var(--cds-space-4);
+    /* Hug the content rather than reserving a desktop header's height — on a
+     * phone the bar is a strip, not a masthead. */
+    min-height: 0;
+  }
+  .sb-masthead__section {
+    display: none;
+  }
+  .sb-masthead__brand {
+    font-size: 17px;
+  }
+  .sb-masthead__actions {
+    margin-left: auto;
+  }
+  /* A slot that still has real content in it — a search field — takes its own
+   * row deliberately, rather than squeezing the actions. */
+  .sb-masthead__slot {
+    flex-basis: 100%;
+    order: 1;
+  }
+}
+
+/* Page gutters for the Patterns stories. Inline styles cannot carry a media
+ * query, and space-6 on both sides of a 390px screen spends a sixth of it on
+ * margin. */
+.sb-page {
+  padding: var(--cds-space-6);
+}
+
+@media (max-width: 640px) {
+  .sb-page {
+    padding: var(--cds-space-4) var(--cds-space-3);
+  }
+}
+
+/* The reading column. Wider gutters than a dashboard on desktop, narrower on a
+ * phone, because the measure is doing the work. */
+.sb-article {
+  padding: var(--cds-space-8) var(--cds-space-6);
+}
+
+@media (max-width: 640px) {
+  .sb-article {
+    padding: var(--cds-space-5) var(--cds-space-4);
+  }
+}
+
+/* The burger, and the nav it replaces. AppShell drops its sidebar at 860px, so
+ * that is where the header nav folds away and the menu button appears —
+ * matching the component rather than picking a second breakpoint. */
+.sb-burger {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .sb-burger {
+    display: inline-flex;
+  }
+  .sb-primary-nav {
+    display: none;
+  }
+  /* The nav is hidden, but its wrapper is a flex item with a 16rem basis — left
+   * alone it keeps reserving that width and pushes the actions onto a second
+   * row for no reason. Collapse the wrapper, not just its contents. */
+  .sb-masthead__slot:has(> .sb-primary-nav) {
+    display: none;
+  }
+}
+
+/* --- Landing page ---
+ * A marketing page has gutters and rhythm an application does not, and none of
+ * it belongs in the shipped system. */
+
+.sb-landing {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--cds-color-canvas);
+}
+
+.sb-landing__bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--cds-z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-6);
+  padding: var(--cds-space-3) var(--cds-space-6);
+  background-color: var(--cds-color-canvas);
+  border-bottom: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.sb-landing__bar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+}
+
+.sb-landing__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--cds-space-10);
+  align-items: center;
+  padding: var(--cds-space-16) var(--cds-space-6);
+  max-width: var(--cds-content-max);
+  margin-inline: auto;
+  width: 100%;
+}
+
+.sb-landing__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cds-space-3);
+}
+
+.sb-landing__demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-5);
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-lg);
+  background-color: var(--cds-color-surface-sunken);
+}
+
+.sb-landing__demo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cds-space-2);
+}
+
+.sb-landing__numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--cds-space-8);
+  padding: var(--cds-space-8) var(--cds-space-6);
+  max-width: var(--cds-content-max);
+  margin-inline: auto;
+  width: 100%;
+  border-block: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.sb-landing__number {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+}
+
+.sb-landing__figure {
+  font-size: var(--cds-text-3xl);
+  line-height: 1.05;
+}
+
+.sb-landing__section {
+  padding: var(--cds-space-12) var(--cds-space-6);
+  max-width: var(--cds-content-max);
+  margin-inline: auto;
+  width: 100%;
+}
+
+.sb-landing__features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--cds-space-8);
+  margin-top: var(--cds-space-6);
+}
+
+.sb-landing__closing {
+  padding: var(--cds-space-16) var(--cds-space-6);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.sb-landing__footer {
+  padding: var(--cds-space-6);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .sb-landing__hero {
+    grid-template-columns: 1fr;
+    gap: var(--cds-space-8);
+    padding: var(--cds-space-10) var(--cds-space-4);
+  }
+  .sb-landing__bar {
+    gap: var(--cds-space-3);
+    padding-inline: var(--cds-space-4);
+  }
+  /* The nav duplicates what the page already scrolls through; the actions are
+   * what the bar is for at this width. */
+  .sb-landing__bar .cds-nav {
+    display: none;
+  }
+  .sb-landing__numbers,
+  .sb-landing__section {
+    padding-inline: var(--cds-space-4);
+  }
+  .sb-landing__closing {
+    padding: var(--cds-space-10) var(--cds-space-4);
+  }
+}
+
+/* --- Sign in --- */
+
+.sb-auth {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--cds-color-surface-sunken);
+}
+
+.sb-auth__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--cds-space-4) var(--cds-space-6);
+}
+
+.sb-auth__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--cds-space-6) var(--cds-space-4);
+}
+
+.sb-auth__card {
+  width: 100%;
+  max-width: 24rem;
+  padding: var(--cds-space-8);
+  background-color: var(--cds-color-surface);
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-lg);
+}
+
+.sb-auth__footer {
+  padding: var(--cds-space-6);
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .sb-auth__card {
+    padding: var(--cds-space-5);
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+  .sb-auth__main {
+    align-items: flex-start;
+    padding-inline: 0;
+  }
+}
+
+/* --- Editorial calendar --- */
+
+.sb-calendar-split {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--cds-space-6);
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .sb-calendar-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Below the width where the calendar and the list can sit side by side, the
+ * day's entries move into a bottom sheet instead — a list under a six-week
+ * grid is off the bottom of a phone before you have tapped anything. */
+@media (max-width: 860px) {
+  /* Doubled for the same reason as `.sb-route-active` below. */
+  .cds-panel.sb-calendar-day {
+    display: none;
+  }
+}
+
+/* --- Delivery router --- */
+
+.sb-route-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: var(--cds-space-4);
+}
+
+.sb-route-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--cds-space-5);
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .sb-route-split { grid-template-columns: 1fr; }
+}
+
+.sb-route-map {
+  position: relative;
+  overflow: hidden;
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-md);
+  background-color: var(--cds-color-surface-sunken);
+}
+
+/* Sized explicitly rather than with `position: absolute; inset: 0` — MapLibre's
+ * own stylesheet sets `position: relative` on whatever element it mounts into,
+ * which overrides the absolute positioning and collapses the box to zero
+ * height. A map in a zero-height box never finishes loading its style. */
+.sb-route-map__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.sb-route-map__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-4);
+  overflow-y: auto;
+  background-color: var(--cds-color-surface-sunken);
+}
+
+.sb-route-map__note { margin: 0; color: var(--cds-color-text-subtle); }
+
+/* Markers are plain DOM so they take the system's tokens rather than
+ * MapLibre's default pin. */
+.sb-route-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: var(--cds-border-width) solid var(--cds-color-surface);
+  border-radius: var(--cds-radius-pill);
+  background-color: var(--cds-color-text-subtle);
+  color: var(--cds-color-text-inverse);
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-semibold);
+  cursor: pointer;
+  box-shadow: var(--cds-shadow-sm);
+}
+
+.sb-route-marker[data-status='delivered'] { background-color: var(--cds-color-success); }
+.sb-route-marker[data-status='next'] { background-color: var(--cds-color-accent); }
+.sb-route-marker[data-status='failed'] { background-color: var(--cds-color-danger); }
+.sb-route-marker.is-active { outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring); outline-offset: 2px; }
+
+.sb-route-schematic {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sb-route-schematic__stop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+  width: 100%;
+  padding: var(--cds-space-2) 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The connecting line between stops — the whole reason this reads as a route
+ * rather than a list. */
+.sb-route-schematic li:not(:last-child) .sb-route-schematic__stop::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 11px;
+  top: 50%;
+  bottom: calc(-50% + 2px);
+  width: var(--cds-border-width-heavy);
+  background-color: var(--cds-color-rule-strong);
+}
+
+.sb-route-schematic__dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--cds-radius-pill);
+  background-color: var(--cds-color-text-subtle);
+  color: var(--cds-color-text-inverse);
+  font-size: var(--cds-text-2xs);
+  font-weight: var(--cds-weight-semibold);
+}
+
+.sb-route-schematic__stop[data-status='delivered'] .sb-route-schematic__dot { background-color: var(--cds-color-success); }
+.sb-route-schematic__stop[data-status='next'] .sb-route-schematic__dot { background-color: var(--cds-color-accent); }
+.sb-route-schematic__stop[data-status='failed'] .sb-route-schematic__dot { background-color: var(--cds-color-danger); }
+
+.sb-route-schematic__label {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  justify-content: space-between;
+  gap: var(--cds-space-3);
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text);
+}
+
+.sb-route-row {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+  width: 100%;
+  /* Room on the leading edge for the selected marker below, so the rule sits
+   * beside the sequence number instead of printing through it. */
+  padding: var(--cds-space-3) var(--cds-space-2) var(--cds-space-3) var(--cds-space-3);
+  border: 0;
+  border-inline-start: var(--cds-border-width-heavy) solid transparent;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sb-route-row:hover { background-color: var(--cds-color-surface-hover); }
+
+.sb-route-row[aria-pressed='true'] {
+  background-color: var(--cds-color-surface-selected);
+  border-inline-start-color: var(--cds-color-accent);
+}
+
+.sb-route-row__seq {
+  flex: none;
+  width: 1.5rem;
+  color: var(--cds-color-text-subtle);
+  font-size: var(--cds-text-sm);
+}
+
+.sb-route-row__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+/* The detail panel repeats the next-stop card on a phone.
+ *
+ * Doubled selector on purpose: component stylesheets are imported from inside
+ * their own `.tsx`, so Vite injects them *after* this file and they win any tie
+ * on specificity. `.cds-panel { display: flex }` would otherwise beat a single
+ * class here. */
+@media (max-width: 860px) {
+  .cds-panel.sb-route-active { display: none; }
+}
+
+/* --- Assistant --- */
+
+.sb-assistant {
+  display: flex;
+  flex-direction: column;
+  /* The thread scrolls, the composer stays put — so the field is never chased
+   * off the bottom by a long answer. */
+  height: calc(100dvh - var(--cds-header-height));
+  padding: 0 var(--cds-space-6) var(--cds-space-4);
+  max-width: 54rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.sb-assistant__thread {
+  flex: 1;
+  min-height: 0;
+  padding-block: var(--cds-space-4);
+}
+
+@media (max-width: 640px) {
+  .sb-assistant { padding-inline: var(--cds-space-4); }
+}
+
+/* --- Delivery router: the next stop ---
+ * Hidden on a desktop, where the map and the detail panel already carry this.
+ * On a phone it is the page. */
+
+.sb-route-next { display: none; }
+
+@media (max-width: 860px) {
+  .sb-route-next {
+    display: block;
+    padding: var(--cds-space-5) var(--cds-space-4) var(--cds-space-4);
+    margin-inline: calc(var(--cds-space-3) * -1);
+    background-color: var(--cds-color-surface);
+    border-block: var(--cds-hairline) solid var(--cds-color-rule);
+    /* The accent bar is the system's "here" — and here is the one thing on
+     * screen that matters. */
+    box-shadow: inset 0 3px 0 0 var(--cds-color-accent);
+  }
+
+  .sb-route-next__kicker { color: var(--cds-color-text-subtle); }
+
+  .sb-route-next__address {
+    margin: var(--cds-space-2) 0 0;
+    /* Bigger than anything else the driver will see, deliberately: this is read
+     * at arm's length, in a van, in daylight. */
+    font-size: var(--cds-text-3xl);
+    line-height: var(--cds-leading-tight);
+  }
+
+  .sb-route-next__where {
+    margin: var(--cds-space-1) 0 0;
+    color: var(--cds-color-text-muted);
+  }
+
+  .sb-route-next__facts {
+    display: flex;
+    gap: var(--cds-space-6);
+    margin: var(--cds-space-4) 0 0;
+  }
+
+  .sb-route-next__facts dt { color: var(--cds-color-text-subtle); }
+
+  .sb-route-next__facts dd {
+    margin: var(--cds-space-1) 0 0;
+    font-size: var(--cds-text-lg);
+    color: var(--cds-color-text-strong);
+  }
+
+  .sb-route-next__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cds-space-2);
+    margin-top: var(--cds-space-5);
+  }
+
+  .sb-route-next__after {
+    margin: var(--cds-space-3) 0 0;
+    color: var(--cds-color-text-subtle);
+  }
+
+  /* Everything else becomes reference. The stat tiles in particular are a
+   * desk view — a driver does not need four panels of totals above the
+   * address they are driving to. */
+  .sb-route-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--cds-space-2);
+  }
+
+  .sb-route-map { height: 240px !important; }
+}
+
+/* --- Task tracker ---
+ *
+ * The board is a grid of columns that scrolls sideways rather than reflowing:
+ * a board's whole value is seeing what sits in the next column, and five
+ * stacked accordions is a list with extra steps. */
+
+.sb-board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 1fr);
+  gap: var(--cds-space-4);
+  overflow-x: auto;
+  /* Room for the focus ring on the last card, which an overflow container
+   * would otherwise clip. */
+  padding-bottom: var(--cds-space-2);
+}
+
+/* Doubled for the reason noted under `.sb-route-active`: component CSS is
+ * imported from inside its own .tsx, so Vite injects it after this file and
+ * wins every tie. */
+.cds-panel.sb-board__column {
+  display: flex;
+  flex-direction: column;
+  min-height: 14rem;
+  transition: outline-color var(--cds-duration-fast) var(--cds-ease-standard);
+  outline: var(--cds-hairline) dashed transparent;
+  outline-offset: -1px;
+}
+
+/* The drop target, while a card is in the air. Dashed rather than filled: a
+ * background change would fight the cards sitting on it. */
+.cds-panel.sb-board__column[data-over='true'] {
+  outline: 2px dashed var(--cds-color-accent);
+}
+
+.sb-board__column .cds-panel__body {
+  flex: 1;
+}
+
+.sb-board__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+}
+
+.sb-board__empty {
+  color: var(--cds-color-text-subtle);
+  margin: 0;
+  padding: var(--cds-space-3) 0;
+}
+
+.sb-task-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  padding: var(--cds-space-3);
+  background-color: var(--cds-color-canvas);
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-md);
+  cursor: grab;
+}
+
+.sb-task-card[data-dragging='true'] {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.sb-task-card__top {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+}
+
+.sb-task-card__grip {
+  color: var(--cds-color-text-subtle);
+  flex: none;
+}
+
+.sb-task-card__ref {
+  color: var(--cds-color-text-subtle);
+  margin-right: auto;
+}
+
+.sb-task-card__priority.is-urgent {
+  color: var(--cds-color-danger);
+}
+
+.sb-task-card__priority.is-high {
+  color: var(--cds-color-warning);
+}
+
+.sb-task-card__priority.is-normal,
+.sb-task-card__priority.is-low {
+  color: var(--cds-color-text-subtle);
+}
+
+.sb-task-card__title {
+  text-align: start;
+  font-size: var(--cds-text-sm);
+  line-height: var(--cds-leading-snug);
+  color: var(--cds-color-text);
+  transition: color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.sb-task-card__title:hover {
+  color: var(--cds-color-text-link);
+}
+
+.sb-task-card__meta,
+.sb-task-card__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  flex-wrap: wrap;
+}
+
+.sb-task-card__meta:empty {
+  display: none;
+}
+
+.sb-task-card__foot {
+  color: var(--cds-color-text-subtle);
+}
+
+.sb-task-card__count,
+.sb-task-card__due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sb-task-card__due.is-overdue {
+  color: var(--cds-color-danger);
+}
+
+.sb-task-card__unassigned {
+  color: var(--cds-color-text-subtle);
+}
+
+/* --- Task tracker: list --- */
+
+.sb-task-row__title {
+  text-align: start;
+}
+
+.sb-task-row__priority,
+.sb-task-row__person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+}
+
+.sb-task-row__priority .is-urgent {
+  color: var(--cds-color-danger);
+}
+
+.sb-task-row__priority .is-high {
+  color: var(--cds-color-warning);
+}
+
+.sb-task-row__priority .is-normal,
+.sb-task-row__priority .is-low {
+  color: var(--cds-color-text-subtle);
+}
+
+.sb-task-row__overdue {
+  color: var(--cds-color-danger);
+}
+
+.sb-task-row__blocked {
+  color: var(--cds-color-warning);
+}
+
+/* --- Task tracker: schedule and progress --- */
+
+.sb-tasks-split {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--cds-space-6);
+  align-items: start;
+}
+
+.sb-tasks-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: var(--cds-space-5);
+}
+
+/* --- Task tracker: detail --- */
+
+.sb-task-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: var(--cds-space-4);
+}
+
+.sb-task-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cds-space-3) var(--cds-space-5);
+  padding-top: var(--cds-space-3);
+}
+
+.sb-task-deps {
+  display: grid;
+  gap: var(--cds-space-2);
+}
+
+.sb-task-deps__items {
+  display: grid;
+  gap: var(--cds-space-1);
+}
+
+.sb-task-deps__link {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  text-align: start;
+  color: var(--cds-color-text);
+}
+
+.sb-task-deps__link:hover {
+  color: var(--cds-color-text-link);
+}
+
+.sb-task-deps__title {
+  color: var(--cds-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sb-task-deps__link:hover .sb-task-deps__title {
+  color: inherit;
+}
+
+/* A rule down the left edge, with each entry hung off it. */
+.sb-task-activity {
+  display: grid;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-3) 0 0 var(--cds-space-4);
+  border-inline-start: var(--cds-hairline) solid var(--cds-color-rule);
+  margin-inline-start: var(--cds-space-1);
+}
+
+.sb-task-activity li {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: var(--cds-space-3);
+}
+
+.sb-task-activity__when {
+  color: var(--cds-color-text-subtle);
+}
+
+.sb-task-new {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--cds-space-6);
+  align-items: start;
+}
+
+/* --- Task tracker: narrow screens --- */
+
+@media (max-width: 1000px) {
+  .sb-tasks-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .sb-task-new {
+    grid-template-columns: 1fr;
+  }
+  /* The calendar is the first thing to go when the dialog is a phone's whole
+   * screen: a date is optional here, and a six-week grid above the fold pushes
+   * the title field off it. */
+  .sb-task-new__calendar {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* One column at a time, snapped, so a swipe lands somewhere rather than
+   * halfway between two columns. */
+  .sb-board {
+    grid-auto-columns: 82vw;
+    scroll-snap-type: x mandatory;
+    gap: var(--cds-space-3);
+  }
+  .cds-panel.sb-board__column {
+    scroll-snap-align: start;
+  }
+  /* Dragging does not exist on a touchscreen, so the card should not pretend. */
+  .sb-task-card {
+    cursor: default;
+  }
+  /* Doubled: `.cds-icon` sets `display: inline-block` at the same specificity
+   * and its stylesheet is injected after this file, so it wins the tie. */
+  .sb-task-card .sb-task-card__grip {
+    display: none;
+  }
+}
+
+/* --- Document form --- */
+
+.sb-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-6);
+}
+
+/* Fields that belong together on a wide screen and stack on a narrow one,
+ * without either being a breakpoint decision — the grid decides. */
+.sb-form__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--cds-space-4);
+}
+
+.sb-form__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cds-space-2);
+  color: var(--cds-color-text-subtle);
+}
+
+/* The action bar follows the form to the bottom of the viewport: a form this
+ * long otherwise means scrolling back to the top to save it. */
+.sb-form__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background-color: var(--cds-color-canvas);
+  margin-inline: calc(var(--cds-space-6) * -1);
+  padding-inline: var(--cds-space-6);
+}
+
+@media (max-width: 640px) {
+  .sb-form__actions {
+    margin-inline: calc(var(--cds-space-3) * -1);
+    padding-inline: var(--cds-space-3);
+  }
+}

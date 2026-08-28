@@ -1,0 +1,60 @@
+/* Word-sized, so everything here is about sitting correctly on a text baseline
+ * rather than about the chart itself. Colour comes from `currentColor`, the
+ * same law the icons follow. */
+
+.cds-sparkline {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+  color: var(--cds-color-accent);
+}
+
+/* Fluid needs to be a block that can actually take the container's width —
+ * `inline-block` plus `flex: none` is exactly what stops it. */
+.cds-sparkline.is-fluid {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cds-sparkline svg {
+  display: block;
+  overflow: visible;
+}
+
+.cds-sparkline__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cds-sparkline__area {
+  fill: currentColor;
+  fill-opacity: 0.14;
+  stroke: none;
+}
+
+.cds-sparkline__bar {
+  fill: currentColor;
+}
+
+.cds-sparkline__endpoint {
+  fill: currentColor;
+}
+
+/* In forced colours the wash carries no information the line doesn't, and a
+ * system fill would flatten the two together. */
+@media (forced-colors: active) {
+  .cds-sparkline__line {
+    stroke: CanvasText;
+  }
+  .cds-sparkline__area {
+    fill: none;
+  }
+  .cds-sparkline__bar,
+  .cds-sparkline__endpoint {
+    fill: CanvasText;
+  }
+}

@@ -6,6 +6,9 @@ const meta = {
   title: 'Forms/Select',
   component: Select,
   args: {
+    // Outside a `Field` there is nothing to name the control, so these
+    // isolated stories supply the name themselves.
+    'aria-label': 'Sort order',
     options: [
       { value: 'relevance', label: 'Relevance' },
       { value: 'date', label: 'Publication date' },

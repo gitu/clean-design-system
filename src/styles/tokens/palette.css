@@ -22,7 +22,30 @@
   --cds-neutral-950: #100f0d;
 
   /* The one loud colour in the system. Everything else is desaturated so this
-   * red always means "here" — brand, selection, focus, live state. */
+   * ink blue always means "here" — brand, selection, focus, live state. It is
+   * a greyed navy, not a saturated UI blue: it sits down against warm paper
+   * instead of vibrating on it. */
+  --cds-blue-50: #f1f4f8;
+  --cds-blue-100: #dde5ee;
+  --cds-blue-200: #bccbdd;
+  --cds-blue-300: #8ba5c1;
+  --cds-blue-400: #4f739b;
+  --cds-blue-500: #2b4f77;
+  --cds-blue-600: #234062;
+  --cds-blue-700: #1b324d;
+  --cds-blue-800: #142639;
+  --cds-blue-900: #0e1b28;
+
+  /* Masthead blue — brighter and more saturated than the accent, for large
+   * brand marks only. It is not the interaction colour; never reach for it to
+   * make a link or a control stand out.
+   *
+   * Dark enough to clear 4.5:1 on the sunken surface as well as on white: a
+   * wordmark ends up on both, and the earlier value only passed on one. */
+  --cds-blue-masthead: #1668c9;
+
+  /* Red is now a status hue only: it carries `danger` and nothing else, so an
+   * error never has to compete with the accent for the same meaning. */
   --cds-red-50: #fdf2f2;
   --cds-red-100: #fadedf;
   --cds-red-200: #f3bcbe;
@@ -33,10 +56,6 @@
   --cds-red-700: #8a0a12;
   --cds-red-800: #6b080e;
   --cds-red-900: #4d060a;
-
-  /* Masthead red — brighter, for large brand marks only. Fails small-text
-   * contrast on white by design; never use it for body copy. */
-  --cds-red-masthead: #e3120b;
 
   /* Support hues, deliberately muted. Status must never out-shout the accent. */
   --cds-green-50: #eff5f1;
@@ -51,11 +70,13 @@
   --cds-amber-600: #7d5300;
   --cds-amber-300: #cfa955;
 
-  --cds-blue-50: #eef3f8;
-  --cds-blue-100: #d5e2ee;
-  --cds-blue-500: #1f5c8f;
-  --cds-blue-600: #194a73;
-  --cds-blue-300: #6d9ac0;
+  /* Teal carries `info`. It used to be blue, but blue is the accent now and an
+   * informational note must not read as "selected". */
+  --cds-teal-50: #eef4f5;
+  --cds-teal-100: #d3e4e7;
+  --cds-teal-500: #17646f;
+  --cds-teal-600: #12515a;
+  --cds-teal-300: #6aa8b4;
 
   /* Highlighter yellow for matched search terms. */
   --cds-highlight-light: #fff2a8;

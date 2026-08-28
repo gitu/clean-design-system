@@ -1,0 +1,52 @@
+.cds-time-input {
+  position: relative;
+  min-width: 0;
+}
+
+.cds-time-input__icon {
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-time-input__message {
+  margin: 0;
+  color: var(--cds-color-danger);
+}
+
+.cds-time-input__message:empty {
+  display: none;
+}
+
+.cds-time-input__list {
+  position: absolute;
+  z-index: var(--cds-z-popover);
+  inset-inline: 0;
+  margin-top: var(--cds-space-1);
+  /* Ten rows before it scrolls — enough to see the shape of the hour without
+   * covering the field underneath. */
+  max-height: 15rem;
+  overflow-y: auto;
+  padding: var(--cds-space-1);
+  background-color: var(--cds-color-surface);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-md);
+  box-shadow: var(--cds-shadow-md);
+}
+
+.cds-time-input__option {
+  padding: var(--cds-space-1) var(--cds-space-3);
+  border-radius: var(--cds-radius-sm);
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text);
+  cursor: pointer;
+}
+
+.cds-time-input__option.is-active {
+  background-color: var(--cds-color-surface-hover);
+}
+
+/* The chosen time keeps its mark while the cursor walks past it — two states
+ * that mean different things and so must not share one treatment. */
+.cds-time-input__option.is-selected {
+  color: var(--cds-color-accent);
+  font-weight: var(--cds-weight-medium);
+}

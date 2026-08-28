@@ -5,6 +5,11 @@ import { Field } from '../Field/Field'
 const meta = {
   title: 'Forms/Textarea',
   component: Textarea,
+  args: {
+    // The stories that wrap this in a `Field` get their name from the label;
+    // the bare ones need to say it themselves.
+    'aria-label': 'Advanced query',
+  },
 } satisfies Meta<typeof Textarea>
 
 export default meta
@@ -30,9 +35,11 @@ export const Default: Story = {
 export const States: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 460 }}>
-      <Textarea placeholder="Describe what you are looking for" />
-      <Textarea invalid defaultValue="unbalanced (parenthesis" mono />
-      <Textarea disabled defaultValue="Read-only saved query" />
+      {/* This render ignores `args`, so the meta-level name does not reach
+          these — each says what it is. */}
+      <Textarea aria-label="Default" placeholder="Describe what you are looking for" />
+      <Textarea aria-label="Invalid" invalid defaultValue="unbalanced (parenthesis" mono />
+      <Textarea aria-label="Disabled" disabled defaultValue="Read-only saved query" />
     </div>
   ),
 }

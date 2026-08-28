@@ -1,0 +1,210 @@
+/* ---------------------------------------------------------------------------
+ * Chart chrome. Everything here reuses the rule family rather than inventing
+ * chart-specific greys: gridlines are one step quieter than the hairlines that
+ * carry page structure, so the data always sits in front of them.
+ *
+ * Colour reaches the marks through `currentColor` — each series group sets a
+ * `color` and every stroke and fill inside inherits it. That is the same law
+ * `Icon` follows, and it means a caller's own colour, a series token and a
+ * legend swatch all work through one mechanism.
+ * ------------------------------------------------------------------------- */
+
+.cds-chart {
+  display: block;
+  margin: 0;
+  position: relative;
+  width: 100%;
+}
+
+.cds-chart__plot {
+  position: relative;
+  width: 100%;
+}
+
+.cds-chart__plot:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+  border-radius: var(--cds-radius-sm);
+}
+
+.cds-chart__svg {
+  display: block;
+  overflow: visible;
+}
+
+/* --- Axes and grid --- */
+
+.cds-chart__tick {
+  fill: var(--cds-color-text-subtle);
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-2xs);
+  letter-spacing: var(--cds-tracking-wide);
+}
+
+.cds-chart__axis-line {
+  stroke: var(--cds-color-rule);
+  stroke-width: var(--cds-hairline);
+}
+
+.cds-chart__gridline {
+  stroke: var(--cds-color-rule-subtle);
+  stroke-width: var(--cds-hairline);
+}
+
+/* The zero line is a fact about the data, not decoration — it gets the weight
+ * of a real rule. */
+.cds-chart__gridline.is-baseline {
+  stroke: var(--cds-color-rule-strong);
+}
+
+/* --- Series --- */
+
+.cds-chart__series {
+  transition: opacity var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+/* Cross-filter state is carried by opacity, never by hue. Colour in a chart
+ * only ever means "which series" — so the accent is never asked to also mean
+ * "selected", and the state still reads for a colour-blind reader and in
+ * forced colours. */
+.cds-chart__mark.is-dimmed {
+  opacity: 0.24;
+}
+
+.cds-chart__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cds-chart__line--dashed {
+  stroke-dasharray: 5 3;
+}
+
+.cds-chart__area {
+  fill: currentColor;
+  fill-opacity: 0.14;
+  stroke: none;
+}
+
+.cds-chart__point {
+  fill: var(--cds-color-surface);
+  stroke: currentColor;
+  stroke-width: 1.75;
+}
+
+.cds-chart__point--solid {
+  fill: currentColor;
+}
+
+.cds-chart__bar {
+  fill: currentColor;
+  transition:
+    transform var(--cds-duration-normal) var(--cds-ease-standard),
+    opacity var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+/* --- Crosshair --- */
+
+.cds-chart__crosshair {
+  stroke: var(--cds-color-rule-strong);
+  stroke-width: var(--cds-hairline);
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+
+.cds-chart__hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+/* --- Empty and loading --- */
+
+.cds-chart__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--cds-color-text-subtle);
+}
+
+/* --- Motion ---
+ * Every duration and delay below is a token, and tokens/motion.css already
+ * collapses all of them to 0ms under prefers-reduced-motion. That is why there
+ * is no reduced-motion block in this file: a staggered reveal simply lands on
+ * its final frame. `--cds-chart-i` is the mark's index, set inline. */
+
+.cds-chart--animate .cds-chart__line:not(.cds-chart__line--dashed),
+.cds-chart--animate .cds-chart__area {
+  animation: cds-chart-draw var(--cds-duration-slower) var(--cds-ease-out) backwards;
+  animation-delay: calc(var(--cds-chart-i, 0) * var(--cds-stagger));
+}
+
+.cds-chart--animate .cds-chart__line--dashed {
+  animation: cds-chart-fade var(--cds-duration-slower) var(--cds-ease-out) backwards;
+  animation-delay: calc(var(--cds-chart-i, 0) * var(--cds-stagger));
+}
+
+@keyframes cds-chart-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* pathLength normalises the dash units to 1 regardless of the real path
+ * length, so the line draws itself on without ever calling getTotalLength() —
+ * no measurement, and it works identically on a server-rendered path.
+ *
+ * A dashed series is excluded: the draw-on effect works by commandeering
+ * stroke-dasharray, which is the same property carrying the dash pattern, and
+ * the pattern is load-bearing (it is what separates a target from a
+ * measurement, and a fifth series from a fourth). Dashed lines fade instead. */
+.cds-chart--animate .cds-chart__line:not(.cds-chart__line--dashed) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@keyframes cds-chart-draw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+}
+
+/* Bars enter by fading, not by rising.
+ *
+ * A bar's geometry lives in its `transform` attribute, which maps to the CSS
+ * `transform` property — that mapping is what makes the `transition` above
+ * tween a value change, a band-width change and a stack reorder all at once.
+ * It also means a keyframe animation touching `transform` would *replace* that
+ * geometry rather than compose with it, collapsing every bar to the origin for
+ * the duration. Opacity is the one channel that composes cleanly here, and the
+ * update transition is the more valuable half anyway. */
+.cds-chart--animate .cds-chart__bar {
+  animation: cds-chart-fade var(--cds-duration-normal) var(--cds-ease-out) backwards;
+  animation-delay: calc(var(--cds-chart-i, 0) * var(--cds-stagger));
+}
+
+/* --- Forced colours ---
+ * currentColor does most of the work already; what has to go is the area wash,
+ * which a system fill would flatten into a block carrying no information the
+ * line does not. Series then separate by dash and by label, which is what the
+ * palette documentation says they must do past four anyway. */
+@media (forced-colors: active) {
+  .cds-chart__line,
+  .cds-chart__point {
+    stroke: CanvasText;
+  }
+  .cds-chart__area {
+    fill: none;
+  }
+  .cds-chart__bar {
+    fill: CanvasText;
+  }
+  .cds-chart__mark.is-dimmed {
+    opacity: 1;
+    stroke-dasharray: 2 3;
+  }
+}

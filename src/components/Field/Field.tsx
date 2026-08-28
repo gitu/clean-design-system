@@ -44,6 +44,9 @@ export function Field({
 
   const ctx: FieldContextValue = {
     id,
+    // Only when it is text — a composite control needs something it can put
+    // in an `aria-label`, and a ReactNode is not that.
+    ...(typeof label === 'string' ? { label } : null),
     describedBy: [hintId, errorId].filter(Boolean).join(' ') || undefined,
     invalid: Boolean(error),
     required,

@@ -1,6 +1,7 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { cx } from '../../utils/cx'
+import { useModalLayer } from '../../utils/useModalLayer'
 import { Icon } from '../Icon/Icon'
 import { IconButton } from '../IconButton/IconButton'
 import './Drawer.css'
@@ -42,55 +43,8 @@ export function Drawer({
   children,
   className,
 }: DrawerProps) {
-  const panelRef = useRef<HTMLDivElement>(null)
-  const returnFocusRef = useRef<HTMLElement | null>(null)
-
-  useEffect(() => {
-    if (!open) return undefined
-
-    returnFocusRef.current = document.activeElement as HTMLElement | null
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        event.stopPropagation()
-        onClose()
-        return
-      }
-      if (event.key !== 'Tab') return
-
-      // Minimal focus trap: cycle within the panel's tabbable elements.
-      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )
-      if (!focusable || focusable.length === 0) return
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) return
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', onKeyDown)
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    const frame = requestAnimationFrame(() => {
-      panelRef.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus() ??
-        panelRef.current?.focus()
-    })
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = previousOverflow
-      cancelAnimationFrame(frame)
-      returnFocusRef.current?.focus?.()
-    }
-  }, [open, onClose])
+  // Escape, focus trap, scroll lock and focus return — shared with `Dialog`.
+  const panelRef = useModalLayer(open, onClose)
 
   if (!open) return null
 
@@ -109,8 +63,13 @@ export function Drawer({
         aria-label={typeof title === 'string' ? title : undefined}
         tabIndex={-1}
       >
+        {/* Plain divs, not <header>/<footer>. The panel is portalled to
+            <body>, and `role="dialog"` does not scope those elements the way a
+            <section> or <article> would — so a <header> here becomes a second
+            `banner` landmark on the page and a <footer> a second `contentinfo`,
+            both of which axe reports the moment the drawer is open. */}
         {(title || !hideClose) && (
-          <header className="cds-drawer__header">
+          <div className="cds-drawer__header">
             <div className="cds-drawer__heading">
               {title && <h2 className="cds-drawer__title cds-kicker">{title}</h2>}
               {description && <p className="cds-drawer__description">{description}</p>}
@@ -123,10 +82,10 @@ export function Drawer({
                 onClick={onClose}
               />
             )}
-          </header>
+          </div>
         )}
         <div className="cds-drawer__body">{children}</div>
-        {footer && <footer className="cds-drawer__footer">{footer}</footer>}
+        {footer && <div className="cds-drawer__footer">{footer}</div>}
       </div>
     </div>,
     document.body

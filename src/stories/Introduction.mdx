@@ -1,0 +1,103 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Introduction" />
+
+# clean-design-system
+
+A quiet, editorial design system for complex search applications.
+
+Its manners come from Swiss and British newspaper design — the NZZ and The
+Economist in particular: a serif for editorial content, a grotesque for
+interface chrome, hairline rules instead of boxes and shadows, generous
+whitespace, and exactly one loud colour. Its job, though, is dense application
+work: faceted search, long result lists, sortable tables, saved queries.
+
+---
+
+## The five rules
+
+**Rules over boxes.** Separate regions with a hairline, not a card. Reserve
+shadow for things that genuinely float — popovers, drawers. A page of this
+system should read as a printed page: structure carried by rules and
+whitespace, not by a grid of containers.
+
+**One accent.** `--cds-color-accent` means *here*: selection, focus, applied
+filters, active tabs. Primary buttons use `--cds-color-ink`, the
+maximum-contrast solid, so the accent never competes with itself.
+
+**Red is `danger` and nothing else.** If something is red, it is wrong — not
+merely selected. This is why the accent is ink blue.
+
+**Numbers are tabular.** `.cds-numeric` is mandatory anywhere figures stack: a
+table column, an axis, a stat tile. Proportional figures in a column of numbers
+make the column impossible to scan.
+
+**Two type roles, never mixed by accident.** The serif carries editorial
+content — titles, snippets, body. The grotesque carries interface chrome —
+labels, controls, metadata. Apply a role class rather than setting font
+properties by hand.
+
+---
+
+## Getting started
+
+```bash
+npm install clean-design-system
+```
+
+```tsx
+import 'clean-design-system/fonts/fonts.css' // optional, self-hosted faces
+import 'clean-design-system/styles.css'
+import { ThemeProvider, SearchInput, ResultCard, ResultList } from 'clean-design-system'
+
+export function App() {
+  return (
+    <ThemeProvider theme="system">
+      <SearchInput placeholder="Search the archive" />
+      <ResultList>
+        <ResultCard title="…" snippet="…" query="…" href="#" />
+      </ResultList>
+    </ThemeProvider>
+  )
+}
+```
+
+`ThemeProvider` is required. It supplies the `cds-root` class that every token
+keys off — components rendered outside it are unstyled.
+
+---
+
+## How to read this Storybook
+
+**Foundations** are the tokens: colour, typography, spacing, elevation. Start
+with *Colour* if you are theming, *Typography* if you are laying out a page.
+
+**Primitives**, **Forms**, **Search**, **Data**, **Charts**, **Prose** and
+**Layout** are the components, each with a page of states and a props table generated from the
+JSDoc in its source. The doc comments are load-bearing — if a prop's behaviour
+is surprising, its comment is where the reasoning lives.
+
+**Patterns** are whole applications built from the system. They are the honest
+test of whether the parts compose, and they are where to look first if you are
+deciding whether this system fits your problem:
+
+- **Search application** — the case the system was designed against
+- **Search analytics** — the chart family working as one linked screen
+- **Relevance workbench** — two rankers compared side by side
+- **Index console** — the operational view, and where `Progress` came from
+- **Document reader** — the typography under real load
+- **Document form** — the long form: markdown with a live preview, dates and
+  times you can type, and validation that waits until you ask to save
+- **Task tracker** — the densest screen here: a board, a table, a calendar and
+  a report over one filter set, and the place to look for how a drag-and-drop
+  interface stays usable without a pointer
+- **Workspace** — two levels of navigation folding into one burger
+- **User management** — where `Dialog`, `Menu`, `Avatar` and `Toast` came from
+- **Editorial calendar** — `Calendar` and `DateRangePicker` in anger
+- **Delivery router** — a real map, and a mobile view built around one decision
+- **Assistant** — a model that uses tools, asks questions back, and shows its work
+- **Landing page** and **Sign in** — the two screens with no application behind
+  them, which is its own test of the type scale
+
+Every story runs in both themes; use the theme control in the toolbar. Every
+story is also checked by the a11y addon.

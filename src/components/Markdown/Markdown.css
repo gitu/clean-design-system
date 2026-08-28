@@ -1,0 +1,60 @@
+/* The rendered form of `Markdown`. Shared by the assistant transcript, the
+ * editor's preview pane and anywhere else prose arrives as text. */
+
+.cds-markdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-3);
+  max-width: var(--cds-measure);
+}
+
+.cds-markdown > p { margin: 0; }
+.cds-markdown > h1, .cds-markdown > h2, .cds-markdown > h3,
+.cds-markdown > h4, .cds-markdown > h5, .cds-markdown > h6 { margin: var(--cds-space-2) 0 0; }
+
+/* The reset strips list markers everywhere, which is right for the navigation
+ * and result lists this system is mostly made of — but a markdown list without
+ * its numbers is not a list, it is a set of stranded sentences. */
+ul.cds-markdown__list { list-style: disc; }
+ol.cds-markdown__list { list-style: decimal; }
+
+.cds-markdown__list {
+  margin: 0;
+  padding-inline-start: var(--cds-space-6);
+}
+
+.cds-markdown__list li { margin-bottom: var(--cds-space-1); }
+.cds-markdown__list li::marker { color: var(--cds-color-text-subtle); }
+
+.cds-markdown__quote {
+  margin: 0;
+  padding-inline-start: var(--cds-space-4);
+  border-inline-start: var(--cds-border-width-heavy) solid var(--cds-color-rule-strong);
+  color: var(--cds-color-text-muted);
+}
+
+.cds-markdown__rule {
+  margin: var(--cds-space-2) 0;
+  border: 0;
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-markdown__code {
+  margin: 0;
+  padding: var(--cds-space-3);
+  border: var(--cds-hairline) solid var(--cds-color-rule);
+  border-radius: var(--cds-radius-md);
+  background-color: var(--cds-color-surface-sunken);
+  overflow-x: auto;
+  font-family: var(--cds-font-mono);
+  font-size: var(--cds-text-2xs);
+  line-height: 1.55;
+}
+
+.cds-markdown__inline-code {
+  padding: 0.1em 0.3em;
+  border-radius: var(--cds-radius-sm);
+  background-color: var(--cds-color-surface-active);
+  font-family: var(--cds-font-mono);
+  font-size: 0.9em;
+}

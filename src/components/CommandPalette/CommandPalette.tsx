@@ -225,9 +225,17 @@ export function CommandPalette({
           <Kbd keys="Esc" size="sm" />
         </div>
 
-        <div className="cds-cmdk__list" id="cds-cmdk-list" role="listbox" ref={listRef}>
+        <div
+          className="cds-cmdk__list"
+          id="cds-cmdk-list"
+          // A listbox is required to contain options. With no matches there are
+          // none, so the role is dropped rather than left unsatisfied — the
+          // empty message announces itself as a status instead.
+          role={visible.length === 0 ? undefined : 'listbox'}
+          ref={listRef}
+        >
           {visible.length === 0 && !loading && (
-            <p className="cds-cmdk__empty">{emptyMessage}</p>
+            <p className="cds-cmdk__empty" role="status">{emptyMessage}</p>
           )}
 
           {groups.map((group, gi) => (

@@ -3,6 +3,15 @@ import { createContext, useContext } from 'react'
 export interface FieldContextValue {
   /** id the labelled control must adopt. */
   id: string
+  /**
+   * The field's label, when it is plain text.
+   *
+   * Only a composite control needs this — one `<Field>` around two inputs has
+   * one visible label and two things to name, and "Embargo lifts — time" has to
+   * be built from somewhere. A single control ignores it: the `<label for>`
+   * already does the job.
+   */
+  label?: string
   /** Space-joined ids of the hint and error text, or undefined when neither exists. */
   describedBy: string | undefined
   invalid: boolean
@@ -29,6 +38,8 @@ export function useFieldControl(props: {
 
   return {
     id: props.id ?? field?.id,
+    /** The surrounding field's label text, for composite controls. */
+    fieldLabel: field?.label,
     describedBy,
     invalid: props.invalid ?? field?.invalid ?? false,
     required: props.required ?? field?.required ?? false,

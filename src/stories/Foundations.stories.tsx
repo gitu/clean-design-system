@@ -69,7 +69,7 @@ export const Colour: Story = {
           <Swatch token="--cds-color-accent" note="selection, focus, links" />
           <Swatch token="--cds-color-accent-hover" />
           <Swatch token="--cds-color-accent-subtle" note="tinted grounds" />
-          <Swatch token="--cds-color-brand-mark" note="masthead only — fails small-text contrast" />
+          <Swatch token="--cds-color-brand-mark" note="masthead only — never the interaction colour" />
           <Swatch token="--cds-color-ink" note="primary button fill" />
         </Stack>
       </section>
@@ -82,6 +82,25 @@ export const Colour: Story = {
           <Swatch token="--cds-color-danger" />
           <Swatch token="--cds-color-info" />
           <Swatch token="--cds-color-highlight-bg" note="matched search terms" />
+        </Stack>
+      </section>
+
+      <section>
+        <Divider label="Series" />
+        <p className="cds-body-sm" style={{ marginTop: 12, maxWidth: '52ch' }}>
+          The categorical scale, for charts only. Slot 1 is the accent, so a
+          single-series chart is drawn in the system’s own colour. Slots 1–4 are
+          separable by hue alone under normal and colour-blind vision; past four
+          series a chart must carry a second channel — a dash pattern, a distinct
+          marker, a direct label.
+        </p>
+        <Stack gap={2} style={{ marginTop: 16 }}>
+          <Swatch token="--cds-color-series-1" note="= the accent" />
+          <Swatch token="--cds-color-series-2" />
+          <Swatch token="--cds-color-series-3" />
+          <Swatch token="--cds-color-series-4" />
+          <Swatch token="--cds-color-series-5" note="needs redundant encoding" />
+          <Swatch token="--cds-color-series-6" note="needs redundant encoding" />
         </Stack>
       </section>
     </Stack>

@@ -1,0 +1,90 @@
+/* Centred, and the one surface in the system allowed a full-strength scrim —
+ * unlike a drawer, a dialog is asking a question, and what is behind it is not
+ * the subject until it is answered. */
+
+.cds-dialog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--cds-z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--cds-space-6) var(--cds-space-4);
+  /* The portal layer carries `cds-root`, which paints the canvas. Without this
+   * it covers the page instead of dimming it. */
+  background: none;
+}
+
+.cds-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--cds-color-overlay);
+  animation: cds-dialog-fade var(--cds-duration-fast) var(--cds-ease-out);
+}
+
+.cds-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: min(40rem, calc(100dvh - var(--cds-space-12)));
+  background-color: var(--cds-color-surface-raised);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-lg);
+  box-shadow: var(--cds-shadow-lg);
+  outline: none;
+  animation: cds-dialog-rise var(--cds-duration-normal) var(--cds-ease-out);
+}
+
+.cds-dialog--sm { max-width: 26rem; }
+.cds-dialog--md { max-width: 34rem; }
+.cds-dialog--lg { max-width: 46rem; }
+
+@keyframes cds-dialog-fade {
+  from { opacity: 0; }
+}
+@keyframes cds-dialog-rise {
+  from { opacity: 0; transform: translateY(-6px); }
+}
+
+.cds-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--cds-space-4);
+  padding: var(--cds-space-5) var(--cds-space-5) var(--cds-space-3);
+  border-bottom: var(--cds-hairline) solid var(--cds-color-rule);
+}
+
+.cds-dialog--danger .cds-dialog__header {
+  border-bottom-color: var(--cds-color-danger-border);
+  box-shadow: inset 0 2px 0 0 var(--cds-color-danger);
+}
+
+.cds-dialog__heading { min-width: 0; }
+
+.cds-dialog__title {
+  margin: 0;
+}
+
+.cds-dialog__description {
+  margin: var(--cds-space-2) 0 0;
+  color: var(--cds-color-text-muted);
+}
+
+.cds-dialog__body {
+  padding: var(--cds-space-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.cds-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--cds-space-2);
+  padding: var(--cds-space-4) var(--cds-space-5);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule);
+  background-color: var(--cds-color-surface-sunken);
+  border-radius: 0 0 var(--cds-radius-lg) var(--cds-radius-lg);
+}

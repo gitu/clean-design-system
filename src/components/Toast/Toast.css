@@ -1,0 +1,83 @@
+.cds-toast-layer {
+  position: fixed;
+  inset-block-end: var(--cds-space-5);
+  inset-inline-end: var(--cds-space-5);
+  z-index: var(--cds-z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+  width: min(24rem, calc(100vw - var(--cds-space-8)));
+  /* The layer carries `cds-root`, which paints the canvas — without this it
+   * would drop an opaque sheet over the page. */
+  background: none;
+  pointer-events: none;
+}
+
+.cds-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-3) var(--cds-space-3) var(--cds-space-3) var(--cds-space-4);
+  background-color: var(--cds-color-surface-raised);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-md);
+  box-shadow: var(--cds-shadow-lg);
+  pointer-events: auto;
+  animation: cds-toast-in var(--cds-duration-normal) var(--cds-ease-out);
+}
+
+@keyframes cds-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+/* Tone is a rule down the leading edge, not a filled card — the same device
+ * the rest of the system uses to mark something without shouting. */
+.cds-toast--success { box-shadow: var(--cds-shadow-lg), inset 3px 0 0 0 var(--cds-color-success); }
+.cds-toast--warning { box-shadow: var(--cds-shadow-lg), inset 3px 0 0 0 var(--cds-color-warning); }
+.cds-toast--danger  { box-shadow: var(--cds-shadow-lg), inset 3px 0 0 0 var(--cds-color-danger); }
+
+.cds-toast__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cds-toast__title {
+  margin: 0;
+  font-size: var(--cds-text-sm);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text-strong);
+}
+
+.cds-toast__description {
+  margin: var(--cds-space-1) 0 0;
+  font-size: var(--cds-text-xs);
+  color: var(--cds-color-text-muted);
+}
+
+.cds-toast__action {
+  flex: none;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-xs);
+  font-weight: var(--cds-weight-medium);
+  color: var(--cds-color-text-link);
+  cursor: pointer;
+}
+
+.cds-toast__action:hover { text-decoration: underline; }
+
+.cds-toast__action:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+  border-radius: var(--cds-radius-sm);
+}
+
+@media (max-width: 560px) {
+  .cds-toast-layer {
+    inset-inline: var(--cds-space-3);
+    width: auto;
+  }
+}

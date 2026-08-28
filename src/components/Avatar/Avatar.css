@@ -1,0 +1,45 @@
+.cds-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--cds-radius-pill);
+  background-color: var(--cds-color-surface-active);
+  color: var(--cds-color-text-muted);
+  font-family: var(--cds-font-sans);
+  font-weight: var(--cds-weight-medium);
+  letter-spacing: 0.01em;
+  user-select: none;
+  /* A hairline instead of a shadow, like everything else that sits on paper. */
+  box-shadow: inset 0 0 0 var(--cds-hairline) var(--cds-color-rule);
+}
+
+.cds-avatar--xs { width: 20px; height: 20px; font-size: 9px; }
+.cds-avatar--sm { width: 24px; height: 24px; font-size: 10px; }
+.cds-avatar--md { width: 32px; height: 32px; font-size: 12px; }
+.cds-avatar--lg { width: 44px; height: 44px; font-size: 15px; }
+
+/* The tint colours are the chart series palette, which is built for *marks* at
+ * 3:1 — set initials in it and they land around 3:1 against their own wash,
+ * which is under the bar for text. The wash and the ring carry the identity;
+ * the letters stay in the ordinary ink so they can actually be read. */
+.cds-avatar.is-tinted {
+  background-color: color-mix(in srgb, var(--cds-avatar-tint) 16%, transparent);
+  color: var(--cds-color-text);
+  box-shadow: inset 0 0 0 var(--cds-hairline)
+    color-mix(in srgb, var(--cds-avatar-tint) 40%, transparent);
+}
+
+.cds-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (forced-colors: active) {
+  .cds-avatar {
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+}

@@ -55,7 +55,7 @@
 }
 
 /* Selection is an ink fill: unmistakable at a glance in a dense toolbar, and it
- * keeps the accent red free to mean "applied filter" elsewhere on the page. */
+ * keeps the accent free to mean "applied filter" elsewhere on the page. */
 .cds-segmented__item.is-selected {
   background-color: var(--cds-color-ink);
   color: var(--cds-color-on-ink);

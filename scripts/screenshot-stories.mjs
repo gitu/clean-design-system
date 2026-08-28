@@ -17,7 +17,7 @@ const opt = (name, fallback) => {
   return i >= 0 && args[i + 1] ? args[i + 1] : fallback
 }
 
-const PORT = opt('port', '6017')
+const PORT = opt('port', '6006')  // matches `pnpm storybook`
 const BASE = `http://localhost:${PORT}`
 const OUT = opt('out', '.shots')
 const THEME = opt('theme', 'light')
@@ -36,6 +36,12 @@ const browser = await chromium.launch()
 const page = await browser.newPage({
   viewport: { width: WIDTH, height: HEIGHT },
   deviceScaleFactor: 2,
+  // Emulate reduced motion. Every duration token collapses to 0ms under it
+  // (see tokens/motion.css), so entrance animations land on their final frame
+  // instead of being caught mid-flight — which is what makes these PNGs
+  // comparable between runs. It also means the shots record the reduced-motion
+  // rendering, which is the one nobody otherwise looks at.
+  reducedMotion: 'reduce',
 })
 
 const failures = []
@@ -53,12 +59,17 @@ for (const entry of entries) {
   await page.waitForSelector('#storybook-root > *', { timeout: 15000 }).catch(() => {
     errors.push('story never mounted')
   })
-  await page.waitForTimeout(180)
+  // Longer than --cds-duration-slower (420ms) so anything not covered by the
+  // reduced-motion emulation above has still settled.
+  await page.waitForTimeout(500)
 
   // Clip to the mounted story rather than the viewport, so a shot is exactly
   // as tall as the component and reviewing a hundred of them stays practical.
   const root = await page.$('#storybook-root')
-  const shot = { path: `${OUT}/${entry.id}--${THEME}.png` }
+  // `animations: 'disabled'` finishes any running CSS animation rather than
+  // catching a frame of it — the infinite ones (Spinner, Skeleton) have no
+  // final frame to settle on and were non-deterministic before this.
+  const shot = { path: `${OUT}/${entry.id}--${THEME}.png`, animations: 'disabled' }
   if (root) await root.screenshot(shot).catch(() => page.screenshot(shot))
   else await page.screenshot(shot)
 

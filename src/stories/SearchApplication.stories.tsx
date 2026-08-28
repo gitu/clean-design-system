@@ -40,6 +40,7 @@ import {
   formatDate,
   type Article,
 } from './fixtures'
+import { PhoneFrame } from './PhoneFrame'
 
 const meta = {
   title: 'Patterns/Search application',
@@ -80,11 +81,15 @@ function Masthead({ query, onQuery, onCommand }: { query: string; onQuery: (v: s
       }}
     >
       <span
-        className="cds-display"
-        style={{ fontSize: 21, color: 'var(--cds-color-brand-mark)', letterSpacing: '-0.02em', flex: 'none' }}
-      >
-        Archiv
-      </span>
+        className="cds-mono"
+        style={{
+          fontSize: 19,
+          fontWeight: 'var(--cds-weight-medium)',
+          color: 'var(--cds-color-brand-mark)',
+          letterSpacing: '-0.01em',
+          flex: 'none',
+        }}
+      >archiv_</span>
       <span className="cds-kicker" style={{ flex: 'none' }}>Document search</span>
       <div style={{ flex: 1, maxWidth: 560 }}>
         <SearchInput size="md" value={query} onValueChange={onQuery} shortcut="/" placeholder="Search 4.6 million documents" />
@@ -353,7 +358,7 @@ export const LandingScreen: Story = {
     >
       <Stack gap={6} style={{ width: '100%', maxWidth: 640 }}>
         <Stack gap={2}>
-          <span className="cds-display" style={{ color: 'var(--cds-color-brand-mark)' }}>Archiv</span>
+          <span className="cds-mono" style={{ color: 'var(--cds-color-brand-mark)' }}>archiv_</span>
           <div style={{ height: 3, background: 'var(--cds-color-accent)', width: 64 }} />
           <p className="cds-lede" style={{ marginTop: 8 }}>
             4.6 million documents from 1780 to today. Start with a name, a place or a phrase.
@@ -371,5 +376,30 @@ export const LandingScreen: Story = {
         </Panel>
       </Stack>
     </div>
+  ),
+}
+
+/**
+ * The same screen at 390 x 844, in an iframe so the breakpoints actually fire.
+ *
+ * Shrinking a container would not do it: every responsive rule in this system
+ * is a `@media (max-width: ...)` query, and those ask the viewport, not the
+ * element — so a narrow `<div>` would still get the desktop layout rendered
+ * inside it. An iframe has its own viewport.
+ */
+export const Mobile: Story = {
+  name: 'Mobile',
+  parameters: {
+    layout: 'padded',
+    // The frame is a scaled-down copy of another story; running axe over it
+    // would double-report that story's own results.
+    a11y: { disable: true },
+  },
+  render: (_args, context) => (
+    <PhoneFrame
+      storyId="patterns-search-application--full-application"
+      theme={String(context.globals.theme ?? 'light')}
+      caption="Full application at 390 x 844"
+    />
   ),
 }

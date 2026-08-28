@@ -1,0 +1,169 @@
+import { Meta, Canvas, Story } from '@storybook/addon-docs/blocks'
+import * as LineChartStories from '../components/LineChart/LineChart.stories'
+import * as BarChartStories from '../components/BarChart/BarChart.stories'
+import * as SparklineStories from '../components/Sparkline/Sparkline.stories'
+
+<Meta title="Charts/Overview" />
+
+# Charts
+
+Four charts, four pieces of chrome, and one rule that shapes all of them:
+**a chart is given data and accessors, and renders what it is given.** Sorting,
+filtering, paging, zooming and drilling stay outside — the same contract
+`DataTable` has, and the reason both are usable against a server that does the
+work.
+
+<Canvas of={LineChartStories.MultipleSeries} />
+
+---
+
+## Picking one
+
+| | |
+|---|---|
+| `LineChart` | A time series. Shape over time; the y-axis is free to not start at zero. |
+| `AreaChart` | Quantity over time, as stacked bands. Anchored at zero, because the fill encodes magnitude. |
+| `BarChart` | Categorical comparison. `layout="horizontal"` whenever the categories have real names. |
+| `Sparkline` | Word-sized, no axes, no interaction. For a table cell or beside a number. |
+
+`AreaChart` is a separate component rather than `LineChart area`, because
+stacking is not a paint job: it changes the y-domain to cumulative totals,
+changes what the tooltip means, and makes `yDomain: 'auto'` anchor at zero.
+
+---
+
+## The data shape
+
+Wide format — one row per x position, one accessor per series. Pivot a long
+table before you get here.
+
+```tsx
+<LineChart
+  label="Indexed documents per week"
+  data={weeks}
+  x={w => new Date(w.week)}
+  datumKey={w => w.week}
+  series={[
+    { key: 'indexed', label: 'Indexed', value: w => w.indexed },
+    { key: 'failed',  label: 'Failed',  value: w => w.failed },
+    { key: 'target',  label: 'Target',  value: w => w.target, dashed: true },
+  ]}
+  onDatumClick={e => setWeek(e.key)}
+/>
+```
+
+`value` returns `number | null`. **`null` is a gap, not a zero** — it breaks the
+line, because a week with no telemetry and a week with no searches are
+different facts.
+
+`label` is required. A chart with no accessible name is unreadable to a screen
+reader, and there is no sensible default to invent.
+
+---
+
+## Colour, and the limit of it
+
+<Canvas of={BarChartStories.Stacked} />
+
+`--cds-color-series-1…6` is the only categorical scale in the system, and slot 1
+*is* the accent — so a single-series chart is drawn in the system's own colour
+and needs no palette at all.
+
+The palette is validated by `scripts/check-series-palette.mjs`, which measures
+perceptual distance (CIEDE2000) under normal vision **and** under simulated
+deuteranopia, protanopia and tritanopia. What that measurement establishes is a
+hard limit:
+
+> **Slots 1–4 are separable by hue alone. Slots 5 and 6 are not.**
+
+A muted editorial palette and a colour-blind-safe one pull in opposite
+directions — desaturating is exactly what removes the chroma dichromats rely on.
+Four is where those two demands stop being reconcilable. So past four series, a
+chart **must** carry a second channel:
+
+- `dashed: true` on the series
+- `points="always"` for distinct markers
+- a direct label at the end of the line
+- or, better, group the tail into an "Other"
+
+Selection is expressed by **opacity, never hue** — unselected marks drop to
+`0.24`. Colour therefore only ever means *which series*, the accent is never
+asked to mean two things at once, and cross-filter state still reads in forced
+colours and for a colour-blind reader.
+
+---
+
+## Interaction
+
+Every chart works three ways, and the resolution order is always the same:
+**own prop → surrounding `ChartGroup` → the chart's own state.**
+
+```tsx
+{/* 1. Uncontrolled — it just works */}
+<LineChart … />
+
+{/* 2. Lifted — the house default everywhere else in this system */}
+<LineChart hoverKey={key} onHoverChange={setKey} … />
+
+{/* 3. Grouped — linked hover, filter, legend and zoom across N charts */}
+<ChartGroup columns={2}>
+  <LineChart … />
+  <BarChart … />
+</ChartGroup>
+```
+
+`ChartGroup` is the one place this system reaches for context, and it earns it
+twice: eight interaction props times four charts is thirty-two identical
+wirings, and a page-level `hoverKey` re-renders the whole dashboard on every
+pointer move. Hover lives in its own context for exactly that reason.
+
+Charts in a group share a key space — `datumKey` is the vocabulary. Two charts
+over the same weeks should both key on the ISO week. A chart keyed on section
+and a chart keyed on week are only meaningfully grouped for `series`, and should
+say `sync={['series']}`.
+
+**Drill-down is not a chart feature.** It is `onDatumClick` plus the caller
+swapping `data` and putting `<Breadcrumbs>` in `ChartFrame`'s slot.
+
+---
+
+## Keyboard and screen readers
+
+The SVG is `aria-hidden` in its entirety — ARIA on SVG children is supported too
+unevenly to be worth it. Everything semantic lives in real DOM:
+
+- one tab stop per chart, with a **virtual cursor** inside it (a sixty-point
+  chart must not be sixty tab stops)
+- `←→` moves along x, `↑↓` between series, `Home`/`End`, `PageUp`/`PageDown`,
+  `Enter` activates, `Escape` unwinds cursor → zoom → focus
+- a polite live region announces each landing, debounced and de-duplicated
+- a visually-hidden `<table>` always carries the complete data, for a reader who
+  wants to go at their own pace
+
+**Keyboard focus and pointer hover are the same state.** The cursor writes to
+`hoverKey`, so the crosshair, tooltip and every linked chart respond identically
+either way.
+
+---
+
+## Motion
+
+CSS transitions only — no JS animation runtime. Every duration and delay is a
+token, and `tokens/motion.css` already collapses all of them to `0ms` under
+`prefers-reduced-motion`, so the charts need no reduced-motion block of their
+own.
+
+Lines draw themselves on using `pathLength="1"`, which normalises the dash units
+and means no `getTotalLength()` call — no DOM measurement, and identical
+behaviour on a server-rendered path. Bars fade rather than rise, because their
+geometry lives in a `transform` that a keyframe would replace rather than
+compose with.
+
+A **dashed** series is excluded from the draw-on effect: that effect works by
+commandeering `stroke-dasharray`, which is the same property carrying the dash
+pattern — and the pattern is load-bearing.
+
+Pass `animate={false}` for a screenshot-stable chart. Every visual-review story
+here does.
+
+<Canvas of={SparklineStories.InATable} />

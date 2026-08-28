@@ -16,6 +16,15 @@ export interface AppShellProps extends HTMLAttributes<HTMLDivElement> {
   asideWidth?: string
   /** Hide the sidebar — pair with a `Drawer` at narrow widths. */
   sidebarHidden?: boolean
+  /**
+   * What happens to the aside below 1100px.
+   *
+   * `hide` is the default because the usual aside is a preview pane, and a
+   * preview stacked under a hundred results helps nobody. Use `stack` when the
+   * aside carries something that exists nowhere else — a document's metadata,
+   * a summary — so a narrow screen does not simply lose it.
+   */
+  asideCollapse?: 'hide' | 'stack'
   /** Cap and centre the content column. */
   maxWidth?: string | false
 }
@@ -35,6 +44,7 @@ export function AppShell({
   sidebarWidth = 'var(--cds-sidebar-width)',
   asideWidth = '22rem',
   sidebarHidden = false,
+  asideCollapse = 'hide',
   maxWidth = 'var(--cds-content-max)',
   className,
   style,
@@ -48,7 +58,11 @@ export function AppShell({
   } as CSSProperties
 
   return (
-    <div className={cx('cds-shell', className)} style={vars} {...rest}>
+    <div
+      className={cx('cds-shell', asideCollapse === 'stack' && 'cds-shell--aside-stack', className)}
+      style={vars}
+      {...rest}
+    >
       {header && <header className="cds-shell__header">{header}</header>}
 
       <div className="cds-shell__main">

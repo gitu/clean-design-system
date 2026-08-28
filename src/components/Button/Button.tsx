@@ -9,7 +9,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg'
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'> {
   /**
    * `primary` is a solid ink fill — the one obvious action on a view.
-   * `accent` is the red fill, reserved for the search/submit action itself.
+   * `accent` is the accent fill, reserved for the search/submit action itself.
    * `secondary` is ruled, `ghost` is bare, `danger` is ruled in red.
    */
   variant?: ButtonVariant

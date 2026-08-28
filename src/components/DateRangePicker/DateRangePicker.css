@@ -1,0 +1,118 @@
+.cds-daterange {
+  position: relative;
+  display: inline-flex;
+}
+
+.cds-daterange__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cds-space-2);
+  padding: 0 var(--cds-space-3);
+  border: var(--cds-border-width) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-sm);
+  background-color: var(--cds-color-surface);
+  font-family: var(--cds-font-sans);
+  color: var(--cds-color-text);
+  cursor: pointer;
+  transition: border-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+.cds-daterange__trigger--sm { height: var(--cds-control-height-sm); font-size: var(--cds-text-sm); }
+.cds-daterange__trigger--md { height: var(--cds-control-height-md); font-size: var(--cds-text-md); }
+
+.cds-daterange__trigger:hover:not(:disabled) { border-color: var(--cds-color-rule-heavy); }
+
+.cds-daterange__trigger:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+.cds-daterange__trigger:disabled {
+  background-color: var(--cds-color-surface-disabled);
+  color: var(--cds-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.cds-daterange__value.is-placeholder { color: var(--cds-color-text-subtle); }
+
+.cds-daterange__panel {
+  position: absolute;
+  top: calc(100% + var(--cds-space-1));
+  inset-inline-start: 0;
+  z-index: var(--cds-z-popover);
+  display: flex;
+  padding: var(--cds-space-4);
+  gap: var(--cds-space-4);
+  background-color: var(--cds-color-surface-raised);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-md);
+  box-shadow: var(--cds-shadow-lg);
+  animation: cds-daterange-in var(--cds-duration-fast) var(--cds-ease-out);
+}
+
+@keyframes cds-daterange-in {
+  from { opacity: 0; transform: translateY(-3px); }
+}
+
+.cds-daterange__presets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-px);
+  padding-inline-end: var(--cds-space-4);
+  border-inline-end: var(--cds-hairline) solid var(--cds-color-rule);
+  min-width: 9rem;
+}
+
+.cds-daterange__preset {
+  padding: var(--cds-space-2) var(--cds-space-2);
+  border: 0;
+  border-radius: var(--cds-radius-sm);
+  background: none;
+  font-family: var(--cds-font-sans);
+  font-size: var(--cds-text-sm);
+  color: var(--cds-color-text-muted);
+  text-align: start;
+  cursor: pointer;
+}
+
+.cds-daterange__preset:hover {
+  background-color: var(--cds-color-surface-hover);
+  color: var(--cds-color-text);
+}
+
+.cds-daterange__preset:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: calc(var(--cds-focus-ring-offset) * -1);
+}
+
+.cds-daterange__calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-2);
+}
+
+.cds-daterange__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--cds-space-2);
+  border-top: var(--cds-hairline) solid var(--cds-color-rule-subtle);
+}
+
+/* On a phone the two-month panel is wider than the screen; stack it and let
+ * the presets run across the top. */
+@media (max-width: 700px) {
+  .cds-daterange__panel {
+    flex-direction: column;
+    max-width: calc(100vw - var(--cds-space-8));
+    overflow-x: auto;
+  }
+  .cds-daterange__presets {
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 0;
+    padding-inline-end: 0;
+    padding-block-end: var(--cds-space-3);
+    border-inline-end: 0;
+    border-block-end: var(--cds-hairline) solid var(--cds-color-rule);
+  }
+}

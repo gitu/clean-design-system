@@ -21,10 +21,12 @@ export const Interactive: Story = {
 export const Positions: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Pagination page={1} pageCount={212} onChange={() => {}} />
-      <Pagination page={7} pageCount={212} onChange={() => {}} />
-      <Pagination page={212} pageCount={212} onChange={() => {}} />
-      <Pagination page={3} pageCount={5} onChange={() => {}} />
+      {/* Each is a nav landmark, so each needs its own name to stay
+          distinguishable in a landmarks list. */}
+      <Pagination page={1} pageCount={212} onChange={() => {}} label="First page" />
+      <Pagination page={7} pageCount={212} onChange={() => {}} label="Middle pages" />
+      <Pagination page={212} pageCount={212} onChange={() => {}} label="Last page" />
+      <Pagination page={3} pageCount={5} onChange={() => {}} label="Few pages" />
     </div>
   ),
 }

@@ -42,16 +42,22 @@
   border-bottom: var(--cds-border-width-heavy) solid var(--cds-color-rule-heavy);
 }
 
-.cds-table__th:first-child {
+.cds-table__th:first-child:not(.cds-table__th--select) {
   padding-inline-start: 0;
 }
 .cds-table__th:last-child {
   padding-inline-end: 0;
 }
 
-.cds-table__th--select {
+/* The selection column opts out of the flush-edge rule above. A checkbox
+ * pinned to the table's left edge has nothing to sit in, and 8px to the first
+ * data column is not a gutter — it reads as part of that column. It also has to
+ * clear the accent rule a selected row draws down its leading edge. */
+.cds-table__th--select,
+.cds-table__td--select {
   width: 1%;
-  padding-inline-end: var(--cds-space-2);
+  white-space: nowrap;
+  padding-inline: var(--cds-space-3) var(--cds-space-4);
 }
 
 .cds-table__sort {
@@ -108,7 +114,7 @@
   color: var(--cds-color-text);
 }
 
-.cds-table__td:first-child {
+.cds-table__td:first-child:not(.cds-table__td--select) {
   padding-inline-start: 0;
 }
 .cds-table__td:last-child {
@@ -123,9 +129,10 @@
   padding-block: var(--cds-space-1) var(--cds-space-2);
 }
 
+/* Align the checkbox with the first line of a cell that wraps, rather than
+ * centring it against a tall row. */
 .cds-table__td--select {
-  width: 1%;
-  padding-inline-end: var(--cds-space-2);
+  vertical-align: top;
 }
 
 .cds-table__cell--start {
