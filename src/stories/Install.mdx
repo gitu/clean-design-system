@@ -115,6 +115,21 @@ often enough to be offered, but it is a trade and not a free improvement.
   dependencies and where its files land.
 - `/r/<name>.json` — one item, with the file contents inline.
 
+## For agents
+
+If you are pointing a coding agent at this system, give it these rather than the
+Storybook — they are plain text, and they carry the install command for every
+component next to the description of what it does:
+
+- [`/llms.txt`](/llms.txt) — every component with its description, exports and
+  `npx shadcn@latest add …` command. 15 KB, small enough to paste into a prompt.
+- [`/llms-full.txt`](/llms-full.txt) — the same plus every prop, its type and its
+  documentation. 49 KB, meant to be fetched when a component is actually being
+  used.
+
+Both are generated from `src/` in the same pass that builds the registry, so
+what an agent reads and what it installs cannot disagree.
+
 Both are generated from `src/` on every build, so the registry cannot drift from
 the package. Item names are the kebab-cased component name: `Button` → `button`,
 `MarkdownEditor` → `markdown-editor`, `AppShell` → `app-shell`.

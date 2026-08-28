@@ -19,6 +19,18 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   value: string
 }
 
+/**
+ * One option in a mutually exclusive set.
+ *
+ * A real `<input type="radio">` under a drawn circle, for the same reason as
+ * `Checkbox`: the native control carries the roving focus, the arrow-key
+ * behaviour and the form value, and none of that is worth rebuilding to change
+ * how a dot looks. Radios sharing a `name` are a group to the browser whether
+ * or not they are one in the markup.
+ *
+ * Use `RadioGroup` to share the name and the selected value across a set; use
+ * this alone only when the surrounding form already provides both.
+ */
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
   {
     label,

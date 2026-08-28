@@ -50,6 +50,19 @@ seven components a date field is actually made of.
 No account needed for this route, which is the practical difference between the
 two: the registry is plain JSON over HTTPS.
 
+### For agents
+
+A machine-readable catalogue of every component — description, exports, props
+and its exact `add` command — is served as plain text:
+
+- [`/llms.txt`](https://gitu.github.io/clean-design-system/llms.txt) — the index,
+  small enough to paste into a prompt (15 KB)
+- [`/llms-full.txt`](https://gitu.github.io/clean-design-system/llms-full.txt) —
+  the same with every prop, its type and its documentation (49 KB)
+
+Both are generated from `src/` alongside the registry, so an agent reading them
+is reading the same scan that produced the files it will install.
+
 The registry is **generated from `src/` on every build** (`scripts/build-registry.mjs`),
 so it cannot drift from the package. Browse it at
 [`/registry.json`](https://gitu.github.io/clean-design-system/registry.json), or

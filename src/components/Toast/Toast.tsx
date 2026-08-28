@@ -23,6 +23,12 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null)
 
+export interface ToastProviderProps {
+  children: ReactNode
+  /** Oldest messages drop off beyond this. */
+  max?: number
+}
+
 /**
  * Announces what just happened, without stealing focus.
  *
@@ -31,14 +37,7 @@ const ToastContext = createContext<ToastContextValue | null>(null)
  * taken the undo away with it — so these stay until dismissed. That also means
  * this is the wrong component for anything high-frequency.
  */
-export function ToastProvider({
-  children,
-  max = 4,
-}: {
-  children: ReactNode
-  /** Oldest messages drop off beyond this. */
-  max?: number
-}) {
+export function ToastProvider({ children, max = 4 }: ToastProviderProps) {
   const [messages, setMessages] = useState<ToastMessage[]>([])
   // A ref, not state: bumping it must not itself schedule a render, and the
   // value is only ever read at the moment a toast is pushed.

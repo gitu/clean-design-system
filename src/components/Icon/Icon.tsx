@@ -69,6 +69,19 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   label?: string
 }
 
+/**
+ * One glyph from the set, drawn rather than loaded.
+ *
+ * Every icon is a single `<path>` on a 16-unit grid with a 1.5 hairline stroke,
+ * so they sit at the same optical weight as the rules around them and there is
+ * no sprite, no font and no network request. Colour is always `currentColor`:
+ * an icon takes the colour of the text it sits beside, which is what keeps it
+ * correct in both themes without anyone deciding.
+ *
+ * `label` is deliberately opt-*in*. An icon next to text that already says what
+ * it means should be silent, and most icons are — so the default is
+ * `aria-hidden`. Set `label` only when the glyph carries the meaning alone.
+ */
 export function Icon({ name, size = 16, label, className, ...rest }: IconProps) {
   const d = PATHS[name]
   return (

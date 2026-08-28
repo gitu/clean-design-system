@@ -112,7 +112,39 @@ async function readComponent(dir) {
     })
   }
 
-  return { dir, files: emitted, deps: [...deps], libs: [...libs], npm: [...npm], loc }
+  // What an importer can actually write. Read from the declarations rather than
+  // from index.ts, because most barrels here are `export * from './X'` and a
+  // re-export tells you nothing about what is behind it.
+  const values = new Set()
+  const types = new Set()
+  for (const file of emitted) {
+    if (!file.path.endsWith('.tsx') && !file.path.endsWith('.ts')) continue
+    if (file.path.endsWith('/index.ts')) continue
+    // Only the component files. A lower-cased filename here is a helper module
+    // — `calendar-utils.ts`, `date-parse.ts`, `chart-types.ts` — and listing
+    // its dozen date functions as the component's API is noise to a reader
+    // trying to find out what `Calendar` is called.
+    const base = file.path.split('/').pop() ?? ''
+    if (!/^[A-Z]/.test(base)) continue
+    for (const [, name] of file.content.matchAll(
+      /^export (?:async )?(?:function|const|class) ([A-Za-z_$][\w$]*)/gm
+    )) {
+      values.add(name)
+    }
+    for (const [, name] of file.content.matchAll(/^export (?:interface|type) ([A-Za-z_$][\w$]*)/gm)) {
+      types.add(name)
+    }
+  }
+  const exports = [...values].sort()
+  const exportedTypes = [...types].sort()
+
+  const main = emitted.find(file => file.path.endsWith(`${dir}.tsx`))
+  const props = main ? readProps(main.content) : []
+
+  return {
+    dir, files: emitted, deps: [...deps], libs: [...libs], npm: [...npm], loc,
+    exports, exportedTypes, props,
+  }
 }
 
 /**
@@ -139,6 +171,112 @@ async function walk(dir) {
     else out.push(rel)
   }
   return out.sort()
+}
+
+/* --- Reading the barrel and the prop interfaces ---------------------------- */
+
+/**
+ * The system's own grouping, taken from the section comments in `src/index.ts`.
+ *
+ * Derived rather than invented: the barrel already sorts components into
+ * Primitives, Forms, Search, Data, Charts, Prose, Layout and Assistant, and a
+ * second list here would be the one that goes stale. Anything not exported —
+ * the internal `Chart` folder — falls through to "Internal".
+ */
+async function readCategories() {
+  const barrel = await readFile(path.join(ROOT, 'src/index.ts'), 'utf8')
+  const map = {}
+  let current = 'Other'
+  for (const line of barrel.split('\n')) {
+    const heading = line.match(/^\/\* --- (.+?) --- \*\//)
+    if (heading?.[1]) {
+      current = heading[1]
+      continue
+    }
+    const exported = line.match(/^export \* from '\.\/components\/([A-Za-z0-9]+)'/)
+    if (exported?.[1]) map[exported[1]] = current
+  }
+  return map
+}
+
+/**
+ * The public props of a component, for an agent that has to use it without
+ * reading the file.
+ *
+ * A regex reading of TypeScript, which is the wrong tool in general and the
+ * right one here: the target is `export interface XProps`, every one of which
+ * in this repository is a flat list of documented members. It is used only to
+ * *describe*, never to typecheck, so a member it cannot parse is skipped rather
+ * than guessed at.
+ */
+function readProps(source) {
+  const start = source.search(/export interface [A-Za-z0-9]*Props(?:<[^>]*>)?\s*(?:extends [^{]+)?\{/)
+  if (start === -1) return []
+
+  const open = source.indexOf('{', start)
+  let depth = 0
+  let end = open
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === '{') depth++
+    else if (source[i] === '}') {
+      depth--
+      if (depth === 0) {
+        end = i
+        break
+      }
+    }
+  }
+
+  const body = source.slice(open + 1, end)
+  const props = []
+  let doc = []
+  let buffer = ''
+
+  for (const raw of body.split('\n')) {
+    const line = raw.trim()
+    if (!line) continue
+
+    if (line.startsWith('/**') || line.startsWith('*') || line.startsWith('*/')) {
+      // A one-line JSDoc opens and closes on the same line, so the trailing
+      // `*/` has to come off separately from the leading `/**`.
+      const text = line
+        .replace(/\s*\*\/\s*$/, '')
+        .replace(/^\/\*\*\s?/, '')
+        .replace(/^\*\s?/, '')
+        .trim()
+      if (text) doc.push(text)
+      continue
+    }
+    if (line.startsWith('//')) continue
+
+    buffer = buffer ? `${buffer} ${line}` : line
+    // A member can span lines when its type is a long union, so it is only
+    // finished once the brackets it opened have closed. The arrow in a callback
+    // type has to come out first — `(d: T) => void` counts one `(` against a
+    // `)` and a `>`, which never balances, and every component with a callback
+    // prop silently lost its entire prop list.
+    const brackets = buffer.replace(/=>/g, '')
+    const balanced =
+      (brackets.match(/[<({[]/g) ?? []).length === (brackets.match(/[>)}\]]/g) ?? []).length
+    if (!balanced) continue
+
+    const member = buffer.match(/^([A-Za-z_$][\w$]*|'[^']+')(\?)?:\s*(.+?);?$/)
+    buffer = ''
+    if (!member) {
+      doc = []
+      continue
+    }
+
+    props.push({
+      name: member[1].replace(/'/g, ''),
+      required: !member[2],
+      type: member[3].replace(/\s+/g, ' ').trim(),
+      doc: doc.join(' ').replace(/\s+/g, ' ').trim(),
+    })
+    doc = []
+  }
+
+  return props
 }
 
 /* --- Items ---------------------------------------------------------------- */
@@ -223,6 +361,8 @@ async function buildLib(key) {
  * component of its own, and `Chat` is a family of eleven in one directory. A
  * generated one-liner for either would be a guess.
  */
+const undocumented = []
+
 const OVERRIDES = {
   Chart:
     'Internal chart machinery — scales, axes, the SVG surface, the keyboard cursor. Installed as a dependency of the charts; not used directly.',
@@ -252,8 +392,20 @@ function describe(component) {
       /\/\*\*((?:(?!\*\/)[\s\S])*)\*\/\s*export\s+(?:function|const)\s+([A-Za-z0-9_]+)/g
     ),
   ]
-  const hit = blocks.find(block => block[2] === component.dir) ?? blocks[0]
-  if (!hit) return `The ${component.dir} component.`
+  // Only the block attached to the component itself. Falling back to the first
+  // documented export in the file is how `Icon` came to be described as "All
+  // icon names, in a stable order" — that is `iconNames`, one export below.
+  const hit =
+    blocks.find(block => block[2] === component.dir) ??
+    // Some folders have no export named after them: `Toast` exports
+    // `ToastProvider`. The component is still the one carrying the folder's
+    // name as a prefix — but never simply "the first documented export",
+    // which is how `Icon` came to be described as "All icon names".
+    blocks.find(block => block[2].startsWith(component.dir))
+  if (!hit) {
+    undocumented.push(component.dir)
+    return `The ${component.dir} component.`
+  }
 
   const text = hit[1]
     .split('\n')
@@ -296,6 +448,7 @@ const componentDirs = (
   .sort()
 
 const components = (await Promise.all(componentDirs.map(readComponent))).filter(Boolean)
+const CATEGORIES = await readCategories()
 
 const items = [
   await buildStyles(),
@@ -327,6 +480,131 @@ const registry = {
 }
 
 await writeFile(path.join(OUT, 'registry.json'), JSON.stringify(registry, null, 2) + '\n')
+
+/* --- llms.txt --------------------------------------------------------------
+ * A description of the system written for something that will read all of it
+ * and none of the Storybook: name, purpose, install command, exported symbols
+ * and props, as plain text at a stable URL.
+ *
+ * Two files, following the llms.txt convention: `llms.txt` is the index, small
+ * enough to paste into a prompt; `llms-full.txt` carries every prop and is
+ * meant to be fetched when a specific component is actually being used.
+ *
+ * Generated from the same scan as the registry, so the catalogue and the thing
+ * it catalogues cannot disagree.
+ * ------------------------------------------------------------------------- */
+
+const CATEGORY_ORDER = [
+  'Root', 'Primitives', 'Forms', 'Search', 'Charts', 'Prose', 'Data', 'Layout',
+  'Assistant', 'Utilities', 'Other', 'Internal',
+]
+
+const PREAMBLE = `# clean-design-system
+
+> A quiet, editorial design system for complex search applications.
+> ${components.length} independently installable components in TypeScript, styled
+> with plain CSS custom properties — no runtime, no CSS framework, no build
+> plugin. Light and dark from one attribute. WCAG 2.2 AA contrast and keyboard
+> behaviour throughout, checked by axe over every story in CI.
+
+Docs and live examples: ${BASE_URL}/
+Source: https://github.com/gitu/clean-design-system
+
+## Two ways to install
+
+**Copy the source in** (no account needed, and the files become yours):
+
+    npx shadcn@latest add ${BASE_URL}/r/<name>.json
+
+The shadcn CLI installs from any public registry URL. Transitive dependencies
+resolve automatically — asking for \`date-input\` brings the tokens, \`cx\` and the
+seven components a date field is made of. Everything lands under one
+\`components/ui/cds/\` namespace and imports its neighbours relatively, so it works
+the same in Vite, Next and Remix. Requires a \`components.json\` at the project
+root; Tailwind is *not* used or required.
+
+**Or as a package** (GitHub Packages — needs a token with \`read:packages\`, even
+though the package is public):
+
+    npm install @gitu/clean-design-system
+
+## Rules that apply to everything
+
+- Wrap the tree in \`<ThemeProvider>\` and import the stylesheet once. Nothing is
+  styled without it.
+- Class names are prefixed \`cds-\`. The reset is wrapped in \`:where()\`, so it has
+  zero specificity and cannot outrank your own CSS or Tailwind.
+- Colour comes from \`--cds-color-*\` custom properties; there are three theme
+  blocks (light, \`prefers-color-scheme: dark\`, and \`[data-cds-theme='dark']\`)
+  kept in sync by a build check.
+- Form controls wrapped in \`<Field>\` inherit their id, \`aria-describedby\`,
+  invalid and required state automatically — do not wire those by hand.
+- Every component takes \`className\` and merges it.
+- Charts are the only thing with runtime dependencies (three \`@visx/*\` packages).
+- Self-hosted fonts are optional; the tokens fall back to Georgia and the system
+  sans.
+
+## Components
+`
+
+function catalogue({ withProps }) {
+  const byCategory = new Map()
+  for (const component of components) {
+    const key = CATEGORIES[component.dir] ?? 'Internal'
+    if (!byCategory.has(key)) byCategory.set(key, [])
+    byCategory.get(key).push(component)
+  }
+
+  const sorted = [...byCategory.entries()].sort(
+    (a, b) => CATEGORY_ORDER.indexOf(a[0]) - CATEGORY_ORDER.indexOf(b[0])
+  )
+
+  const out = []
+  for (const [category, list] of sorted) {
+    out.push(`\n### ${category}\n`)
+    for (const component of list.sort((a, b) => a.dir.localeCompare(b.dir))) {
+      const name = kebab(component.dir)
+      out.push(`#### ${component.dir}`)
+      out.push('')
+      out.push(describe(component))
+      out.push('')
+      out.push(`    npx shadcn@latest add ${BASE_URL}/r/${name}.json`)
+      out.push('')
+      if (component.exports.length) out.push(`Exports: ${component.exports.join(', ')}`)
+      if (withProps && component.exportedTypes.length) {
+        out.push(`Types: ${component.exportedTypes.join(', ')}`)
+      }
+      if (component.npm.length) out.push(`npm dependencies: ${component.npm.sort().join(', ')}`)
+      if (component.deps.length) {
+        out.push(`Depends on: ${component.deps.map(kebab).sort().join(', ')}`)
+      }
+
+      if (withProps && component.props.length) {
+        out.push('')
+        out.push('Props:')
+        for (const prop of component.props) {
+          const type = prop.type.length > 90 ? `${prop.type.slice(0, 87)}...` : prop.type
+          const flag = prop.required ? ' (required)' : ''
+          out.push(`  - ${prop.name}: ${type}${flag}${prop.doc ? ` — ${prop.doc}` : ''}`)
+        }
+      }
+      out.push('')
+    }
+  }
+  return out.join('\n')
+}
+
+const index = `${PREAMBLE}
+Every component below installs with the command shown. Names are the kebab-cased
+component name. Full props for all of them: ${BASE_URL}/llms-full.txt
+${catalogue({ withProps: false })}`
+
+const full = `${PREAMBLE}
+Full props for every component. The short index is at ${BASE_URL}/llms.txt
+${catalogue({ withProps: true })}`
+
+await writeFile(path.join(OUT, 'llms.txt'), index)
+await writeFile(path.join(OUT, 'llms-full.txt'), full)
 
 /* --- Checks ---------------------------------------------------------------
  * A registry that emits an item pointing at an item that does not exist is
@@ -366,5 +644,11 @@ if (problems.length) {
   console.log(
     `registry: ${items.length} items, ${total} files, ${(bytes / 1024).toFixed(0)} KB -> registry/`
   )
+  console.log(
+    `          llms.txt ${(index.length / 1024).toFixed(0)} KB, llms-full.txt ${(full.length / 1024).toFixed(0)} KB`
+  )
+  if (undocumented.length) {
+    console.log(`          no component JSDoc: ${[...new Set(undocumented)].sort().join(', ')}`)
+  }
   console.log(`          ${BASE_URL}/r/<name>.json`)
 }
