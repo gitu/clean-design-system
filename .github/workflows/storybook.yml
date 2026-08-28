@@ -1,0 +1,63 @@
+# Publishes the Storybook to GitHub Pages on every push to the default branch.
+#
+# The Storybook *is* the documentation for this package: every component's props
+# table is generated from its JSDoc, and the Patterns stories are the only place
+# the system is shown composing into real screens. A design system whose docs
+# only run on the author's laptop is a design system nobody adopts.
+name: Storybook
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# Pages needs these; the default GITHUB_TOKEN has neither.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. `cancel-in-progress: false` so a queued deploy finishes
+# rather than being dropped by the next push.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The same gates that run locally. A Storybook that deploys green while
+      # the token or palette checks are failing is worse than no deploy.
+      - run: pnpm typecheck
+      - run: pnpm check-tokens
+      - run: pnpm check-palette
+      - run: pnpm build
+      - run: pnpm smoke
+
+      - run: pnpm build-storybook
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
