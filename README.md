@@ -8,6 +8,10 @@ interface chrome, hairline rules instead of boxes and shadows, generous
 whitespace, and exactly one loud colour. Its job, though, is dense application
 work: faceted search, long result lists, sortable tables, saved queries.
 
+**[Browse the Storybook →](https://gitu.github.io/clean-design-system/)** — every
+component with its states and a props table generated from the source, plus
+fourteen example applications built from the system.
+
 - 72 React components, TypeScript throughout
 - Plain CSS with custom properties — no runtime, no CSS framework, no build plugin
 - Light and dark, driven by one attribute
