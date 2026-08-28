@@ -1,6 +1,7 @@
 {
   "name": "clean-design-system",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.5.2",
   "description": "A quiet, editorial design system for complex search applications.",
   "license": "MIT",
   "type": "module",

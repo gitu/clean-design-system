@@ -38,6 +38,11 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # The story tests run in a real browser, so it has to be fetched. Only
+      # Chromium — the a11y and interaction assertions are not browser-specific,
+      # and three engines would triple the wait for no extra signal.
+      - run: pnpm exec playwright install --with-deps chromium
+
       # The same gates that run locally. A Storybook that deploys green while
       # the token or palette checks are failing is worse than no deploy.
       - run: pnpm typecheck
@@ -45,6 +50,8 @@ jobs:
       - run: pnpm check-palette
       - run: pnpm build
       - run: pnpm smoke
+      # Every story, with axe violations as failures.
+      - run: pnpm test
 
       - run: pnpm build-storybook
 
