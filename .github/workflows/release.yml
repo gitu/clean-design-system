@@ -1,0 +1,88 @@
+# Publishes to npm when a version tag is pushed.
+#
+#   pnpm version minor && git push --follow-tags
+#
+# Uses npm's trusted publishing (OIDC) rather than a long-lived NPM_TOKEN: the
+# `id-token: write` permission below lets npm verify the publish came from this
+# workflow, in this repository, and nowhere else. It also means every published
+# tarball carries a provenance attestation automatically — cryptographic proof
+# of the commit and the run that built it — with no `--provenance` flag.
+#
+# One-time setup, and it has to happen in this order:
+#
+#   1. `npm publish` once from a laptop. npm cannot attach a trusted publisher
+#      to a package name that does not exist yet.
+#   2. On npmjs.com → the package → Settings → Trusted Publisher, add:
+#        organization/user: gitu
+#        repository:        clean-design-system
+#        workflow:          release.yml
+#        allowed actions:   npm publish
+#   3. Every release after that is a tag.
+#
+# Until step 2 is done this workflow will fail at the publish step, which is the
+# correct failure: nothing should be able to publish that npm has not been told
+# to trust.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Trusted publishing needs Node >= 22.14 and npm >= 11.5.1. setup-node
+          # ships an older npm with every Node line, so it is upgraded
+          # explicitly rather than left to chance.
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm install -g npm@latest
+      - run: npm --version
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+
+      # The same gates the docs site deploys behind. A release is the one moment
+      # where "it built" is not good enough — a published version cannot be
+      # taken back, only superseded.
+      - run: pnpm typecheck
+      - run: pnpm check-tokens
+      - run: pnpm check-palette
+      - run: pnpm build
+      - run: pnpm smoke
+      - run: pnpm test
+
+      # Packs the tarball, installs it into an empty project and uses it. This
+      # is the only check that exercises the `exports` map and `files` list,
+      # which is where publishing goes wrong.
+      - run: pnpm check-package
+
+      # The tag has to agree with package.json, or the registry ends up with a
+      # version nobody can find by the tag that produced it.
+      - name: Check the tag matches the version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "tag v$TAG does not match package.json $PKG"
+            exit 1
+          fi
+          echo "publishing $PKG"
+
+      # `--ignore-scripts`: prepublishOnly has already run above, step by step,
+      # where a failure says which gate failed rather than which script did.
+      - run: npm publish --ignore-scripts

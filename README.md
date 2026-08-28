@@ -15,7 +15,9 @@ fourteen example applications built from the system.
 - 72 React components, TypeScript throughout
 - Plain CSS with custom properties — no runtime, no CSS framework, no build plugin
 - Light and dark, driven by one attribute
-- Self-hosted Inter, Source Serif 4 and IBM Plex Mono (optional)
+- Self-hosted Inter, Source Serif 4 and IBM Plex Mono — genuinely optional: the
+  stylesheet pulls no fonts of its own, and the tokens fall back to Georgia and
+  the system sans
 
 ## Install
 
@@ -315,6 +317,38 @@ One PNG per story, in both themes, failing on any console or page error. The
 browser emulates `prefers-reduced-motion`, so every duration token collapses to
 `0ms` and animated stories land on their final frame instead of being caught
 mid-flight — which is what makes the images comparable between runs.
+
+## Releasing
+
+```bash
+pnpm version minor && git push --follow-tags
+```
+
+A `v*` tag runs `.github/workflows/release.yml`, which re-runs every gate,
+checks the tag agrees with `package.json`, and publishes.
+
+Publishing uses npm's [trusted publishing](https://docs.npmjs.com/trusted-publishers/)
+over OIDC rather than a stored `NPM_TOKEN`, so there is no long-lived
+credential in the repository and every tarball carries a provenance attestation
+— cryptographic proof of the commit and workflow run that built it. The setup is
+once, and the order matters: publish manually once (npm cannot attach a trusted
+publisher to a name that does not exist), then add the publisher on npmjs.com
+pointing at `release.yml`.
+
+`prepublishOnly` runs `build`, `smoke` and `check-package` for anyone publishing
+by hand, so the same gates apply either way.
+
+### check-package
+
+`pnpm check-package` packs the tarball, installs it into an empty project with
+npm, and uses it — resolving every subpath in `exports`, rendering on a server,
+and asserting the stylesheet pulls nothing that was not published.
+
+It exists because `pnpm smoke` imports `dist/index.js` by relative path, so it
+passes happily while `exports` points at a file that was never shipped. That is
+the expensive mistake: a published version cannot be withdrawn, only superseded.
+It found two before the first release — a stylesheet importing fonts from a
+directory the package did not publish, and those same fonts shipped twice.
 
 ## Conventions
 
