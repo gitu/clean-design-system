@@ -24,6 +24,18 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
   invalid?: boolean
 }
 
+/**
+ * A real `<input type="checkbox">` under a drawn box.
+ *
+ * The native control is kept and visually hidden rather than replaced by a
+ * `div` with `role="checkbox"`: it brings the label association, the form
+ * value, the indeterminate state and every browser's own keyboard handling for
+ * free, and none of that is worth reimplementing to change a tick.
+ *
+ * `indeterminate` is a DOM property with no HTML attribute, so it is applied
+ * through a ref — which is why this component holds one even when the caller
+ * does not.
+ */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
   {
     label,

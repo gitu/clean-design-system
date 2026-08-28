@@ -6,3 +6,6 @@ ds-bundle/
 *.log
 .DS_Store
 .shots/
+# Generated from src/ by scripts/build-registry.mjs and served with the
+# Storybook. The source tree is the source of truth; this is a build artefact.
+registry/

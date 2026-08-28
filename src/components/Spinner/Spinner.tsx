@@ -12,6 +12,14 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   label?: string | null
 }
 
+/**
+ * An indeterminate wait.
+ *
+ * `label` is announced politely and defaults to "Loading"; pass `null` when
+ * something adjacent already says it, which is the case inside `Button`. The
+ * animation is a duration token, so `prefers-reduced-motion` stops it without
+ * this component knowing anything about the media query.
+ */
 export function Spinner({ size = 'md', label = 'Loading', className, ...rest }: SpinnerProps) {
   return (
     <span

@@ -19,6 +19,14 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   bare?: boolean
 }
 
+/**
+ * A square `Button` carrying an icon and nothing else.
+ *
+ * Separate from `Button` because of `label`, which is required here and has no
+ * equivalent there: a button whose only content is a glyph has no accessible
+ * name, and making the name a required prop is the only version of this
+ * component that cannot be used wrongly.
+ */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   {
     icon,

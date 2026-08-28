@@ -11,6 +11,16 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   resize?: 'none' | 'vertical' | 'both'
 }
 
+/**
+ * A multi-line text field.
+ *
+ * Resizes vertically by default and never horizontally: a textarea dragged
+ * wider than its column breaks the measure of everything beside it. `mono` is
+ * the right default for a raw query body, where alignment carries meaning.
+ *
+ * For prose that will be rendered later, use `MarkdownEditor` — it is this
+ * control plus a toolbar and a preview of the face the text will publish in.
+ */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
   {
     invalid,

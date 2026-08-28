@@ -24,6 +24,18 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   iconEnd?: ReactNode
 }
 
+/**
+ * The system's one button.
+ *
+ * Five variants rather than a `tone` and a `fill` that multiply into twenty:
+ * a design system's job here is to make the loud choice rare, and a matrix
+ * makes it easy. `primary` is the obvious action on a view, `accent` is
+ * reserved for search itself, and `danger` is ruled rather than filled —
+ * red is the one colour this system will not use as a ground.
+ *
+ * `loading` swaps the leading icon for a spinner and disables the button, so
+ * the width does not jump and a second click cannot land.
+ */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     variant = 'secondary',

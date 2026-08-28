@@ -1,0 +1,122 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Installation" />
+
+# Installation
+
+There are two ways to use this system, and they are meant for different
+situations. Both draw on the same source; neither is a fork of the other.
+
+## As a package
+
+```bash
+npm install clean-design-system
+```
+
+```tsx
+import 'clean-design-system/styles.css'
+import { ThemeProvider, Button } from 'clean-design-system'
+```
+
+Take this when you want upgrades to arrive as a version bump and you are content
+to change appearance through tokens. Everything is themed with CSS custom
+properties, so a great deal is reachable without touching a component — but the
+markup and the behaviour are ours.
+
+## As source you own
+
+```bash
+npx shadcn@latest add https://gitu.github.io/clean-design-system/r/button.json
+```
+
+The [shadcn CLI](https://ui.shadcn.com/docs/registry) installs from any public
+registry URL, so it works here without this project shipping a CLI of its own.
+The files land in your repository and become yours: edit them, delete the props
+you do not want, rename the classes.
+
+Take this when the system is a starting point rather than a dependency — which,
+for a design system, is often the honest relationship.
+
+### What arrives
+
+Transitive dependencies are resolved for you. Asking for `date-input` brings the
+tokens, `cx`, and `button`, `calendar`, `field`, `icon`, `icon-button`, `input`
+and `spinner` — twenty files, because that is genuinely what a date field is
+made of here.
+
+```
+src/components/ui/cds/
+  styles/            tokens, reset, typographic base   ← every component needs this
+  lib/               cx, useControllableState, useModalLayer
+  button/            Button.tsx + Button.css + index.ts
+  date-input/        DateInput.tsx + date-parse.ts + DateInput.css + index.ts
+  …
+```
+
+Everything sits under one `cds/` namespace and imports its neighbours
+*relatively*. That is deliberately not how shadcn's own registry works — it
+rewrites `@/registry/…` to your configured aliases at install time, which is
+fine until a `tsconfig` disagrees. Keeping the tree self-contained means it
+installs identically into Vite, Next and Remix, and you can move the whole
+system by dragging one folder.
+
+### What you need first
+
+A `components.json` at your project root. The CLI reads it for the paths; none
+of the Tailwind fields matter here, because **this system does not use
+Tailwind** — it is plain CSS with custom properties.
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": { "config": "", "css": "src/index.css", "baseColor": "neutral", "cssVariables": true },
+  "aliases": {
+    "components": "@/components",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}
+```
+
+Then, once, at your entry point:
+
+```tsx
+import '@/components/ui/cds/styles/index.css'
+```
+
+and wrap the tree in `<ThemeProvider>`. Nothing is styled without it.
+
+The reset is wrapped in `:where()`, so it carries zero specificity and cannot
+outrank your own classes — it will sit beside Tailwind or anything else without
+a fight.
+
+### What it costs
+
+Copy-in distribution means you do not get upgrades. A fix landing here reaches
+you only if you run `add` again, and `add` overwrites — so anything you have
+edited, you have to merge yourself. That is the trade, and it is the right one
+often enough to be offered, but it is a trade and not a free improvement.
+
+## Browsing the registry
+
+- [`/registry.json`](/registry.json) — the catalogue: every item, its
+  dependencies and where its files land.
+- `/r/<name>.json` — one item, with the file contents inline.
+
+Both are generated from `src/` on every build, so the registry cannot drift from
+the package. Item names are the kebab-cased component name: `Button` → `button`,
+`MarkdownEditor` → `markdown-editor`, `AppShell` → `app-shell`.
+
+## Which to choose
+
+| | Package | Source |
+|---|---|---|
+| Upgrades | `npm update` | re-run `add`, merge by hand |
+| Changing markup | fork the project | edit the file |
+| Bundle | one dependency, tree-shaken | only what you installed |
+| Charts | pulls three `@visx/*` packages | same, installed for you |
+| Suits | a product that wants a system | a system that wants a product |

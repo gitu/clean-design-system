@@ -53,6 +53,9 @@ jobs:
       # Every story, with axe violations as failures.
       - run: pnpm test
 
+      # Generates the shadcn registry from src/ and builds the Storybook around
+      # it, so the docs site and the registry it serves are always the same
+      # commit. `pnpm build-storybook` runs the generator itself.
       - run: pnpm build-storybook
 
       - uses: actions/upload-pages-artifact@v3

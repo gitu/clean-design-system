@@ -11,12 +11,6 @@ importers:
       '@visx/curve':
         specifier: ^4.0.0
         version: 4.0.0
-      '@visx/event':
-        specifier: ^4.0.0
-        version: 4.0.0(@types/react@19.2.18)(react@19.2.8)
-      '@visx/group':
-        specifier: ^4.0.0
-        version: 4.0.0(@types/react@19.2.18)(react@19.2.8)
       '@visx/scale':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1120,15 +1114,6 @@ packages:
   '@visx/curve@4.0.0':
     resolution: {integrity: sha512-bXrOSd2BzVCxR7kBE7gPTSU4plxzYN75w7erdHYabwn3vzP+xFk1o0gg3NOHEPJzt5tXqf0Ecm5YqHACOnipTA==}
 
-  '@visx/event@4.0.0':
-    resolution: {integrity: sha512-sOcVVzOUxOefF8mQenRFtutoEO7P9icpTcSJM36Sv13sepQbPBuYLknX7RV+EzqyNLOze5cO5GmLIUNH82FOoA==}
-    peerDependencies:
-      '@types/react': ^18.0.0 || ^19.0.0
-      react: ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
   '@visx/group@4.0.0':
     resolution: {integrity: sha512-HGAq8BCqn5x0t94CJOLJeKtWss9LFpF3HY69HbuO1PlR+B9c4aVT9xbjfudmU8wGQZLT6JNt+PJvxbO2aJ+1aA==}
     peerDependencies:
@@ -1137,9 +1122,6 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  '@visx/point@4.0.0':
-    resolution: {integrity: sha512-hwJ9UlIjg3iV4iiJ3RN5SNTXama+zGaNe57sXSrSvPiqhkDXypsYBdDSlAnHmKbMzHP0zFmgB1UJciB/QUyigw==}
 
   '@visx/scale@4.0.0':
     resolution: {integrity: sha512-Q3VaSLKlsrxxSl9CwS2D3Mvz4/4kIp/6NMKRY8Im0Au1hrQh2egU806p0+JwN0ccuGGDe03jyAxX4BSRAH8Plg==}
@@ -3010,21 +2992,12 @@ snapshots:
     dependencies:
       '@visx/vendor': 4.0.0
 
-  '@visx/event@4.0.0(@types/react@19.2.18)(react@19.2.8)':
-    dependencies:
-      '@visx/point': 4.0.0
-      react: 19.2.8
-    optionalDependencies:
-      '@types/react': 19.2.18
-
   '@visx/group@4.0.0(@types/react@19.2.18)(react@19.2.8)':
     dependencies:
       classnames: 2.5.1
       react: 19.2.8
     optionalDependencies:
       '@types/react': 19.2.18
-
-  '@visx/point@4.0.0': {}
 
   '@visx/scale@4.0.0':
     dependencies:

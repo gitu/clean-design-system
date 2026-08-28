@@ -19,6 +19,17 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   mono?: boolean
 }
 
+/**
+ * A single-line text field, with room either side of the text.
+ *
+ * The border and the focus ring live on a wrapper rather than on the `<input>`,
+ * so icons and affixes sit *inside* the field and the whole thing reads as one
+ * object when focused. `prefix`/`suffix` are static text fused to the edge —
+ * `https://`, `kg`, a timezone — where `iconStart`/`iconEnd` take nodes.
+ *
+ * Inside a `<Field>` it picks up its id, its `aria-describedby` and its invalid
+ * state without being told.
+ */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     size = 'md',

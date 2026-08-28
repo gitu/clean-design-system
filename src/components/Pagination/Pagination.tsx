@@ -37,6 +37,18 @@ function buildRange(page: number, pageCount: number, siblings: number): Array<nu
   return out
 }
 
+/**
+ * Page numbers, with the ends always reachable.
+ *
+ * The window around the current page collapses with ellipses rather than
+ * scrolling, so the control keeps a stable width across a 212-page result set —
+ * a paginator that changes size as you walk through it moves the buttons under
+ * the pointer.
+ *
+ * Rendered as a `<nav>` with the current page carrying `aria-current="page"`,
+ * which is what tells a screen reader where it is without reading all eleven
+ * numbers.
+ */
 export function Pagination({
   page,
   pageCount,

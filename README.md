@@ -19,9 +19,35 @@ fourteen example applications built from the system.
 
 ## Install
 
+Two ways, for two different relationships with a design system.
+
+**As a package**, when you want upgrades as a version bump:
+
 ```bash
 npm install clean-design-system
 ```
+
+**As source you own**, when the system is a starting point rather than a
+dependency:
+
+```bash
+npx shadcn@latest add https://gitu.github.io/clean-design-system/r/button.json
+```
+
+The [shadcn CLI](https://ui.shadcn.com/docs/registry) installs from any public
+registry URL, so this works without a CLI of our own. Transitive dependencies
+resolve automatically — asking for `date-input` brings the tokens, `cx` and the
+seven components a date field is actually made of.
+
+The registry is **generated from `src/` on every build** (`scripts/build-registry.mjs`),
+so it cannot drift from the package. Browse it at
+[`/registry.json`](https://gitu.github.io/clean-design-system/registry.json), or
+read the [Installation page](https://gitu.github.io/clean-design-system/?path=/docs/foundations-installation--docs)
+for the `components.json` you need and what the trade costs.
+
+No Tailwind. This is plain CSS with custom properties, and the reset is wrapped
+in `:where()` so it carries zero specificity and will not fight whatever else
+you have.
 
 ### Maps
 
@@ -66,10 +92,10 @@ clock change.
 
 ### Dependencies
 
-The charts are built on visx's scale and shape maths, so five small packages
-come along: `@visx/scale`, `@visx/shape`, `@visx/curve`, `@visx/group` and
-`@visx/event`. Nothing else in the system touches them, and they are external
-to the bundle, so an app that imports only a `Button` never loads them.
+The charts are built on visx's scale and shape maths, so three small packages
+come along: `@visx/scale`, `@visx/shape` and `@visx/curve`. Nothing else in the
+system touches them, and they are external to the bundle, so an app that imports
+only a `Button` never loads them.
 
 The axes, legend, tooltip and brush are written here rather than taken from
 visx. `@visx/axis` and `@visx/legend` reach `@visx/text`, which pulls in lodash
