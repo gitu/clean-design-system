@@ -15,3 +15,22 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env?: ImportMetaEnv
 }
+
+/**
+ * Vite's `?url` suffix: the module resolves to the emitted asset's URL rather
+ * than to its contents. Used for MapLibre's worker, which has to be handed to
+ * the library as a URL the build has actually emitted.
+ */
+declare module '*?url' {
+  const src: string
+  export default src
+}
+
+/**
+ * `?worker&url`: the worker and its imports are bundled, and the module
+ * resolves to the emitted bundle's URL.
+ */
+declare module '*?worker&url' {
+  const src: string
+  export default src
+}

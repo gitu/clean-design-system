@@ -1,4 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
+/**
+ * MapLibre's tile-parsing worker, as a URL the bundler has actually emitted.
+ *
+ * The library works its own worker URL out at runtime — roughly
+ * `new URL('./' + filename, import.meta.url)` with the filename in a variable —
+ * which no bundler can follow statically. In dev that resolved to the real file
+ * sitting in node_modules and everything worked; in a production build the
+ * MapLibre chunk moves to `assets/` and the worker beside it was never emitted,
+ * so the request 404s and the map renders its chrome, its attribution and its
+ * markers and then asks for exactly zero tiles.
+ *
+ * `?worker&url` is the fix, and the `worker` half matters: plain `?url` emits
+ * this one file and follows none of its imports, so the worker loaded and then
+ * died reaching for `./maplibre-gl-shared.mjs` beside it. `?worker` bundles the
+ * worker with its dependencies; `&url` hands back the address rather than a
+ * constructor, which is what `setWorkerUrl` wants.
+ */
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import type { Stop } from './fixtures'
 
 /**
@@ -141,6 +159,10 @@ export function RouteMap({
         const maplibre = await import('maplibre-gl')
         await import('maplibre-gl/dist/maplibre-gl.css')
         if (cancelled) return
+
+        // Before the first Map is constructed: the worker pool is built lazily
+        // on construction and keeps whatever URL it was told then.
+        maplibre.setWorkerUrl(workerUrl)
 
         const map = new maplibre.Map({
           container: node,

@@ -20,11 +20,16 @@ const config: StorybookConfig = {
     ...config,
     optimizeDeps: {
       ...config.optimizeDeps,
-      // maplibre-gl loads its tile parser in a Web Worker. Run through Vite's
-      // dependency pre-bundler that worker is rewritten in a way that leaves it
-      // unable to fetch, so the map renders its chrome and attribution and then
-      // silently never requests a single tile. Excluding it makes the worker
-      // load from source, where it behaves.
+      // maplibre-gl works out its own worker URL at runtime, which no bundler
+      // can follow statically. Excluding it from the pre-bundler leaves it
+      // loading from node_modules in dev, where the worker sits on disk beside
+      // the library and resolves.
+      //
+      // That only ever fixed the dev server: `optimizeDeps` does nothing for
+      // `vite build`, so the deployed Storybook shipped with no worker at all
+      // and asked for zero tiles while looking like a working map. The fix that
+      // covers both is `?worker&url` in `src/stories/RouteMap.tsx`. This stays
+      // because it is verified working and removing it is not.
       //
       // Story-only: the published package does not touch maplibre.
       exclude: [...(config.optimizeDeps?.exclude ?? []), 'maplibre-gl'],
