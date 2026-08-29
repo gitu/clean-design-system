@@ -116,10 +116,20 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Metadata items are separated by middots rather than pipes or bullets. */
-.cds-result__meta-item + .cds-result__meta-item::before {
+/* Metadata items are separated by middots rather than pipes or bullets.
+ *
+ * The separator trails the item before it rather than leading the item after
+ * it, so a wrapped meta line never begins with a stranded middot. Each item is
+ * a flex item, so a `::before` on the following one is what wraps — this is the
+ * difference between "96 m²  ·" at the end of a line and "· Zürich" at the
+ * start of the next.
+ *
+ * `:has(+ …)` rather than `:not(:last-child)`: the tags slot is a sibling in
+ * the same footer, so the last meta item is not the last child and would
+ * otherwise grow a separator pointing at a badge. */
+.cds-result__meta-item:has(+ .cds-result__meta-item)::after {
   content: '·';
-  margin-inline-end: var(--cds-space-2);
+  margin-inline-start: var(--cds-space-2);
   color: var(--cds-color-rule-strong);
 }
 
@@ -130,4 +140,29 @@
   position: relative;
   z-index: 1;
   margin-inline-start: var(--cds-space-1);
+}
+
+/* Below this width a leading thumbnail and a trailing score together can leave
+ * the body a column too narrow to set type in — the snippet becomes a ladder of
+ * two-word lines. The trailing slot drops under the body, and the leading slot
+ * is allowed to shrink instead of holding its intrinsic width.
+ *
+ * Collapse rather than breakpoint soup: one query, and it changes what wraps
+ * rather than restating the layout. */
+@media (max-width: 640px) {
+  .cds-result {
+    flex-wrap: wrap;
+    row-gap: var(--cds-space-2);
+    gap: var(--cds-space-3);
+  }
+
+  .cds-result__leading {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .cds-result__trailing {
+    flex-basis: 100%;
+    align-items: center;
+  }
 }

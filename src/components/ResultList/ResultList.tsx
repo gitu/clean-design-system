@@ -37,30 +37,36 @@ export function ResultList({
 }: ResultListProps) {
   const items = Children.toArray(children)
 
+  // Still the list element, not a `div`. `aria-label` is prohibited on a
+  // generic element, so degrading to a `div` while loading would silently drop
+  // the list's accessible name at exactly the moment a screen reader is being
+  // told something is in flight.
   if (loading) {
     return (
-      <div
+      <Tag
         className={cx('cds-result-list', dividers && 'cds-result-list--ruled', className)}
         aria-busy="true"
         aria-label={label}
         {...rest}
       >
         {Array.from({ length: loadingCount }, (_, i) => (
-          <div className="cds-result-list__item" key={i}>
+          <li className="cds-result-list__item" key={i}>
             <div className="cds-result-list__skeleton">
               <Skeleton variant="block" width="30%" height={11} />
               <Skeleton variant="block" width="72%" height={17} />
               <Skeleton variant="text" lines={2} />
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </Tag>
     )
   }
 
+  // No `aria-label` here: there is no list any more, and the empty state names
+  // itself with a heading. Labelling the wrapper would be the same violation.
   if (items.length === 0 && empty) {
     return (
-      <div className={cx('cds-result-list', className)} aria-label={label} {...rest}>
+      <div className={cx('cds-result-list', className)} {...rest}>
         {empty}
       </div>
     )

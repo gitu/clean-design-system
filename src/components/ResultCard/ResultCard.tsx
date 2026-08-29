@@ -6,6 +6,13 @@ import './ResultCard.css'
 export interface ResultCardProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /** The result's headline. Set in the editorial serif. */
   title: ReactNode
+  /**
+   * Heading level for the title. A result card knows what it is, but not what
+   * it sits under — so the page that places it has to say. Defaults to `3`,
+   * which is right for the common case of a list under a section heading;
+   * a page whose results follow its `h1` directly wants `2`.
+   */
+  titleLevel?: 2 | 3 | 4 | 5 | 6
   /** Makes the title a link and the whole card clickable. */
   href?: string
   /** Uppercase kicker above the title — section, collection, source. */
@@ -34,6 +41,7 @@ export interface ResultCardProps extends Omit<HTMLAttributes<HTMLElement>, 'titl
  */
 export function ResultCard({
   title,
+  titleLevel = 3,
   href,
   kicker,
   snippet,
@@ -50,8 +58,10 @@ export function ResultCard({
   const renderText = (node: ReactNode) =>
     typeof node === 'string' && query ? <Highlight query={query}>{node}</Highlight> : node
 
+  const Heading = `h${titleLevel}` as const
+
   const heading = (
-    <h3 className="cds-result__title">
+    <Heading className="cds-result__title">
       {href ? (
         <a className="cds-result__link" href={href}>
           {renderText(title)}
@@ -59,7 +69,7 @@ export function ResultCard({
       ) : (
         renderText(title)
       )}
-    </h3>
+    </Heading>
   )
 
   return (

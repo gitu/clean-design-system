@@ -53,6 +53,20 @@ body {
   flex: none;
 }
 
+/* Primary navigation in the bar. Below 720px it is hidden outright rather than
+ * wrapped: a nav that wraps to its own row costs more vertical space than a
+ * phone has to give, and a Drawer is the answer at that width. */
+.sb-masthead__nav {
+  flex: none;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .sb-masthead__nav {
+    display: none;
+  }
+}
+
 /* The wide slot — a search field. It takes the remaining room on a desktop and
  * the whole of the second row on a phone. */
 .sb-masthead__slot {

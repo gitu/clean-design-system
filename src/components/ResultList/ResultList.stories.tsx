@@ -38,7 +38,7 @@ export const Default: Story = {
 export const Loading: Story = {
   render: () => (
     <div style={{ maxWidth: 760 }}>
-      <ResultList loading loadingCount={4} />
+      <ResultList label="Search results" loading loadingCount={4} />
     </div>
   ),
 }

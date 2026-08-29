@@ -4,6 +4,13 @@ import { ThemeToggle } from '../index'
 interface MastheadProps {
   /** The section name, set as a kicker beside the wordmark. */
   section: string
+  /** The wordmark. Defaults to this Storybook's own. */
+  brand?: string
+  /**
+   * Primary navigation, for a product whose bar carries one — usually a
+   * horizontal `NavList`. Hidden below 720px, where a `Drawer` should take it.
+   */
+  nav?: ReactNode
   /** Optional wide slot — a search field, usually. */
   children?: ReactNode
   /** Right-aligned controls. The theme toggle is appended after them. */
@@ -25,15 +32,23 @@ interface MastheadProps {
  * Its styles are in `.storybook/preview.css`, which is canvas-only and never
  * reaches `dist/`.
  */
-export function Masthead({ section, children, actions, hideThemeToggle = false }: MastheadProps) {
+export function Masthead({
+  section,
+  brand = 'archiv_',
+  nav,
+  children,
+  actions,
+  hideThemeToggle = false,
+}: MastheadProps) {
   return (
     <div className="sb-masthead">
       {/* Lowercase, monospace, trailing underscore — a terminal prompt rather
           than a masthead. Static, not blinking: content that flashes for more
           than five seconds needs a way to stop it (WCAG 2.2.2), and a logo is
           not the place to owe the reader a control. */}
-      <span className="sb-masthead__brand">archiv_</span>
+      <span className="sb-masthead__brand">{brand}</span>
       <span className="sb-masthead__section cds-kicker">{section}</span>
+      {nav && <div className="sb-masthead__nav">{nav}</div>}
       {children && <div className="sb-masthead__slot">{children}</div>}
       {(actions || !hideThemeToggle) && (
         <div className="sb-masthead__actions">
