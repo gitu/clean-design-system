@@ -3,6 +3,11 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--cds-space-2);
+  /* Queried below. A range filter's usual home is the filter sidebar, which is
+   * 264px wide — narrower than the two fields, the dash and a `CHF` suffix can
+   * share. What matters is the width of *this* box, not the viewport, because
+   * the same component also appears full-width inside a form. */
+  container-type: inline-size;
 }
 
 .cds-range__row {
@@ -10,6 +15,26 @@
   align-items: center;
   gap: var(--cds-space-2);
   width: 100%;
+}
+
+/* Both fields shrink evenly rather than one of them winning; without this the
+ * suffix's intrinsic width holds a field open and pushes the other to nothing. */
+.cds-range__row > .cds-input {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Below this the two fields stack. The dash goes with them — it reads as
+ * "from … to" across a row and as a stray rule down a column. */
+@container (max-width: 15rem) {
+  .cds-range__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cds-range__dash {
+    display: none;
+  }
 }
 
 .cds-range__dash {

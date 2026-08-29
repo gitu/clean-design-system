@@ -5,7 +5,9 @@ import {
   AppShell,
   Badge,
   Button,
+  Callout,
   Checkbox,
+  Disclosure,
   Divider,
   EmptyState,
   Field,
@@ -24,7 +26,6 @@ import {
 } from '../index'
 import { Masthead } from './Masthead'
 import { PhoneFrame } from './PhoneFrame'
-import { CalloutStandIn, DisclosureStandIn } from './StandIns'
 import { Thumbnail } from './Thumbnail'
 import {
   BRIEF_VERSIONS,
@@ -98,7 +99,7 @@ export const Brief: Story = {
             </Badge>
           </Stack>
 
-          <CalloutStandIn
+          <Callout
             tone="info"
             title="Last scan found 6 new listings, 31 minutes ago"
             actions={
@@ -109,7 +110,7 @@ export const Brief: Story = {
           >
             Four portals, capped at 40 search pages a day. The cap resets at
             midnight and 12 pages are left.
-          </CalloutStandIn>
+          </Callout>
 
           <Tabs
             value={tab}
@@ -285,7 +286,7 @@ export const Brief: Story = {
                 </p>
                 <div>
                   {BRIEF_VERSIONS.map((version, i) => (
-                    <DisclosureStandIn
+                    <Disclosure
                       key={version.id}
                       defaultOpen={i === 0}
                       summary={
@@ -315,7 +316,7 @@ export const Brief: Story = {
                           )}
                         </Stack>
                       </Stack>
-                    </DisclosureStandIn>
+                    </Disclosure>
                   ))}
                 </div>
               </Stack>
@@ -389,10 +390,10 @@ export const MatchBreakdown: Story = {
               </Stack>
             ))}
           </Stack>
-          <CalloutStandIn tone="warning" title="One criterion missed">
+          <Callout tone="warning" title="One criterion missed">
             The commute is 31 minutes, six over the brief. Raising the limit to
             35 would bring in 14 more listings.
-          </CalloutStandIn>
+          </Callout>
         </Stack>
       </Panel>
     </div>

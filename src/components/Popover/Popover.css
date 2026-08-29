@@ -1,0 +1,36 @@
+.cds-popover-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Shares Menu's geometry deliberately: the two are the same layer at different
+ * levels of opinion, and a reader should not be able to tell from the edge
+ * treatment which one they are looking at. */
+.cds-popover {
+  position: absolute;
+  top: calc(100% + var(--cds-space-1));
+  z-index: var(--cds-z-popover);
+  width: var(--cds-popover-width, 18rem);
+  max-width: min(var(--cds-popover-width, 18rem), calc(100vw - var(--cds-space-8)));
+  background-color: var(--cds-color-surface-raised);
+  border: var(--cds-hairline) solid var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-md);
+  box-shadow: var(--cds-shadow-md);
+  animation: cds-popover-in var(--cds-duration-fast) var(--cds-ease-out);
+}
+
+.cds-popover:focus-visible {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+.cds-popover--start { inset-inline-start: 0; }
+.cds-popover--end { inset-inline-end: 0; }
+
+.cds-popover--pad-none { padding: 0; }
+.cds-popover--pad-sm { padding: var(--cds-space-2); }
+.cds-popover--pad-md { padding: var(--cds-space-3); }
+
+@keyframes cds-popover-in {
+  from { opacity: 0; transform: translateY(-3px); }
+}

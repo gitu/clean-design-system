@@ -24,6 +24,7 @@ export * from './components/Spinner'
 export * from './components/Skeleton'
 export * from './components/Divider'
 export * from './components/Progress'
+export * from './components/Callout'
 export * from './components/Avatar'
 
 /* --- Forms --- */
@@ -40,6 +41,7 @@ export * from './components/DateInput'
 export * from './components/TimeInput'
 export * from './components/DateTimeInput'
 export * from './components/DateRangePicker'
+export * from './components/FileDrop'
 export * from './components/MarkdownEditor'
 
 /* --- Search --- */
@@ -86,11 +88,14 @@ export * from './components/Toolbar'
 export * from './components/Panel'
 export * from './components/Stack'
 export * from './components/Tabs'
+export * from './components/Disclosure'
 export * from './components/Breadcrumbs'
 export * from './components/NavList'
 export * from './components/Drawer'
 export * from './components/Dialog'
 export * from './components/Menu'
+export * from './components/Popover'
+export * from './components/ConfirmPopover'
 export * from './components/Toast'
 
 /* --- Prose --- */

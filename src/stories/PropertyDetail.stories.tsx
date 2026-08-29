@@ -12,6 +12,7 @@ import {
   IconButton,
   Menu,
   Panel,
+  Popover,
   Stack,
   Tabs,
   Tag,
@@ -19,7 +20,6 @@ import {
 } from '../index'
 import { Masthead } from './Masthead'
 import { PhoneFrame } from './PhoneFrame'
-import { PopoverStandIn } from './StandIns'
 import { Rating } from './Rating'
 import { Thumbnail } from './Thumbnail'
 import {
@@ -249,7 +249,7 @@ export const FullDetail: Story = {
               {/* Triage is the one control that belongs in the bar rather than
                   the aside: it is the thing a reader changes *while* reading,
                   and the aside is for facts they only consult. */}
-              <PopoverStandIn
+              <Popover
                 label="Set triage status"
                 trigger={props => (
                   <Button {...props} size="sm" variant="secondary" iconEnd={<Icon name="chevron-down" size={14} />}>
@@ -276,7 +276,7 @@ export const FullDetail: Story = {
                     ))}
                   </Stack>
                 )}
-              </PopoverStandIn>
+              </Popover>
               {/* No icon: the set has no pencil, and borrowing the `bold` glyph
                   for "edit" — which is what a hurry would do — puts a letter B
                   on the button. find-my-place keeps lucide for exactly this

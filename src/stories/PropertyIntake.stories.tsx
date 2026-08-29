@@ -4,9 +4,11 @@ import { expect, userEvent, within } from 'storybook/test'
 import {
   AppShell,
   Button,
+  Callout,
   Checkbox,
   Divider,
   Field,
+  FileDrop,
   Icon,
   Input,
   Panel,
@@ -20,7 +22,6 @@ import {
 } from '../index'
 import { Masthead } from './Masthead'
 import { PhoneFrame } from './PhoneFrame'
-import { CalloutStandIn, FileDropStandIn } from './StandIns'
 import { FEATURED_LISTING } from './property-fixtures'
 
 /**
@@ -87,7 +88,7 @@ export const EditForm: Story = {
             </h1>
           </Stack>
 
-          <CalloutStandIn
+          <Callout
             tone="info"
             title="Imported from Homegate on 2 August"
             actions={
@@ -98,7 +99,7 @@ export const EditForm: Story = {
           >
             Fields the importer filled in are marked. Re-importing overwrites
             them and leaves anything you typed alone.
-          </CalloutStandIn>
+          </Callout>
 
           <Panel variant="ruled" title="The listing">
             <Stack gap={4}>
@@ -178,12 +179,11 @@ export const EditForm: Story = {
 
           <Panel variant="ruled" title="Size and price">
             <Stack gap={4}>
-              <Stack direction="row" gap={4} wrap>
-                {/* No hint on this one, though it wants one: a `hint` on a
-                    single field in a horizontal row pushes its control a line
-                    below the others' and the row stops reading as a row.
-                    Recorded as a `Field` finding rather than worked around. */}
-                <Field label="Rooms" required style={{ flex: '0 1 9rem' }}>
+              {/* `align="end"`: one field here carries a hint and the others do
+                  not, and the hint sits above the control. Aligning the bottoms
+                  lines the controls up — see the Field/Row story. */}
+              <Stack direction="row" gap={4} align="end" wrap>
+                <Field label="Rooms" required hint="Half rooms count" style={{ flex: '0 1 9rem' }}>
                   <Input type="number" step="0.5" defaultValue="3.5" />
                 </Field>
                 <Field label="Living space" style={{ flex: '0 1 10rem' }}>
@@ -251,7 +251,7 @@ export const EditForm: Story = {
 
           <Panel variant="ruled" title="Documents">
             <Stack gap={3}>
-              <FileDropStandIn
+              <FileDrop
                 label="Drop the listing PDF, or choose a file"
                 hint="PDF, JPEG or PNG, up to 20 MB each"
                 accept=".pdf,.jpg,.jpeg,.png"
@@ -372,7 +372,7 @@ export const Import: Story = {
           )}
 
           {state === 'failed' && (
-            <CalloutStandIn
+            <Callout
               tone="danger"
               title="Homegate refused the request"
               actions={
@@ -389,11 +389,11 @@ export const Import: Story = {
               The portal returned 403, which usually means it is rate-limiting us
               rather than that the listing is gone. Trying again in a few minutes
               generally works.
-            </CalloutStandIn>
+            </Callout>
           )}
 
           {state === 'done' && (
-            <CalloutStandIn
+            <Callout
               tone="success"
               title="Imported 18 fields and 12 photographs"
               actions={
@@ -404,7 +404,7 @@ export const Import: Story = {
             >
               The price, room count and address came across. The description was
               truncated by the portal and may need a look.
-            </CalloutStandIn>
+            </Callout>
           )}
 
           <Stack direction="row" gap={2}>

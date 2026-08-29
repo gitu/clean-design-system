@@ -135,8 +135,23 @@ async function readComponent(dir) {
       types.add(name)
     }
   }
-  const exports = [...values].sort()
-  const exportedTypes = [...types].sort()
+  // Barrels mostly re-export wholesale, but not always: DataTable's index does
+  // `export type { Column as TableColumn }`, and reporting the declaration's
+  // own name sends a reader to write an import that does not resolve. Apply the
+  // renames the barrel actually performs.
+  const renames = new Map()
+  const barrel = emitted.find(file => file.path.endsWith('/index.ts'))
+  if (barrel) {
+    for (const [, clause] of barrel.content.matchAll(/^export\s+(?:type\s+)?\{([^}]*)\}/gm)) {
+      for (const [, local, exported] of clause.matchAll(/([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)/g)) {
+        renames.set(local, exported)
+      }
+    }
+  }
+  const rename = name => renames.get(name) ?? name
+
+  const exports = [...values].map(rename).sort()
+  const exportedTypes = [...types].map(rename).sort()
 
   const main = emitted.find(file => file.path.endsWith(`${dir}.tsx`))
   const props = main ? readProps(main.content) : []

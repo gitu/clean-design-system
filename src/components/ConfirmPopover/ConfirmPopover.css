@@ -1,0 +1,9 @@
+.cds-confirm__title {
+  margin: 0;
+  color: var(--cds-color-text-strong);
+}
+
+.cds-confirm__description {
+  margin: 0;
+  color: var(--cds-color-text-muted);
+}

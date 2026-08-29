@@ -6,6 +6,7 @@ import {
   Avatar,
   Badge,
   Button,
+  ConfirmPopover,
   DataTable,
   Divider,
   EmptyState,
@@ -14,6 +15,7 @@ import {
   IconButton,
   Input,
   Panel,
+  Popover,
   SegmentedControl,
   Stack,
   Textarea,
@@ -22,7 +24,6 @@ import {
 } from '../index'
 import { Masthead } from './Masthead'
 import { PhoneFrame } from './PhoneFrame'
-import { ConfirmStandIn, PopoverStandIn } from './StandIns'
 import {
   COMMENTS,
   VIEWINGS,
@@ -79,7 +80,7 @@ function statusTone(status: Viewing['status']) {
  */
 function LogViewing({ onLog }: { onLog: () => void }) {
   return (
-    <PopoverStandIn
+    <Popover
       label="Log a viewing"
       align="end"
       width="21rem"
@@ -121,7 +122,7 @@ function LogViewing({ onLog }: { onLog: () => void }) {
           </Stack>
         </Stack>
       )}
-    </PopoverStandIn>
+    </Popover>
   )
 }
 
@@ -190,7 +191,7 @@ export const Schedule: Story = {
         width: '3rem',
         cell: row =>
           row.status === 'scheduled' && !cancelled.includes(row.id) ? (
-            <ConfirmStandIn
+            <ConfirmPopover
               title="Cancel this viewing? The agent is not told."
               confirmLabel="Cancel it"
               cancelLabel="Keep it"

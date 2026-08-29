@@ -1,0 +1,83 @@
+.cds-filedrop {
+  position: relative;
+  border: var(--cds-border-width) dashed var(--cds-color-rule-strong);
+  border-radius: var(--cds-radius-sm);
+  background-color: var(--cds-color-surface-sunken);
+  transition:
+    background-color var(--cds-duration-fast) var(--cds-ease-standard),
+    border-color var(--cds-duration-fast) var(--cds-ease-standard);
+}
+
+/* Dashed rather than solid: this is the one place in the system where the rule
+ * is describing a target rather than a boundary, and a reader should be able to
+ * tell a drop zone from a panel without reading it. */
+.cds-filedrop.is-dragging {
+  border-color: var(--cds-color-accent);
+  border-style: solid;
+  background-color: var(--cds-color-accent-subtle);
+}
+
+.cds-filedrop.is-invalid {
+  border-color: var(--cds-color-danger);
+}
+
+.cds-filedrop.is-disabled {
+  background-color: var(--cds-color-surface-disabled);
+  border-color: var(--cds-color-rule);
+}
+
+.cds-filedrop__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cds-space-2);
+  padding: var(--cds-space-6) var(--cds-space-4);
+  text-align: center;
+  cursor: pointer;
+}
+
+.cds-filedrop--sm .cds-filedrop__label {
+  padding: var(--cds-space-4) var(--cds-space-3);
+  gap: var(--cds-space-1);
+}
+
+.cds-filedrop.is-disabled .cds-filedrop__label {
+  cursor: not-allowed;
+  color: var(--cds-color-text-disabled);
+}
+
+.cds-filedrop__icon {
+  color: var(--cds-color-text-subtle);
+}
+
+.cds-filedrop__text {
+  color: var(--cds-color-text);
+}
+
+.cds-filedrop__hint {
+  color: var(--cds-color-text-subtle);
+}
+
+/* Hidden, but in the tab order and still the thing that gets focused — which is
+ * why the ring is drawn on the box around it. Not `display: none`, which would
+ * take it out of the tab order and out of the form. */
+.cds-filedrop__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cds-filedrop:has(.cds-filedrop__input:focus-visible) {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+.cds-filedrop:has(.cds-filedrop__input:not(:disabled)):hover {
+  border-color: var(--cds-color-rule-heavy);
+}

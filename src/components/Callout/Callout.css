@@ -1,0 +1,71 @@
+.cds-callout {
+  display: flex;
+  gap: var(--cds-space-3);
+  padding: var(--cds-space-3);
+  border: var(--cds-hairline) solid var(--cds-callout-border);
+  border-radius: var(--cds-radius-sm);
+  background-color: var(--cds-callout-bg);
+}
+
+.cds-callout--info {
+  --cds-callout-bg: var(--cds-color-info-bg);
+  --cds-callout-border: var(--cds-color-info-border);
+  --cds-callout-mark: var(--cds-color-info);
+}
+.cds-callout--success {
+  --cds-callout-bg: var(--cds-color-success-bg);
+  --cds-callout-border: var(--cds-color-success-border);
+  --cds-callout-mark: var(--cds-color-success);
+}
+.cds-callout--warning {
+  --cds-callout-bg: var(--cds-color-warning-bg);
+  --cds-callout-border: var(--cds-color-warning-border);
+  --cds-callout-mark: var(--cds-color-warning);
+}
+.cds-callout--danger {
+  --cds-callout-bg: var(--cds-color-danger-bg);
+  --cds-callout-border: var(--cds-color-danger-border);
+  --cds-callout-mark: var(--cds-color-danger);
+}
+
+.cds-callout__icon {
+  flex: none;
+  display: inline-flex;
+  color: var(--cds-callout-mark);
+  /* Optically aligned to the first line of the title rather than to the top of
+   * the box, which sits a hair high against 11px caps. */
+  padding-block-start: 1px;
+}
+
+.cds-callout__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-space-1);
+}
+
+.cds-callout__title {
+  margin: 0;
+  color: var(--cds-color-text-strong);
+}
+
+.cds-callout__text {
+  color: var(--cds-color-text-muted);
+  max-width: var(--cds-measure);
+}
+
+.cds-callout__text > :first-child { margin-block-start: 0; }
+.cds-callout__text > :last-child { margin-block-end: 0; }
+
+.cds-callout__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cds-space-2);
+  margin-block-start: var(--cds-space-2);
+}
+
+.cds-callout__dismiss {
+  flex: none;
+  margin-block-start: -1px;
+}

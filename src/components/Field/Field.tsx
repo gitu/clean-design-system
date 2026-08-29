@@ -24,6 +24,18 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChan
 /**
  * Label, hint, error and the ARIA wiring between them. Wrap any control in
  * this and the control picks up its id and `aria-describedby` automatically.
+ *
+ * The hint sits between the label and the control, which is where it is read
+ * — but it means a field with one is taller above its control than a field
+ * without. In a **row** of fields that is visible as controls at different
+ * heights, so align the row to its end rather than its start:
+ *
+ * ```tsx
+ * <Stack direction="row" gap={4} align="end">
+ * ```
+ *
+ * Every control in the system snaps to one of four heights, so aligning the
+ * bottoms lines the controls up exactly. See the `Row` story.
  */
 export function Field({
   label,
