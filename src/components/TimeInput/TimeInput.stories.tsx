@@ -54,20 +54,20 @@ export const Shorthand: Story = {
     const value = () => canvas.getByTestId('value').textContent
 
     await userEvent.type(input, '930{Enter}')
-    expect(value()).toBe('09:30')
+    await expect(value()).toBe('09:30')
 
     await userEvent.clear(input)
     await userEvent.type(input, '9pm{Enter}')
-    expect(value()).toBe('21:00')
+    await expect(value()).toBe('21:00')
 
     await userEvent.clear(input)
     await userEvent.type(input, 'noon{Enter}')
-    expect(value()).toBe('12:00')
+    await expect(value()).toBe('12:00')
 
     await userEvent.clear(input)
     await userEvent.type(input, 'half nine{Enter}')
-    expect(input).toBeInvalid()
-    expect(canvas.getByText(/Not a time we recognise/)).toBeInTheDocument()
+    await expect(input).toBeInvalid()
+    await expect(canvas.getByText(/Not a time we recognise/)).toBeInTheDocument()
   },
 }
 

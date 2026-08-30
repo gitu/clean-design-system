@@ -63,22 +63,22 @@ export const Shorthand: Story = {
     const value = () => canvas.getByTestId('value').textContent
 
     await userEvent.type(input, '+3d{Enter}')
-    expect(value()).toBe('2024-07-11')
+    await expect(value()).toBe('2024-07-11')
 
     await userEvent.clear(input)
     await userEvent.type(input, '8.7.{Enter}')
-    expect(value()).toBe('2024-07-08')
+    await expect(value()).toBe('2024-07-08')
 
     await userEvent.clear(input)
     await userEvent.type(input, 'friday{Enter}')
-    expect(value()).toBe('2024-07-12')
+    await expect(value()).toBe('2024-07-12')
 
     // A date it cannot read is kept, not thrown away — and it says so.
     await userEvent.clear(input)
     await userEvent.type(input, 'someday{Enter}')
-    expect(input).toHaveValue('someday')
-    expect(input).toBeInvalid()
-    expect(canvas.getByText(/Not a date we recognise/)).toBeInTheDocument()
+    await expect(input).toHaveValue('someday')
+    await expect(input).toBeInvalid()
+    await expect(canvas.getByText(/Not a date we recognise/)).toBeInTheDocument()
   },
 }
 

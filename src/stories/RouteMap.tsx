@@ -47,7 +47,7 @@ const OPENFREEMAP = {
   dark: 'https://tiles.openfreemap.org/styles/dark',
 } as const
 
-const ENV_STYLE = (import.meta.env?.VITE_MAP_STYLE as string | undefined) ?? undefined
+const ENV_STYLE = (import.meta.env?.VITE_MAP_STYLE) ?? undefined
 
 interface StyleLayer {
   id: string
@@ -154,7 +154,11 @@ export function RouteMap({
     if (!node) return undefined
     setStatus('loading')
 
-    ;(async () => {
+    // An effect cannot be async, so the load runs detached; `cancelled` is
+    // what unwinds it, and the try/catch inside is what handles failure.
+    // Named rather than immediately-invoked: TypeScript propagates control
+    // flow into an IIFE and would read `cancelled` as permanently false.
+    const load = async () => {
       try {
         const maplibre = await import('maplibre-gl')
         await import('maplibre-gl/dist/maplibre-gl.css')
@@ -186,8 +190,8 @@ export function RouteMap({
         let drawn = false
         const draw = () => {
           if (cancelled || drawn) return
-          const layers = map.getStyle()?.layers
-          if (!layers || layers.length === 0) return
+          const layers = map.getStyle().layers
+          if (layers.length === 0) return
           drawn = true
 
           tintToTokens(map as unknown as TintableMap)
@@ -252,7 +256,8 @@ export function RouteMap({
       } catch {
         if (!cancelled) setStatus('unavailable')
       }
-    })()
+    }
+    void load()
 
     return () => {
       cancelled = true

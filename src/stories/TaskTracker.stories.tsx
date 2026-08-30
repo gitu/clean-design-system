@@ -191,21 +191,21 @@ export const Tracker: Story = {
         ?.closest('.sb-board__column')
         ?.querySelector('.cds-panel__title')?.textContent
 
-    expect(columnOf('ARC-104')).toBe('In progress')
+    await expect(columnOf('ARC-104')).toBe('In progress')
 
     await userEvent.click(canvas.getByRole('button', { name: 'Actions for ARC-104' }))
     await userEvent.click(await canvas.findByRole('menuitem', { name: 'Ready' }))
 
-    expect(columnOf('ARC-104')).toBe('Ready')
+    await expect(columnOf('ARC-104')).toBe('Ready')
     // A card changing column in silence is invisible to a screen reader.
-    expect(canvas.getByRole('status')).toHaveTextContent('ARC-104 moved to Ready.')
+    await expect(canvas.getByRole('status')).toHaveTextContent('ARC-104 moved to Ready.')
 
     // Move it back — both because the round trip is the thing that has to work,
     // and because this story is what the Mobile frame and the docs page render.
     // A test that leaves the demo somewhere else is a test with side effects.
     await userEvent.click(canvas.getByRole('button', { name: 'Actions for ARC-104' }))
     await userEvent.click(await canvas.findByRole('menuitem', { name: 'In progress' }))
-    expect(columnOf('ARC-104')).toBe('In progress')
+    await expect(columnOf('ARC-104')).toBe('In progress')
 
     // Clicking scrolls the target into view, which on a narrow screen leaves
     // the board parked on column three. Put it back at the start.

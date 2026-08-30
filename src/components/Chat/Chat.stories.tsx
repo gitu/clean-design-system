@@ -129,21 +129,21 @@ export const Questions: Story = {
     const tabs = () => canvas.getAllByRole('tab')
     const marked = () => tabs().filter(tab => tab.textContent?.includes('answered')).length
 
-    expect(marked()).toBe(0)
-    expect(canvas.getByText('0 of 2 answered')).toBeInTheDocument()
+    await expect(marked()).toBe(0)
+    await expect(canvas.getByText('0 of 2 answered')).toBeInTheDocument()
 
     // Answering the first question ticks its tab and nothing else.
     await userEvent.click(canvas.getByLabelText(/Halve the freshness weight/))
-    expect(marked()).toBe(1)
-    expect(canvas.getByText('1 of 2 answered')).toBeInTheDocument()
-    expect(canvas.getByRole('button', { name: 'Answer' })).toBeDisabled()
+    await expect(marked()).toBe(1)
+    await expect(canvas.getByText('1 of 2 answered')).toBeInTheDocument()
+    await expect(canvas.getByRole('button', { name: 'Answer' })).toBeDisabled()
 
     // The second question lives behind its own tab.
     await userEvent.click(canvas.getByRole('tab', { name: /Verify/ }))
     await userEvent.click(canvas.getByLabelText(/NDCG on the judged set/))
-    expect(marked()).toBe(2)
-    expect(canvas.getByText('2 of 2 answered')).toBeInTheDocument()
-    expect(canvas.getByRole('button', { name: 'Answer' })).toBeEnabled()
+    await expect(marked()).toBe(2)
+    await expect(canvas.getByText('2 of 2 answered')).toBeInTheDocument()
+    await expect(canvas.getByRole('button', { name: 'Answer' })).toBeEnabled()
   },
 }
 

@@ -87,16 +87,16 @@ export const CyclesBackToSystem: Story = {
     const start = setting()
     await userEvent.click(button)
     const second = setting()
-    expect(second).not.toBe(start)
+    await expect(second).not.toBe(start)
 
     await userEvent.click(button)
     const third = setting()
-    expect(third).not.toBe(second)
+    await expect(third).not.toBe(second)
 
     await userEvent.click(button)
-    expect(setting()).toBe(start)
+    await expect(setting()).toBe(start)
 
     // `system` has to be one of the three, or there is no way back to it.
-    expect([start, second, third]).toContain('system')
+    await expect([start, second, third]).toContain('system')
   },
 }
