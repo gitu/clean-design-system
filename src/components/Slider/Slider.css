@@ -1,0 +1,125 @@
+/* One value along a range, on a native input[type=range].
+
+   Range inputs need their track and thumb styled per engine — there is no
+   shared pseudo-element for either — so the rules below are duplicated for
+   WebKit and Firefox rather than being a mistake. */
+
+.cds-slider {
+  display: grid;
+  gap: var(--cds-space-1);
+  inline-size: 100%;
+}
+
+.cds-slider__row {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-space-3);
+}
+
+.cds-slider__input {
+  flex: 1;
+  min-inline-size: 0;
+  appearance: none;
+  background: none;
+  cursor: pointer;
+  /* Room for the thumb to overhang the track without being clipped. */
+  padding-block: var(--cds-space-2);
+}
+
+.cds-slider__input:focus {
+  outline: none;
+}
+
+/* --- Track ------------------------------------------------------------- */
+
+.cds-slider__input::-webkit-slider-runnable-track {
+  block-size: var(--cds-slider-track);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--cds-color-accent) 0 var(--cds-slider-filled, 0%),
+    var(--cds-color-surface-sunken) var(--cds-slider-filled, 0%) 100%
+  );
+}
+
+.cds-slider__input::-moz-range-track {
+  block-size: var(--cds-slider-track);
+  border-radius: 999px;
+  background: var(--cds-color-surface-sunken);
+}
+
+.cds-slider__input::-moz-range-progress {
+  block-size: var(--cds-slider-track);
+  border-radius: 999px;
+  background: var(--cds-color-accent);
+}
+
+/* --- Thumb ------------------------------------------------------------- */
+
+.cds-slider__input::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: var(--cds-slider-thumb);
+  block-size: var(--cds-slider-thumb);
+  margin-block-start: calc((var(--cds-slider-track) - var(--cds-slider-thumb)) / 2);
+  border-radius: 50%;
+  border: var(--cds-border-width) solid var(--cds-color-accent);
+  background: var(--cds-color-surface);
+}
+
+.cds-slider__input::-moz-range-thumb {
+  inline-size: var(--cds-slider-thumb);
+  block-size: var(--cds-slider-thumb);
+  border-radius: 50%;
+  border: var(--cds-border-width) solid var(--cds-color-accent);
+  background: var(--cds-color-surface);
+}
+
+.cds-slider__input:focus-visible::-webkit-slider-thumb {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+.cds-slider__input:focus-visible::-moz-range-thumb {
+  outline: var(--cds-focus-ring-width) solid var(--cds-color-focus-ring);
+  outline-offset: var(--cds-focus-ring-offset);
+}
+
+/* --- Sizes, states, labels --------------------------------------------- */
+
+.cds-slider--md {
+  --cds-slider-track: 0.375rem;
+  --cds-slider-thumb: 1rem;
+}
+
+.cds-slider--sm {
+  --cds-slider-track: 0.25rem;
+  --cds-slider-thumb: 0.875rem;
+}
+
+.cds-slider.is-invalid .cds-slider__input::-webkit-slider-thumb {
+  border-color: var(--cds-color-danger);
+}
+
+.cds-slider.is-invalid .cds-slider__input::-moz-range-thumb {
+  border-color: var(--cds-color-danger);
+}
+
+/* Dim the track and thumb, not the whole component: the value a disabled
+   slider is showing still has to be readable, and fading it takes it under
+   the contrast floor. */
+.cds-slider.is-disabled .cds-slider__input {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Fixed width so the track does not shift as the number changes width. */
+.cds-slider__value {
+  min-inline-size: 3ch;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.cds-slider__ends {
+  display: flex;
+  justify-content: space-between;
+}

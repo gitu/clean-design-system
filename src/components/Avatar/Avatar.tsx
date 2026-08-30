@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react'
+import { useState, type HTMLAttributes } from 'react'
 import { cx } from '../../utils/cx'
 import './Avatar.css'
 
@@ -41,6 +41,16 @@ export function Avatar({
   style,
   ...rest
 }: AvatarProps) {
+  // A picture that fails to load leaves a broken-image glyph where a person
+  // should be, which is worse than the fallback this component already has
+  // for no picture at all.
+  //
+  // What is remembered is *which* URL failed, not a boolean. That way a new
+  // `src` is untried by construction, with no effect needed to reset a flag
+  // when the prop changes.
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const showImage = src !== undefined && src !== failedSrc
+
   // A stable slot per name, so the same person keeps the same tint everywhere.
   const slot = tinted
     ? // eslint-disable-next-line @typescript-eslint/no-misused-spread -- a hash, not text handling
@@ -57,8 +67,13 @@ export function Avatar({
       aria-hidden={decorative ? true : undefined}
       {...rest}
     >
-      {src ? (
-        <img className="cds-avatar__image" src={src} alt="" />
+      {showImage ? (
+        <img
+          className="cds-avatar__image"
+          src={src}
+          alt=""
+          onError={() => setFailedSrc(src)}
+        />
       ) : (
         <span className="cds-avatar__initials" aria-hidden="true">
           {initials(name)}

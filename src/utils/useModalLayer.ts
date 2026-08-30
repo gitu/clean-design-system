@@ -19,16 +19,30 @@ export function useModalLayer(open: boolean, onClose: () => void) {
   const panelRef = useRef<HTMLDivElement>(null)
   const returnFocusRef = useRef<HTMLElement | null>(null)
 
+  // Every caller writes `onClose={() => setOpen(false)}`, so the identity
+  // changes on each render. Held in a ref, it stays out of the dependency
+  // list below and the layer is set up once per opening — not torn down and
+  // rebuilt on every render, which would run the cleanup's focus restore
+  // after each keystroke and pull focus back to whatever opened the modal.
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
   useEffect(() => {
     if (!open) return undefined
 
     returnFocusRef.current = document.activeElement as HTMLElement | null
+    // Captured here rather than read in the cleanup: the panel for this
+    // opening does not change while it is open, and reading a ref during
+    // teardown is the classic way to get the wrong node.
+    const panel = panelRef.current
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         // Stopped so a modal inside a modal closes only the inner one.
         event.stopPropagation()
-        onClose()
+        onCloseRef.current()
         return
       }
       if (event.key !== 'Tab') return
@@ -61,9 +75,17 @@ export function useModalLayer(open: boolean, onClose: () => void) {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = previousOverflow
       cancelAnimationFrame(frame)
-      returnFocusRef.current?.focus()
+
+      // Give focus back only if this layer still holds it. Closing one modal
+      // to open another runs this cleanup *after* the new one has focused its
+      // own field, and restoring focus then would snatch it straight back to
+      // a button behind two layers. `body` counts as ours: it is where focus
+      // lands when the panel is removed before this runs.
+      const active = document.activeElement as HTMLElement | null
+      const ours = !active || active === document.body || panel?.contains(active)
+      if (ours) returnFocusRef.current?.focus()
     }
-  }, [open, onClose])
+  }, [open])
 
   return panelRef
 }
