@@ -409,15 +409,35 @@ story to render. `site/vite.config.ts` turns each entry into a directory with an
 `index.html` before the build starts, so adding an example is one entry and
 nothing else. Those directories are generated and gitignored.
 
+### Getting back out
+
+Every page on the site backlinks to the index above it, and always by the same
+gesture: the wordmark at the top left.
+
+- A sample application's wordmark — `archiv_`, `findmyplace_` — links to
+  `/examples/`. It is the screen's *own* masthead, not a strip of site chrome
+  above it, so the demo still reads as a product. `Shell` supplies an href
+  through a context that `src/stories/BrandMark.tsx` consumes; inside Storybook
+  no provider exists, the same markup renders as a `<span>`, and nothing
+  changes. A labelled disc in the corner does the same job for the screens
+  where the wordmark has scrolled away.
+- The examples index links to the landing page, and the landing page's own
+  wordmark stays put.
+- The Storybook's sidebar heading is `brandUrl: '../'` in
+  `.storybook/manager.ts`, which lands on the site root.
+
 `check-site` is the gate worth explaining. A story whose `render` calls
 `useState` is a component, not a function — Storybook mounts it, and code that
 *calls* it instead takes the page down with a null-hook error that `tsc`, ESLint
 and the build itself all pass cleanly. So the check serves the built output and
 opens all twenty-one pages: each must mount something, apply the system's
-canvas, and log nothing. It then asserts that the registry, `llms.txt`, the
-favicon and the Storybook's own entry point are where the links say they are —
-none of which any page load would notice. It runs on every pull request and
-before every Pages deploy.
+canvas, and log nothing. Each sample application must also carry that wordmark
+link, because a story that hand-rolls its masthead instead of using `BrandMark`
+looks entirely normal while being a page you cannot leave — which is how the
+search application was caught. It then asserts that the registry, `llms.txt`,
+the favicon and the Storybook's own entry point are where the links say they
+are, none of which any page load would notice. It runs on every pull request
+and before every Pages deploy.
 
 ## Releasing
 

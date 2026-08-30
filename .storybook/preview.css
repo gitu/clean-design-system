@@ -48,6 +48,19 @@ body {
   flex: none;
 }
 
+/* The wordmark as a link, which it is on the examples site and is not in
+ * Storybook — see src/stories/BrandMark.tsx. No underline in rest, because a
+ * masthead with an underlined wordmark reads as a mistake; a hairline on hover
+ * so the affordance is there when looked for. */
+.sb-masthead__brand--link {
+  text-decoration: none;
+  border-bottom: var(--cds-hairline) solid transparent;
+}
+
+.sb-masthead__brand--link:hover {
+  border-bottom-color: currentColor;
+}
+
 .sb-masthead__section {
   color: var(--cds-color-text-muted);
   flex: none;
@@ -92,7 +105,20 @@ body {
      * phone the bar is a strip, not a masthead. */
     min-height: 0;
   }
-  .sb-masthead__section {
+  /* The wordmark as a link, which it is on the examples site and is not in
+ * Storybook — see src/stories/BrandMark.tsx. No underline in rest, because a
+ * masthead with an underlined wordmark reads as a mistake; a hairline on hover
+ * so the affordance is there when looked for. */
+.sb-masthead__brand--link {
+  text-decoration: none;
+  border-bottom: var(--cds-hairline) solid transparent;
+}
+
+.sb-masthead__brand--link:hover {
+  border-bottom-color: currentColor;
+}
+
+.sb-masthead__section {
     display: none;
   }
   .sb-masthead__brand {

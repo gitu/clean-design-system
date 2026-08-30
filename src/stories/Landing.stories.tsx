@@ -14,6 +14,7 @@ import {
   ThemeToggle,
   Tag,
 } from '../index'
+import { BrandMark } from './BrandMark'
 import { PhoneFrame } from './PhoneFrame'
 import { ARTICLES, formatDate } from './fixtures'
 
@@ -60,7 +61,7 @@ export const Landing: Story = {
   render: () => (
     <div className="sb-landing">
       <header className="sb-landing__bar">
-        <span className="sb-masthead__brand">archiv_</span>
+        <BrandMark brand="archiv_" />
         <NavList
           orientation="horizontal"
           size="sm"
