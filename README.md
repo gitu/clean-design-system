@@ -386,6 +386,11 @@ pnpm build-site        # both, in that order
 pnpm check-site        # opens every built page in a browser
 ```
 
+`pnpm site` and `pnpm storybook` are two servers on two ports, so in development
+the links between them do not resolve — `/storybook/` and `/r/` only exist once
+the pieces are in the same directory. To click through the site as it will be
+published, build it and serve `site-dist/`.
+
 ### The sample applications
 
 Every **Patterns** story is published twice: inside the Storybook, and as a page
