@@ -120,7 +120,7 @@ export function CartesianChart<Datum>({
   }, [xMin, xMax, xIsTime, innerWidth])
 
   const positionX = useCallback(
-    (value: number) => (xIsTime ? xScale(new Date(value) as never) : xScale(value as never)) as number,
+    (value: number) => (xIsTime ? xScale(new Date(value) as never) : xScale(value as never)),
     [xScale, xIsTime]
   )
 
@@ -140,7 +140,7 @@ export function CartesianChart<Datum>({
     if (pool.length === 0) return { domain: [0, 1] as [number, number], step: 0.25 }
     // An area chart reads as a quantity, so it is anchored at zero unless the
     // caller says otherwise; a line chart is about shape and is not.
-    const anchor = yDomain === 'zero' || (mode === 'area' && yDomain === 'auto') ? 'zero' : 'auto'
+    const anchor = yDomain === 'zero' || mode === 'area' ? 'zero' : 'auto'
     return niceScale(Math.min(...pool), Math.max(...pool), anchor, yTicks)
   }, [yDomain, stacked, stackOffset, totals, flat, mode, yTicks])
 
@@ -206,7 +206,7 @@ export function CartesianChart<Datum>({
     const count = Math.min(xTicks, rows.length, affordable)
     const step = rows.length <= 1 ? 1 : (rows.length - 1) / Math.max(count - 1, 1)
     const seen = new Set<number>()
-    const out: Array<{ offset: number; label: string }> = []
+    const out: { offset: number; label: string }[] = []
     for (let i = 0; i < count; i++) {
       const index = Math.round(i * step)
       if (seen.has(index)) continue
@@ -245,7 +245,7 @@ export function CartesianChart<Datum>({
             label: s.label ?? s.key,
             value,
             formatted: value === null ? '—' : (s.format ?? formatValue)(value),
-            color: seriesColor(s, series.indexOf(s) === -1 ? order : series.indexOf(s)),
+            color: seriesColor(s, !series.includes(s) ? order : series.indexOf(s)),
             dashed: s.dashed ?? false,
           }
         }),
@@ -321,7 +321,9 @@ export function CartesianChart<Datum>({
       if (!context) return ''
       if (formatAnnouncement) return formatAnnouncement({ ...context, seriesKey })
       const row = seriesKey ? context.rows.find(r => r.seriesKey === seriesKey) : context.rows[0]
-      const name = row && visible.length > 1 ? `${String(row.label)}, ` : ''
+      // `label` is a ReactNode: only a plain string can go into speech.
+      const name =
+        row && visible.length > 1 && typeof row.label === 'string' ? `${row.label}, ` : ''
       return `${name}${context.xLabel}: ${row?.formatted ?? '—'}. Point ${index + 1} of ${keys.length}.`
     },
     [keys, contextFor, formatAnnouncement, visible.length]
@@ -365,8 +367,8 @@ export function CartesianChart<Datum>({
   const summary = useMemo(() => {
     const kind = mode === 'area' ? 'Area chart' : 'Line chart'
     if (rows.length === 0) return `${kind}. No data.`
-    const from = table.columns[0]
-    const to = table.columns[table.columns.length - 1]
+    const from = table.columns[0] ?? ''
+    const to = table.columns[table.columns.length - 1] ?? ''
     const seriesCount = `${visible.length} series`
     return [
       description,
@@ -396,7 +398,7 @@ export function CartesianChart<Datum>({
   const anySelected = selected.length > 0
 
   const marks: ReactNode = visible.map((s, order) => {
-    const paletteIndex = series.indexOf(s) === -1 ? order : series.indexOf(s)
+    const paletteIndex = !series.includes(s) ? order : series.indexOf(s)
     const colour = seriesColor(s, paletteIndex)
     const defined = (datum: Datum, index: number) => valueAt(s.key, datum, index) !== null
 

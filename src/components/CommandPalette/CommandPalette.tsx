@@ -35,7 +35,7 @@ export interface CommandPaletteProps {
   onOpenChange: (open: boolean) => void
   items: CommandItem[]
   /** Fires before `item.onSelect`. The palette closes unless this returns `false`. */
-  onSelect?: (item: CommandItem) => void | false
+  onSelect?: (item: CommandItem) => unknown
   placeholder?: string
   emptyMessage?: ReactNode
   /** Control the query yourself — pair with `filter={false}` for server search. */
@@ -107,7 +107,7 @@ export function CommandPalette({
 
   // Group while preserving the order items were given in.
   const groups = useMemo(() => {
-    const out: Array<{ name: string | undefined; items: CommandItem[] }> = []
+    const out: { name: string | undefined; items: CommandItem[] }[] = []
     for (const item of visible) {
       const last = out[out.length - 1]
       if (last && last.name === item.group) last.items.push(item)
@@ -155,6 +155,7 @@ export function CommandPalette({
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- opening must return the highlight to the first row; the palette keeps its state while closed
       setActiveIndex(0)
       // Focus after paint so the dialog is in the tree before we move focus.
       const id = requestAnimationFrame(() => inputRef.current?.focus())
@@ -245,6 +246,11 @@ export function CommandPalette({
                 const index = selectable.indexOf(item)
                 const isActive = index >= 0 && index === activeIndex
                 return (
+                  // The listbox is driven from the input via
+                  // `aria-activedescendant`, so the options are deliberately not
+                  // focusable and the keyboard never reaches them directly —
+                  // ArrowUp/Down and Enter are handled on the layer above.
+                  // eslint-disable-next-line jsx-a11y/interactive-supports-focus, jsx-a11y/click-events-have-key-events
                   <div
                     key={item.id}
                     id={`cds-cmdk-item-${item.id}`}

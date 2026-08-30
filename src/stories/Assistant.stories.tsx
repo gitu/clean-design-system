@@ -92,13 +92,12 @@ two queries.`
  * asking in prose and trying to parse a sentence.
  */
 export const Conversation: Story = {
-  name: 'Conversation',
   render: () => {
     const [answered, setAnswered] = useState<Record<string, ChatAnswer> | undefined>()
     const [busy, setBusy] = useState(false)
     const [extra, setExtra] = useState<string[]>([])
 
-    const columns: Array<TableColumn<TopQuery>> = [
+    const columns: TableColumn<TopQuery>[] = [
       { key: 'q', header: 'Query', cell: row => <span className="cds-mono">{row.query}</span> },
       {
         key: 'zero',
@@ -321,7 +320,6 @@ export const Conversation: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

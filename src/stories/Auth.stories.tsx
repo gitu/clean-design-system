@@ -35,7 +35,7 @@ function AuthPage({ children }: { children: React.ReactNode }) {
       </main>
       <footer className="sb-auth__footer">
         <span className="cds-body-sm" style={{ color: 'var(--cds-color-text-subtle)' }}>
-          Trouble signing in? <a className="cds-link" href="#">Ask your workspace owner.</a>
+          Trouble signing in? <a className="cds-link" href="#workspace-owner">Ask your workspace owner.</a>
         </span>
       </footer>
     </div>
@@ -98,7 +98,7 @@ export const SignIn: Story = {
                 label="Password"
                 error={failed ? 'That password does not match this address.' : undefined}
                 action={
-                  <a className="cds-link cds-body-sm" href="#">
+                  <a className="cds-link cds-body-sm" href="#reset-password">
                     Forgot?
                   </a>
                 }
@@ -126,7 +126,7 @@ export const SignIn: Story = {
               <Icon name="external" size={14} /> Continue with SSO
             </Button>
             <p className="cds-body-sm" style={{ margin: 0, textAlign: 'center', color: 'var(--cds-color-text-subtle)' }}>
-              No account? <a className="cds-link" href="#">Request access.</a>
+              No account? <a className="cds-link" href="#request-access">Request access.</a>
             </p>
           </Stack>
         </Stack>
@@ -160,7 +160,6 @@ export const SignedOut: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

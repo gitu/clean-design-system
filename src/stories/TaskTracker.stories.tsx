@@ -222,7 +222,6 @@ export const Tracker: Story = {
  * shape of the answer, not the question.
  */
 export const List: Story = {
-  name: 'List',
   render: () => (
     <ToastProvider>
       <TrackerScreen initialView="list" />
@@ -232,7 +231,6 @@ export const List: Story = {
 
 /** Due dates on a month grid, with the overdue and undated tails underneath. */
 export const Schedule: Story = {
-  name: 'Schedule',
   render: () => (
     <ToastProvider>
       <TrackerScreen initialView="schedule" />
@@ -296,7 +294,7 @@ function TrackerScreen({
   const [day, setDay] = useState<IsoDate | null>(
     () =>
       TASKS.filter(item => item.due && item.due >= TODAY && item.status !== 'done')
-        .map(item => item.due as IsoDate)
+        .map(item => item.due!)
         .sort()[0] ?? TODAY
   )
 
@@ -850,7 +848,7 @@ function ListView({
   onMove,
   onAssignToMe,
 }: ListProps) {
-  const columns: Array<TableColumn<Task>> = [
+  const columns: TableColumn<Task>[] = [
     {
       key: 'id',
       header: 'Ref',
@@ -1474,7 +1472,7 @@ function DependencyRow({
  * lines of prose nobody reads; what the story needs to show is the shape of an
  * activity feed, and the shape is honest either way.
  */
-function activityFor(task: Task): Array<{ at: string; who: string; what: string }> {
+function activityFor(task: Task): { at: string; who: string; what: string }[] {
   const owner = memberName(task.assignee)
   const entries = [{ at: task.created, who: 'Marta Brunner', what: 'created this task' }]
   if (task.assignee) {
@@ -1631,7 +1629,6 @@ function NewTaskDialog({
  * a card is not possible here at all, which is why the menu carries the columns.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

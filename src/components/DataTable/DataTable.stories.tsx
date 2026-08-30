@@ -19,7 +19,7 @@ const COLUMNS = [
     header: 'Title',
     sortable: true,
     cell: (row: Article) => (
-      <a className="cds-link-quiet" href="#">
+      <a className="cds-link-quiet" href={`#article-${row.id}`}>
         {row.title}
       </a>
     ),

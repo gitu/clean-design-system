@@ -17,7 +17,7 @@ export const lastOf = <T>(items: readonly T[]): T | undefined => items[items.len
  * of the render.
  */
 export function bandPosition(
-  scale: { (value: string): number | undefined },
+  scale: (value: string) => number | undefined,
   category: string
 ): number {
   return scale(category) ?? 0
@@ -43,7 +43,7 @@ export function resolveLayout(
 /** Every finite value across every visible series. */
 export function collectValues<Datum>(
   data: Datum[],
-  series: Array<ChartSeries<Datum>>,
+  series: ChartSeries<Datum>[],
   hidden: readonly string[]
 ): number[] {
   const out: number[] = []
@@ -60,7 +60,7 @@ export function collectValues<Datum>(
 /** Per-datum totals, for a stacked y-domain. */
 export function collectStackTotals<Datum>(
   data: Datum[],
-  series: Array<ChartSeries<Datum>>,
+  series: ChartSeries<Datum>[],
   hidden: readonly string[]
 ): number[] {
   return data.map((datum, index) => {

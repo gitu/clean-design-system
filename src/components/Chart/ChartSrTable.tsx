@@ -15,12 +15,12 @@ interface ChartSrTableProps {
   caption: string
   /** Column headers — the x labels. */
   columns: string[]
-  rows: Array<{
+  rows: {
     key: string
     label: string
     /** Already formatted; the table does no arithmetic. */
     values: string[]
-  }>
+  }[]
 }
 
 export function ChartSrTable({ caption, columns, rows }: ChartSrTableProps) {

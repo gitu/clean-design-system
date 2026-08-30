@@ -214,8 +214,8 @@ export function continueList(value: string, selection: Selection): EditResult | 
   const lineStart = value.lastIndexOf('\n', selection.start - 1) + 1
   const line = value.slice(lineStart, selection.start)
 
-  const bullet = line.match(/^(\s*)([-*+])(\s+)(.*)$/)
-  const ordered = line.match(/^(\s*)(\d+)([.)])(\s+)(.*)$/)
+  const bullet = /^(\s*)([-*+])(\s+)(.*)$/.exec(line)
+  const ordered = /^(\s*)(\d+)([.)])(\s+)(.*)$/.exec(line)
   if (!bullet && !ordered) return null
 
   const body = bullet ? bullet[4] : ordered?.[5]
@@ -228,8 +228,8 @@ export function continueList(value: string, selection: Selection): EditResult | 
   }
 
   const marker = bullet
-    ? `${bullet[1] ?? ''}${bullet[2]}${bullet[3]}`
-    : `${ordered?.[1] ?? ''}${Number(ordered?.[2]) + 1}${ordered?.[3]}${ordered?.[4]}`
+    ? `${bullet[1] ?? ''}${bullet[2] ?? ''}${bullet[3] ?? ''}`
+    : `${ordered?.[1] ?? ''}${Number(ordered?.[2]) + 1}${ordered?.[3] ?? ''}${ordered?.[4] ?? ''}`
 
   const inserted = `\n${marker}`
   return {

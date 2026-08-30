@@ -54,23 +54,22 @@ export function Highlight({
   )
 
   const parts = children.split(pattern)
-  let marked = 0
+  // split() with one capture group puts matches at every odd index; `limit`
+  // caps how many of them are marked, counting from the first.
+  const matches = parts.map((_, i) => i).filter(i => i % 2 === 1)
+  const marked = new Set(limit === undefined ? matches : matches.slice(0, limit))
 
   return (
     <span className={className} {...rest}>
-      {parts.map((part, i) => {
-        // split() with one capture group puts matches at every odd index.
-        const isMatch = i % 2 === 1
-        if (isMatch && (limit === undefined || marked < limit)) {
-          marked += 1
-          return (
-            <mark key={i} className={cx('cds-mark')}>
-              {part}
-            </mark>
-          )
-        }
-        return <Fragment key={i}>{part}</Fragment>
-      })}
+      {parts.map((part, i) =>
+        marked.has(i) ? (
+          <mark key={i} className={cx('cds-mark')}>
+            {part}
+          </mark>
+        ) : (
+          <Fragment key={i}>{part}</Fragment>
+        )
+      )}
     </span>
   )
 }

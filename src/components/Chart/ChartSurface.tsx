@@ -14,7 +14,7 @@ interface ChartSurfaceProps {
   description: string
   /** Announced when the keyboard cursor lands. */
   announcement: string
-  table: { caption: string; columns: string[]; rows: Array<{ key: string; label: string; values: string[] }> }
+  table: { caption: string; columns: string[]; rows: { key: string; label: string; values: string[] }[] }
   className?: string
   style?: React.CSSProperties
   interactive: boolean
@@ -86,6 +86,10 @@ export function ChartSurface({
         {description}
       </p>
 
+      {/* The plot is `role="img"` with a virtual cursor: the pointer handlers
+          track hover, and `onKeyDown` gives the keyboard the same reach — so
+          the click handler is not an interaction without an equivalent. */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
         className="cds-chart__plot"
         style={{ height }}

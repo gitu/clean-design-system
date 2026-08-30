@@ -541,7 +541,7 @@ export const CardStates: Story = {
     <div className="sb-page">
       <Stack gap={4}>
         <p className="cds-lede" style={{ maxWidth: 'var(--cds-measure)' }}>
-          The team's judgement leads; the portal's status follows in outline. A
+          The team’s judgement leads; the portal’s status follows in outline. A
           property nobody has looked at yet carries no badge at all.
         </p>
         <Divider tone="strong" />
@@ -561,7 +561,6 @@ export const CardStates: Story = {
  * meta is the only way to it — which is why that button is not optional.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     a11y: { disable: true },

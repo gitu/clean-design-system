@@ -108,7 +108,6 @@ function Stat({
  * contract is wrong.
  */
 export const Dashboard: Story = {
-  name: 'Dashboard',
   render: () => {
     const [range, setRange] = useState('28')
     const [hiddenSeries, setHiddenSeries] = useState<string[]>([])
@@ -131,7 +130,7 @@ export const Dashboard: Story = {
 
     const hovered = hoverKey ? weeks.find(w => w.week === hoverKey) : undefined
 
-    const columns: Array<TableColumn<TopQuery>> = [
+    const columns: TableColumn<TopQuery>[] = [
       { key: 'query', header: 'Query', cell: row => <span className="cds-mono">{row.query}</span> },
       {
         key: 'searches',
@@ -384,7 +383,6 @@ export const Dashboard: Story = {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

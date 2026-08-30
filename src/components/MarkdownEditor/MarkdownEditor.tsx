@@ -325,7 +325,9 @@ export function MarkdownEditor({
 
 /** `Mod+B` reads as `⌘B` on a Mac and `Ctrl+B` everywhere else. */
 function shortcutLabel(shortcut: string) {
+  const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } })
+    .userAgentData
   const isApple =
-    typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)
+    typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(uaData?.platform ?? navigator.userAgent)
   return shortcut.replace('Mod+', isApple ? '⌘' : 'Ctrl+')
 }

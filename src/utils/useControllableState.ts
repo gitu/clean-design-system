@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 /**
  * One state hook for components that work either controlled or uncontrolled.
@@ -12,8 +12,12 @@ export function useControllableState<T>(
 ): [T, (next: T) => void] {
   const [internal, setInternal] = useState<T>(defaultValue)
   const isControlled = value !== undefined
+  // Held in a ref so `set` keeps a stable identity while still calling the
+  // latest `onChange` — callers pass an inline closure nearly every time.
   const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+  useEffect(() => {
+    onChangeRef.current = onChange
+  })
 
   const set = useCallback(
     (next: T) => {
@@ -23,5 +27,5 @@ export function useControllableState<T>(
     [isControlled]
   )
 
-  return [isControlled ? (value as T) : internal, set]
+  return [isControlled ? (value) : internal, set]
 }

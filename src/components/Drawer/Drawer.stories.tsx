@@ -82,7 +82,9 @@ export const FromStart: Story = {
         <Drawer open={open} onClose={() => setOpen(false)} side="start" size="sm" title="Navigation">
           <Stack gap={2}>
             {['All documents', 'Saved searches', 'Recent', 'Collections', 'Settings'].map(item => (
-              <a key={item} className="cds-link" href="#">{item}</a>
+              <a key={item} className="cds-link" href={`#${item.toLowerCase().replace(/ /g, '-')}`}>
+                {item}
+              </a>
             ))}
           </Stack>
         </Drawer>

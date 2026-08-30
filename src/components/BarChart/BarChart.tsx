@@ -284,7 +284,9 @@ export function BarChart<Datum>({
       if (!context) return ''
       if (formatAnnouncement) return formatAnnouncement({ ...context, seriesKey })
       const row = seriesKey ? context.rows.find(r => r.seriesKey === seriesKey) : context.rows[0]
-      const name = row && visible.length > 1 ? `${String(row.label)}, ` : ''
+      // `label` is a ReactNode: only a plain string can go into speech.
+      const name =
+        row && visible.length > 1 && typeof row.label === 'string' ? `${row.label}, ` : ''
       return `${name}${context.xLabel}: ${row?.formatted ?? '—'}. Bar ${index + 1} of ${keys.length}.`
     },
     [keys, contextFor, formatAnnouncement, visible.length]

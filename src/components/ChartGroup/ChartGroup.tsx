@@ -6,7 +6,7 @@ import type { ChartDomain, ChartKey } from '../Chart/chart-types'
 import { ChartGroupContext, ChartHoverContext } from './ChartGroupContext'
 import './ChartGroup.css'
 
-const ALL_CHANNELS: Array<'hover' | 'selection' | 'series' | 'zoom'> = [
+const ALL_CHANNELS: ('hover' | 'selection' | 'series' | 'zoom')[] = [
   'hover',
   'selection',
   'series',
@@ -33,7 +33,7 @@ export interface ChartGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   onZoomChange?: (domain: ChartDomain | null) => void
 
   /** Which channels are shared. Defaults to all four. */
-  sync?: Array<'hover' | 'selection' | 'series' | 'zoom'>
+  sync?: ('hover' | 'selection' | 'series' | 'zoom')[]
   /** How a datum click changes `selected`. */
   selectionMode?: 'toggle' | 'replace' | 'none'
   /** Lays members out on a grid. Use `Stack` instead if you want a column. */

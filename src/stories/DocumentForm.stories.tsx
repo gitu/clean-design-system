@@ -183,7 +183,7 @@ function FormScreen() {
     if (!complete) {
       // Take the writer to the first thing that is wrong rather than making
       // them hunt for it in a form this long.
-      const first = Object.keys(errors)[0]
+      const first = Object.keys(errors)[0] ?? ''
       document.querySelector<HTMLElement>(`[data-field="${first}"]`)?.scrollIntoView({ block: 'center' })
       toast({
         title: 'Not saved',
@@ -642,7 +642,6 @@ function ErrorScreen() {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

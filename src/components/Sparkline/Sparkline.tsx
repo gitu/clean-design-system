@@ -155,7 +155,7 @@ export function Sparkline<Datum>({
               />
             </>
           )}
-          {endpoint && last && last.value !== null && (
+          {endpoint && last?.value != null && (
             <circle
               className="cds-sparkline__endpoint"
               cx={x(last.index)}

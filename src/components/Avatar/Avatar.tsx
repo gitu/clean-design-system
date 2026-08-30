@@ -43,7 +43,8 @@ export function Avatar({
 }: AvatarProps) {
   // A stable slot per name, so the same person keeps the same tint everywhere.
   const slot = tinted
-    ? ([...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 6) + 1
+    ? // eslint-disable-next-line @typescript-eslint/no-misused-spread -- a hash, not text handling
+      ([...name].reduce((sum, char) => sum + char.charCodeAt(0), 0) % 6) + 1
     : null
 
   return (

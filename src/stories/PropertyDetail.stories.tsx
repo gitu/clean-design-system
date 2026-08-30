@@ -82,7 +82,7 @@ const TABS = [
  * one of the questions this pattern exists to answer — at eighteen lines of
  * layout glue, the honest answer looks like "leave it".
  */
-function Specs({ items }: { items: Array<[string, string]> }) {
+function Specs({ items }: { items: [string, string][] }) {
   return (
     <dl
       style={{
@@ -153,7 +153,7 @@ export const FullDetail: Story = {
           items={[
             ['Rooms', formatRooms(listing.rooms)],
             ['Living space', formatArea(listing.livingSpace)],
-            ['Floor', `${listing.floor} of 4`],
+            ['Floor', `${listing.floor ?? '—'} of 4`],
             ['Built', String(listing.yearBuilt)],
             ['Type', formatPropertyType(listing.propertyType)],
             ['Listed', formatListingDate(listing.listedAt)],
@@ -349,8 +349,8 @@ export const FullDetail: Story = {
                 <div style={{ paddingTop: 'var(--cds-space-4)' }}>
                   <Panel variant="sunken" title={TABS.find(t => t.value === tab)?.label}>
                     <p className="cds-body-sm" style={{ margin: 0 }}>
-                      This tab's content is the product's own — a map, a document
-                      list, a floor-plan canvas. The system's job stopped at the
+                      This tab’s content is the product’s own — a map, a document
+                      list, a floor-plan canvas. The system’s job stopped at the
                       frame around it.
                     </p>
                   </Panel>
@@ -414,7 +414,6 @@ export const FullDetail: Story = {
  * somebody opening this on a phone came for.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     a11y: { disable: true },

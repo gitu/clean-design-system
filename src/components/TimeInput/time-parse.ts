@@ -31,7 +31,7 @@ export function parseTime(input: string): TimeString | null {
   if (text === 'noon' || text === 'midday') return '12:00'
   if (text === 'midnight') return '00:00'
 
-  const match = text.match(/^(\d{1,2})(?:[:.h]?(\d{2}))?(am|pm|a|p)?$/)
+  const match = /^(\d{1,2})(?:[:.h]?(\d{2}))?(am|pm|a|p)?$/.exec(text)
   if (!match) return null
 
   let hours = Number(match[1])
@@ -40,8 +40,8 @@ export function parseTime(input: string): TimeString | null {
 
   // `930` and `1345` — no separator, so the digits themselves say where the
   // split is. Only reachable when the first group ate everything.
-  if (!match[2] && !suffix && match[1] && match[1].length > 2) return null
-  if (!match[2] && match[1] && match[1].length === 4) return null
+  if (!match[2] && !suffix && (match[1]?.length ?? 0) > 2) return null
+  if (!match[2] && match[1]?.length === 4) return null
 
   if (suffix === 'p' && hours < 12) hours += 12
   if (suffix === 'a' && hours === 12) hours = 0

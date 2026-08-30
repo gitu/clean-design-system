@@ -67,7 +67,7 @@ export const Toolbar: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const area = canvas.getByRole('textbox') as HTMLTextAreaElement
+    const area = canvas.getByRole<HTMLTextAreaElement>('textbox')
 
     area.focus()
     area.setSelectionRange(4, 13) // "regulator"

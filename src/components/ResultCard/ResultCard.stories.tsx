@@ -56,7 +56,7 @@ export const Selectable: Story = {
 }
 
 export const Compact: Story = {
-  render: args => (
+  render: () => (
     <div style={{ maxWidth: 720 }}>
       {ARTICLES.slice(0, 4).map(a => (
         <ResultCard

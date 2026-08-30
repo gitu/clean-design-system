@@ -51,7 +51,10 @@ export interface DateTimeInputProps {
 const split = (value: LocalDateTime | null): { date: IsoDate | null; time: TimeString | null } => {
   if (!value) return { date: null, time: null }
   const [date, time] = value.split('T')
-  return { date: date || null, time: time ? time.slice(0, 5) : null }
+  // An empty date half is as unusable as a missing one, so both collapse to
+  // null rather than travelling on as a zero-length IsoDate.
+  if (!date) return { date: null, time: null }
+  return { date, time: time ? time.slice(0, 5) : null }
 }
 
 /**

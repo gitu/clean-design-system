@@ -25,7 +25,7 @@ function ThemeSwitcher() {
           <SegmentedControl
             label="Theme"
             value={theme}
-            onChange={value => setTheme(value as 'light' | 'dark' | 'system')}
+            onChange={value => setTheme(value)}
             options={[
               { value: 'light', label: 'Light' },
               { value: 'dark', label: 'Dark' },

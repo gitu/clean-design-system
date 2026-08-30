@@ -45,7 +45,6 @@ const STATUS_TONE = {
  * thing to look at in a van anyway.
  */
 export const Round: Story = {
-  name: 'Round',
   render: () => {
     const [stops, setStops] = useState<Stop[]>(ROUTE_STOPS)
     const [activeId, setActiveId] = useState<string | null>('s-05')
@@ -68,7 +67,7 @@ export const Round: Story = {
         // Promote the following stop, so the round always has a "next".
         const index = next.findIndex(stop => stop.id === id)
         const following = next[index + 1]
-        if (following && following.status === 'pending') following.status = 'next'
+        if (following?.status === 'pending') following.status = 'next'
         return next
       })
       setSheetOpen(false)
@@ -134,8 +133,8 @@ export const Round: Story = {
               </div>
 
               <p className="sb-route-next__after cds-body-sm">
-                {remaining.length > 1
-                  ? `Then ${remaining[1]?.name} at ${remaining[1]?.eta} · ${remaining.length - 1} stops left after this`
+                {remaining[1]
+                  ? `Then ${remaining[1].name} at ${remaining[1].eta} · ${remaining.length - 1} stops left after this`
                   : 'Last stop of the round.'}
               </p>
             </section>
@@ -298,7 +297,6 @@ export const Round: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

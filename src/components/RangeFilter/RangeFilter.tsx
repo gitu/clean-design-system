@@ -27,7 +27,7 @@ export interface RangeFilterProps {
   applyOn?: 'button' | 'blur'
   applyLabel?: string
   /** Quick presets rendered as a row of links, e.g. last 7 / 30 / 90 days. */
-  presets?: Array<{ label: string; value: RangeValue }>
+  presets?: { label: string; value: RangeValue }[]
   disabled?: boolean
   className?: string
 }

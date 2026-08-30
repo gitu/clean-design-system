@@ -25,7 +25,7 @@ export interface ChartGroupValue {
   /** How a datum click changes `selected`. */
   selectionMode: 'toggle' | 'replace' | 'none'
   /** Channels this group actually shares. */
-  sync: Array<'hover' | 'selection' | 'series' | 'zoom'>
+  sync: ('hover' | 'selection' | 'series' | 'zoom')[]
 }
 
 export const ChartGroupContext = createContext<ChartGroupValue | null>(null)

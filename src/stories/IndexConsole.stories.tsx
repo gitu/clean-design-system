@@ -61,7 +61,6 @@ const time = new Intl.DateTimeFormat('en-GB', {
  * for an indeterminate one.
  */
 export const Console: Story = {
-  name: 'Console',
   render: () => {
     const [tab, setTab] = useState('jobs')
     const [openJob, setOpenJob] = useState<CrawlJob | null>(null)
@@ -71,7 +70,7 @@ export const Console: Story = {
     const failed = useMemo(() => CRAWL_JOBS.filter(j => j.status === 'failed'), [])
     const totalDocs = CRAWL_JOBS.reduce((sum, j) => sum + j.documents, 0)
 
-    const columns: Array<TableColumn<CrawlJob>> = [
+    const columns: TableColumn<CrawlJob>[] = [
       {
         key: 'id',
         header: 'Job',
@@ -329,7 +328,7 @@ export const Console: Story = {
         <Drawer
           open={openJob !== null}
           onClose={() => setOpenJob(null)}
-          title={openJob ? `${openJob.source}` : ''}
+          title={openJob ? openJob.source : ''}
           description={openJob ? `Job ${openJob.id}` : undefined}
           size="md"
           footer={
@@ -386,7 +385,6 @@ export const Console: Story = {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

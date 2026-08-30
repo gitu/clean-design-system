@@ -60,7 +60,7 @@ export function NavList({
 }: NavListProps) {
   // Group headings only make sense stacked; a horizontal bar shows a flat list.
   const grouped = orientation === 'vertical'
-  const sections: Array<{ name?: string; items: NavItem[] }> = []
+  const sections: { name?: string; items: NavItem[] }[] = []
   for (const item of items) {
     const name = grouped ? item.group : undefined
     const last = sections[sections.length - 1]

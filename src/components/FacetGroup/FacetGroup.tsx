@@ -52,7 +52,10 @@ export function FacetGroup({
   const [isOpen, setOpen] = useControllableState(open, defaultOpen, onOpenChange)
   const [expanded, setExpanded] = useState(false)
 
-  const items = useMemo(() => (Array.isArray(children) ? children.flat() : [children]), [children])
+  const items = useMemo(
+    () => (Array.isArray(children) ? (children as ReactNode[]).flat() : [children]),
+    [children]
+  )
   const total = items.length
   const overflowing = maxVisible !== undefined && total > maxVisible && !expanded
   const visible = overflowing ? items.slice(0, maxVisible) : items

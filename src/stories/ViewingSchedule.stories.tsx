@@ -137,7 +137,7 @@ export const Schedule: Story = {
       return scope === 'upcoming' ? v.status === 'scheduled' : v.status !== 'scheduled'
     })
 
-    const columns: Array<TableColumn<Viewing>> = [
+    const columns: TableColumn<Viewing>[] = [
       {
         key: 'at',
         header: 'When',
@@ -149,7 +149,7 @@ export const Schedule: Story = {
         key: 'listing',
         header: 'Property',
         cell: row => (
-          <a className="cds-link-quiet" href="#">
+          <a className="cds-link-quiet" href={`#${row.listingId}`}>
             {row.listingTitle}
           </a>
         ),
@@ -330,7 +330,6 @@ export const Schedule: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     a11y: { disable: true },

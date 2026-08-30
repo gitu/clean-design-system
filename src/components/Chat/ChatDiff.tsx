@@ -41,7 +41,7 @@ function parsePatch(patch: string): { lines: DiffLine[]; path?: string; added: n
 
   for (const raw of patch.replace(/\n$/, '').split('\n')) {
     if (raw.startsWith('diff --git')) {
-      const match = raw.match(/ b\/(\S+)$/)
+      const match = / b\/(\S+)$/.exec(raw)
       if (match?.[1]) path = match[1]
       out.push({ kind: 'meta', text: raw })
       continue
@@ -56,7 +56,7 @@ function parsePatch(patch: string): { lines: DiffLine[]; path?: string; added: n
       out.push({ kind: 'meta', text: raw })
       continue
     }
-    const hunk = raw.match(/^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@/)
+    const hunk = /^@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@/.exec(raw)
     if (hunk) {
       before = Number(hunk[1])
       after = Number(hunk[2])

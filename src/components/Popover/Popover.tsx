@@ -152,6 +152,7 @@ export function Popover({
           className={cx('cds-popover', `cds-popover--${align}`, `cds-popover--pad-${padding}`)}
           style={{ '--cds-popover-width': width } as CSSProperties}
         >
+          {/* eslint-disable-next-line react-hooks/refs -- `close` is handed to the render prop to wire up, not called during render */}
           {typeof children === 'function' ? children(close) : children}
         </div>
       )}

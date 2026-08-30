@@ -55,7 +55,6 @@ const seen = new Intl.DateTimeFormat('en-GB', {
  * Neither auto-dismisses.
  */
 export const Members: Story = {
-  name: 'Members',
   render: () => (
     // The provider has to sit above whatever calls useToast.
     <ToastProvider>
@@ -124,7 +123,7 @@ function MembersScreen() {
     },
   ]
 
-  const columns: Array<TableColumn<Member>> = [
+  const columns: TableColumn<Member>[] = [
     {
       key: 'name',
       header: 'Member',
@@ -321,7 +320,6 @@ function MembersScreen() {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

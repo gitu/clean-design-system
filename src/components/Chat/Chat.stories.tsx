@@ -70,7 +70,7 @@ export const ToolCalls: Story = {
         <pre>{'{ "table": "query_stats", "window": "28d" }'}</pre>
       </ChatToolCall>
       <ChatToolCall name="edit_file" summary="Permission denied" status="failed" duration={12}>
-        <pre>EACCES: permission denied, open 'src/search/rank.ts'</pre>
+        <pre>{"EACCES: permission denied, open 'src/search/rank.ts'"}</pre>
       </ChatToolCall>
     </Stack>
   ),
@@ -127,7 +127,7 @@ export const Questions: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const tabs = () => canvas.getAllByRole('tab')
-    const marked = () => tabs().filter(tab => tab.textContent?.includes('answered')).length
+    const marked = () => tabs().filter(tab => tab.textContent.includes('answered')).length
 
     await expect(marked()).toBe(0)
     await expect(canvas.getByText('0 of 2 answered')).toBeInTheDocument()

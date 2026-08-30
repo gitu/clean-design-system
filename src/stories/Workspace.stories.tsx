@@ -70,7 +70,7 @@ const PAGES: Record<string, NavItem[]> = {
 const TITLES: Record<string, string> = Object.fromEntries(
   Object.values(PAGES)
     .flat()
-    .map(page => [page.id, String(page.label)])
+    .map(page => [page.id, typeof page.label === 'string' ? page.label : page.id])
 )
 
 /**
@@ -171,7 +171,7 @@ export const MultiPage: Story = {
         <Stack gap={5} className="sb-page">
           <Breadcrumbs
             items={[
-              { label: String(AREAS.find(a => a.id === area)?.label ?? area), onClick: () => {} },
+              { label: AREAS.find(a => a.id === area)?.label ?? area, onClick: () => {} },
               { label: TITLES[page] ?? page },
             ]}
           />
@@ -199,9 +199,9 @@ export const MultiPage: Story = {
 
 function PageBody({ page }: { page: string }) {
   if (page === 'library/all' || page === 'library/recent') {
-    const columns: Array<TableColumn<Article>> = [
+    const columns: TableColumn<Article>[] = [
       { key: 'id', header: 'Reference', width: '7rem', numeric: true, align: 'start', cell: row => <span className="cds-mono">{row.id}</span> },
-      { key: 'title', header: 'Title', cell: row => <a className="cds-link-quiet" href="#">{row.title}</a> },
+      { key: 'title', header: 'Title', cell: row => <a className="cds-link-quiet" href={`#${row.id}`}>{row.title}</a> },
       { key: 'section', header: 'Section', width: '8rem', hideBelow: 'sm', cell: row => row.section },
       { key: 'published', header: 'Published', width: '8rem', hideBelow: 'md', cell: row => formatDate(row.published) },
     ]
@@ -216,7 +216,7 @@ function PageBody({ page }: { page: string }) {
   }
 
   if (page === 'ingest/jobs') {
-    const columns: Array<TableColumn<CrawlJob>> = [
+    const columns: TableColumn<CrawlJob>[] = [
       { key: 'id', header: 'Job', width: '6.5rem', numeric: true, align: 'start', cell: row => <span className="cds-mono">{row.id}</span> },
       { key: 'source', header: 'Source', cell: row => row.source },
       { key: 'status', header: 'Status', width: '6.5rem', cell: row => <Badge tone={row.status === 'failed' ? 'danger' : row.status === 'done' ? 'success' : 'info'} size="sm">{row.status}</Badge> },
@@ -263,7 +263,6 @@ function PageBody({ page }: { page: string }) {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

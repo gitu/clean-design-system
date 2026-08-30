@@ -19,7 +19,7 @@ export const Tones: Story = {
   render: () => (
     <Stack gap={3} style={{ maxWidth: '38rem' }}>
       <Callout tone="info" title="Scheduled for 06:00">
-        The next scan runs overnight. Twelve of the day's forty search pages are left.
+        The next scan runs overnight. Twelve of the day’s forty search pages are left.
       </Callout>
       <Callout tone="success" title="Imported 18 fields and 12 photographs">
         The price, room count and address came across. The description was truncated

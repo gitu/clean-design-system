@@ -1,4 +1,4 @@
-import type { FormEvent, KeyboardEvent, ReactNode } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
 import { useRef, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { Button } from '../Button/Button'
@@ -73,7 +73,7 @@ export function ChatComposer({
   return (
     <form
       className={cx('cds-chat-composer', className)}
-      onSubmit={(event: FormEvent) => {
+      onSubmit={event => {
         event.preventDefault()
         send()
       }}

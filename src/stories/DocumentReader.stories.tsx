@@ -58,7 +58,6 @@ const ARTICLE = ARTICLES[0]!
  * instrumentation stops being a reading view.
  */
 export const Reader: Story = {
-  name: 'Reader',
   render: () => {
     const [match, setMatch] = useState(1)
     const [saved, setSaved] = useState(false)
@@ -169,7 +168,7 @@ export const Reader: Story = {
               <Divider label="Cited by" />
               <Stack gap={3} style={{ paddingTop: 'var(--cds-space-3)' }}>
                 {related.map(item => (
-                  <a key={item.id} className="cds-link-quiet cds-body-sm" href="#">
+                  <a key={item.id} className="cds-link-quiet cds-body-sm" href={`#${item.id}`}>
                     {item.title}
                   </a>
                 ))}
@@ -289,7 +288,6 @@ function Meta({ label, value }: { label: string; value: React.ReactNode }) {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

@@ -57,7 +57,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
     disabled,
   })
 
-  const groups: Array<{ name: string | undefined; items: SelectOption[] }> = []
+  const groups: { name: string | undefined; items: SelectOption[] }[] = []
   for (const option of options ?? []) {
     const last = groups[groups.length - 1]
     if (last && last.name === option.group) last.items.push(option)
