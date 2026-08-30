@@ -29,7 +29,7 @@ export function Breadcrumbs({
   className,
   ...rest
 }: BreadcrumbsProps) {
-  let visible: Array<Crumb | null> = items
+  let visible: (Crumb | null)[] = items
   if (maxItems !== undefined && items.length > maxItems) {
     visible = [items[0] ?? null, null, ...items.slice(-2)]
   }

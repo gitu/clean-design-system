@@ -101,14 +101,14 @@ export interface ChartInteractionProps<Datum> {
   /** Fires on click and on Enter. The hook for drill-down and filtering. */
   onDatumClick?: (event: ChartDatumEvent<Datum>) => void
   /** Opt out of the surrounding `ChartGroup`, wholly or per channel. */
-  sync?: false | Array<'hover' | 'selection' | 'series' | 'zoom'>
+  sync?: false | ('hover' | 'selection' | 'series' | 'zoom')[]
 }
 
 export interface ChartBaseProps<Datum>
   extends ChartInteractionProps<Datum>,
     Omit<HTMLAttributes<HTMLDivElement>, 'onSelect' | 'children'> {
   data: Datum[]
-  series: Array<ChartSeries<Datum>>
+  series: ChartSeries<Datum>[]
   /**
    * Stable identity per datum. Defaults to the x value as a string. Charts in
    * one `ChartGroup` must agree on this — it is the vocabulary that linking,

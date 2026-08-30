@@ -67,7 +67,7 @@ export const Toolbar: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const area = canvas.getByRole('textbox') as HTMLTextAreaElement
+    const area = canvas.getByRole<HTMLTextAreaElement>('textbox')
 
     area.focus()
     area.setSelectionRange(4, 13) // "regulator"
@@ -78,7 +78,7 @@ export const Toolbar: Story = {
 
     // The selection survives the edit, still on the same word — which is what
     // makes toggling off possible at all.
-    expect(area.value.slice(area.selectionStart, area.selectionEnd)).toBe('regulator')
+    await expect(area.value.slice(area.selectionStart, area.selectionEnd)).toBe('regulator')
 
     // Toggling off is the half that gets forgotten.
     await userEvent.click(canvas.getByRole('button', { name: /^Bold/ }))

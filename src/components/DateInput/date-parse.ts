@@ -89,7 +89,7 @@ export function parseDate(input: string, options: ParseDateOptions = {}): IsoDat
   if (text === 'yesterday') return toIso(addDays(today, -1))
 
   // `+3`, `+3d`, `-2w`, `+1m`
-  const relative = text.match(/^([+-])\s*(\d{1,4})\s*(d|day|days|w|week|weeks|m|month|months)?$/)
+  const relative = /^([+-])\s*(\d{1,4})\s*(d|day|days|w|week|weeks|m|month|months)?$/.exec(text)
   if (relative) {
     const sign = relative[1] === '-' ? -1 : 1
     const amount = Number(relative[2]) * sign
@@ -107,11 +107,11 @@ export function parseDate(input: string, options: ParseDateOptions = {}): IsoDat
   }
 
   // ISO, and the `2024/07/08` variant of it.
-  const iso = text.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/)
+  const iso = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(text)
   if (iso) return build(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]))
 
   // `8 Jul 2024`, `8 July`, `8. Juli` — day, then a month name.
-  const dayMonth = text.match(/^(\d{1,2})\.?\s+([a-zà-ÿ]+)\.?(?:\s+(\d{2,4}))?$/)
+  const dayMonth = /^(\d{1,2})\.?\s+([a-zà-ÿ]+)\.?(?:\s+(\d{2,4}))?$/.exec(text)
   if (dayMonth) {
     const month = monthIndex(dayMonth[2] ?? '')
     if (month !== null) {
@@ -121,7 +121,7 @@ export function parseDate(input: string, options: ParseDateOptions = {}): IsoDat
   }
 
   // `Jul 8`, `July 8 2024` — month name, then day.
-  const monthDay = text.match(/^([a-zà-ÿ]+)\.?\s+(\d{1,2})(?:,?\s+(\d{2,4}))?$/)
+  const monthDay = /^([a-zà-ÿ]+)\.?\s+(\d{1,2})(?:,?\s+(\d{2,4}))?$/.exec(text)
   if (monthDay) {
     const month = monthIndex(monthDay[1] ?? '')
     if (month !== null) {
@@ -131,7 +131,7 @@ export function parseDate(input: string, options: ParseDateOptions = {}): IsoDat
   }
 
   // `8.7.2024`, `8/7/24`, `8.7.` and bare `8.7`.
-  const numeric = text.match(/^(\d{1,2})[./-](\d{1,2})(?:[./-](\d{2,4}))?\.?$/)
+  const numeric = /^(\d{1,2})[./-](\d{1,2})(?:[./-](\d{2,4}))?\.?$/.exec(text)
   if (numeric) {
     const a = Number(numeric[1])
     const b = Number(numeric[2])
@@ -141,7 +141,7 @@ export function parseDate(input: string, options: ParseDateOptions = {}): IsoDat
   }
 
   // A bare number is a day in the current month — `24` on the 8th of July.
-  const bare = text.match(/^(\d{1,2})\.?$/)
+  const bare = /^(\d{1,2})\.?$/.exec(text)
   if (bare) {
     return build(today.getUTCFullYear(), today.getUTCMonth(), Number(bare[1]))
   }

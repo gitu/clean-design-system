@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cx } from '../../utils/cx'
 import { Icon } from '../Icon/Icon'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -29,7 +29,7 @@ export interface Column<Row> {
 }
 
 export interface DataTableProps<Row> {
-  columns: Array<Column<Row>>
+  columns: Column<Row>[]
   rows: Row[]
   /** Stable identity per row — required for selection and React keys. */
   rowKey: (row: Row, index: number) => string
@@ -100,7 +100,7 @@ export function DataTable<Row>({
   function headerClick(column: Column<Row>) {
     if (!column.sortable || !onSortChange) return
     const isCurrent = sort?.key === column.key
-    onSortChange(column.key, isCurrent && sort?.direction === 'asc' ? 'desc' : 'asc')
+    onSortChange(column.key, isCurrent && sort.direction === 'asc' ? 'desc' : 'asc')
   }
 
   const colCount = columns.length + (selectable ? 1 : 0)
@@ -131,7 +131,7 @@ export function DataTable<Row>({
                 <th
                   key={column.key}
                   scope="col"
-                  style={{ width: column.width } as CSSProperties}
+                  style={{ width: column.width }}
                   className={cx(
                     'cds-table__th',
                     `cds-table__cell--${column.align ?? (column.numeric ? 'end' : 'start')}`,

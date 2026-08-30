@@ -116,7 +116,7 @@ function parseBlocks(source: string): Block[] {
 
     // Fenced code. Everything up to the closing fence is taken verbatim, which
     // is what stops markdown syntax inside a snippet from being interpreted.
-    const fence = line.match(/^```\s*(\S+)?\s*$/)
+    const fence = /^```\s*(\S+)?\s*$/.exec(line)
     if (fence) {
       flush()
       const code: string[] = []
@@ -144,10 +144,10 @@ function parseBlocks(source: string): Block[] {
       continue
     }
 
-    const heading = line.match(/^(#{1,6})\s+(.*)$/)
+    const heading = /^(#{1,6})\s+(.*)$/.exec(line)
     if (heading) {
       flush()
-      blocks.push({ type: 'heading', level: heading[1]!.length, text: heading[2] ?? '' })
+      blocks.push({ type: 'heading', level: heading[1]?.length ?? 1, text: heading[2] ?? '' })
       continue
     }
 
@@ -163,8 +163,8 @@ function parseBlocks(source: string): Block[] {
       continue
     }
 
-    const bullet = line.match(/^\s*[-*+]\s+(.*)$/)
-    const ordered = line.match(/^\s*\d+[.)]\s+(.*)$/)
+    const bullet = /^\s*[-*+]\s+(.*)$/.exec(line)
+    const ordered = /^\s*\d+[.)]\s+(.*)$/.exec(line)
     if (bullet || ordered) {
       flush()
       const isOrdered = Boolean(ordered)
@@ -172,8 +172,8 @@ function parseBlocks(source: string): Block[] {
       while (i < lines.length) {
         const current = lines[i] ?? ''
         const match = isOrdered
-          ? current.match(/^\s*\d+[.)]\s+(.*)$/)
-          : current.match(/^\s*[-*+]\s+(.*)$/)
+          ? (/^\s*\d+[.)]\s+(.*)$/.exec(current))
+          : (/^\s*[-*+]\s+(.*)$/.exec(current))
         if (!match) break
         items.push(match[1] ?? '')
         i++
@@ -204,8 +204,8 @@ function renderInline(text: string): ReactNode[] {
   let key = 0
 
   while (rest) {
-    const match = rest.match(pattern)
-    if (!match || match.index === undefined) {
+    const match = pattern.exec(rest)
+    if (match?.index === undefined) {
       out.push(rest)
       break
     }
@@ -221,7 +221,7 @@ function renderInline(text: string): ReactNode[] {
     } else if (token.startsWith('**')) {
       out.push(<strong key={key++}>{token.slice(2, -2)}</strong>)
     } else if (token.startsWith('[')) {
-      const link = token.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/)
+      const link = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(token)
       const href = link?.[2] ?? '#'
       // Only http(s) and mailto survive. A `javascript:` URL in model output is
       // the obvious attack, and there is no legitimate use for one here.

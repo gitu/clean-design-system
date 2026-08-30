@@ -287,12 +287,12 @@ export const PROPERTY_TYPE_FACETS = [
  * The pipeline facet, with a swatch each. `new` deliberately has no strong
  * colour: it is the default state and would otherwise shout on every row.
  */
-export const TRIAGE_FACETS: Array<{
+export const TRIAGE_FACETS: {
   value: TriageStatus
   label: string
   count: number
   swatch: string
-}> = [
+}[] = [
   { value: 'new', label: 'New', count: 96, swatch: 'var(--cds-color-rule-strong)' },
   { value: 'interested', label: 'Interested', count: 24, swatch: 'var(--cds-color-info)' },
   { value: 'applied', label: 'Applied', count: 7, swatch: 'var(--cds-color-success)' },
@@ -405,7 +405,7 @@ export interface Comment {
   author: string
   at: string
   body: string
-  reactions?: Array<{ emoji: string; count: number }>
+  reactions?: { emoji: string; count: number }[]
 }
 
 export const COMMENTS: Comment[] = [
@@ -510,7 +510,7 @@ export function formatListingDate(iso: string) {
 
 /** `2026-09-02T18:30` → `Wed 2 Sep, 18:30`. Wall-clock, never converted. */
 export function formatViewingAt(local: string) {
-  const [date, time] = local.split('T')
+  const [date = '', time = ''] = local.split('T')
   const day = new Date(`${date}T00:00:00`).toLocaleDateString('en-GB', {
     weekday: 'short',
     day: 'numeric',
@@ -520,7 +520,7 @@ export function formatViewingAt(local: string) {
 }
 
 export function formatCommentAt(local: string) {
-  const [date, time] = local.split('T')
+  const [date = '', time = ''] = local.split('T')
   const day = new Date(`${date}T00:00:00`).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',

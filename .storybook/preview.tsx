@@ -5,10 +5,10 @@ import '../src/styles/index.css'
 import './preview.css'
 
 const withTheme: Decorator = (Story, context) => {
-  const theme = (context.globals.theme ?? 'light') as ThemeSetting
+  const theme = (context.globals.theme as ThemeSetting | undefined) ?? 'light'
   return (
     <ThemeProvider theme={theme} applyTo="document">
-      <div className="sb-canvas" data-layout={context.parameters.layout ?? 'padded'}>
+      <div className="sb-canvas" data-layout={(context.parameters.layout as string | undefined) ?? 'padded'}>
         <Story />
       </div>
     </ThemeProvider>

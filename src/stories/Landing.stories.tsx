@@ -57,7 +57,6 @@ const NUMBERS = [
  * would actually get.
  */
 export const Landing: Story = {
-  name: 'Landing',
   render: () => (
     <div className="sb-landing">
       <header className="sb-landing__bar">
@@ -211,7 +210,6 @@ export const Landing: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

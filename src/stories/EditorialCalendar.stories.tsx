@@ -40,7 +40,7 @@ const KIND_TONE = {
   maintenance: 'neutral',
 } as const
 
-const KINDS = Object.keys(KIND_TONE) as Array<keyof typeof KIND_TONE>
+const KINDS = Object.keys(KIND_TONE) as (keyof typeof KIND_TONE)[]
 
 const dayFormat = new Intl.DateTimeFormat('en-GB', {
   timeZone: 'UTC',
@@ -58,7 +58,6 @@ const dayFormat = new Intl.DateTimeFormat('en-GB', {
  * day you pick opens a real list beside it, which is where the detail belongs.
  */
 export const Month: Story = {
-  name: 'Month',
   render: () => {
     const [selected, setSelected] = useState<string | null>('2024-07-08')
     const [month, setMonth] = useState('2024-07-01')
@@ -262,7 +261,7 @@ export const SelectRange: Story = {
       [range]
     )
 
-    const columns: Array<TableColumn<CalendarEntry>> = [
+    const columns: TableColumn<CalendarEntry>[] = [
       { key: 'date', header: 'Date', width: '7rem', numeric: true, align: 'start', cell: row => row.date },
       { key: 'time', header: 'Time', width: '4.5rem', numeric: true, hideBelow: 'sm', cell: row => row.time ?? '—' },
       { key: 'title', header: 'Entry', cell: row => row.title },
@@ -327,7 +326,6 @@ export const SelectRange: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: { layout: 'padded', a11y: { disable: true } },
   render: (_args, context) => (
     <PhoneFrame

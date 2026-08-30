@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react'
 import { cx } from '../../utils/cx'
@@ -65,9 +66,32 @@ export interface ThemeProviderProps {
 }
 
 function systemTheme(): ResolvedTheme {
+  // lib.dom says `matchMedia` is always there. Test environments disagree —
+  // a jsdom setup without a `matchMedia` stub is the most common way a
+  // consumer's first test of a themed page explodes, and every page is
+  // inside this provider. The guard stays.
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (typeof window === 'undefined' || !window.matchMedia) return 'light'
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
+
+/** Subscribing to the OS preference, for `useSyncExternalStore`. */
+function subscribeToSystemTheme(onChange: () => void) {
+  // lib.dom says `matchMedia` is always there. Test environments disagree —
+  // a jsdom setup without a `matchMedia` stub is the most common way a
+  // consumer's first test of a themed page explodes, and every page is
+  // inside this provider. The guard stays.
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (typeof window === 'undefined' || !window.matchMedia) return () => undefined
+  const query = window.matchMedia('(prefers-color-scheme: dark)')
+  query.addEventListener('change', onChange)
+  return () => {
+    query.removeEventListener('change', onChange)
+  }
+}
+
+/** On the server nobody has a preference; light is the documented default. */
+const serverTheme = (): ResolvedTheme => 'light'
 
 /**
  * The root wrapper. **Every page built with this system must be inside one** —
@@ -87,18 +111,11 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [internal, setInternal] = useState<ThemeSetting>(defaultTheme)
   const theme = controlledTheme ?? internal
-  const [systemResolved, setSystemResolved] = useState<ResolvedTheme>(systemTheme)
-
-  // Track the OS preference so `system` stays live rather than read-once.
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return undefined
-    const query = window.matchMedia('(prefers-color-scheme: dark)')
-    const listener = (event: MediaQueryListEvent) =>
-      setSystemResolved(event.matches ? 'dark' : 'light')
-    query.addEventListener('change', listener)
-    setSystemResolved(query.matches ? 'dark' : 'light')
-    return () => query.removeEventListener('change', listener)
-  }, [])
+  // Track the OS preference so `system` stays live rather than read-once. A
+  // store subscription rather than an effect: the value is read during render,
+  // so there is no first frame in which a dark-mode reader is shown the light
+  // theme, and the server snapshot keeps hydration honest.
+  const systemResolved = useSyncExternalStore(subscribeToSystemTheme, systemTheme, serverTheme)
 
   const resolvedTheme: ResolvedTheme = theme === 'system' ? systemResolved : theme
 
@@ -112,6 +129,7 @@ export function ThemeProvider({
     restored.current = true
     try {
       const stored = window.localStorage.getItem(storageKey)
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- restoring from storage after hydration is the point
       if (stored === 'light' || stored === 'dark' || stored === 'system') setInternal(stored)
     } catch {
       // Private mode, or storage disabled. Carrying on with the default is the

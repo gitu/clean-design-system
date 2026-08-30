@@ -439,7 +439,6 @@ export const Import: Story = {
 }
 
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     a11y: { disable: true },

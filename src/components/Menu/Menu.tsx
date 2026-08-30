@@ -50,7 +50,7 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
   const menuId = useId()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
-  const itemRefs = useRef<Array<HTMLButtonElement | null>>([])
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   const enabled = items.filter(item => !item.disabled)
 
@@ -93,6 +93,7 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
       // Wrap, and skip disabled rows — a menu is short enough that landing on
       // something you cannot press is just a dead keystroke.
       let next = active
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of -- a bounded number of attempts, not an iteration
       for (let i = 0; i < items.length; i++) {
         next = (next + step + items.length) % items.length
         if (!items[next]?.disabled) break
@@ -107,7 +108,6 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
     }
   }
 
-  let lastGroup: string | undefined
 
   return (
     <div className={cx('cds-menu-wrap', className)} ref={wrapperRef}>
@@ -123,6 +123,7 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
       })}
 
       {open && enabled.length > 0 && (
+        // eslint-disable-next-line jsx-a11y/interactive-supports-focus -- roving focus lives on the menuitems
         <div
           id={menuId}
           className={cx('cds-menu', `cds-menu--${align}`)}
@@ -131,8 +132,8 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
           onKeyDown={onKeyDown}
         >
           {items.map((item, index) => {
-            const heading = item.group && item.group !== lastGroup ? item.group : null
-            lastGroup = item.group
+            const heading =
+              item.group && item.group !== items[index - 1]?.group ? item.group : null
             return (
               <div key={item.id}>
                 {heading && <p className="cds-menu__group cds-kicker">{heading}</p>}

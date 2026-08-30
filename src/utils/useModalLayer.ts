@@ -52,15 +52,16 @@ export function useModalLayer(open: boolean, onClose: () => void) {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const frame = requestAnimationFrame(() => {
-      panelRef.current?.querySelector<HTMLElement>('[data-autofocus]')?.focus() ??
-        panelRef.current?.focus()
+      const target =
+        panelRef.current?.querySelector<HTMLElement>('[data-autofocus]') ?? panelRef.current
+      target?.focus()
     })
 
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = previousOverflow
       cancelAnimationFrame(frame)
-      returnFocusRef.current?.focus?.()
+      returnFocusRef.current?.focus()
     }
   }, [open, onClose])
 

@@ -39,7 +39,6 @@ const SIGNALS = [
   { key: 'popularity', label: 'Popularity', slot: 4 },
 ] as const
 
-type SignalKey = (typeof SIGNALS)[number]['key']
 
 /** How far a result moved between the two variants. */
 function Movement({ from, to }: { from: number; to: number }) {
@@ -126,7 +125,7 @@ function RankedColumn({
                   series={SIGNALS.filter(s => !hiddenSignals.includes(s.key)).map(signal => ({
                     key: signal.key,
                     label: signal.label,
-                    value: (r: RankedResult) => r[signal.key as SignalKey],
+                    value: (r: RankedResult) => r[signal.key],
                   }))}
                   layout="horizontal"
                   stacked
@@ -325,7 +324,7 @@ export const Compare: Story = {
               x={p => p.queryIndex}
               datumKey={p => String(p.queryIndex)}
               series={ndcgSeries}
-              formatX={v => `Query ${v}`}
+              formatX={v => `Query ${String(v)}`}
               formatValue={n => n.toFixed(2)}
               height={220}
               curve="monotone"
@@ -357,7 +356,6 @@ export const Compare: Story = {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

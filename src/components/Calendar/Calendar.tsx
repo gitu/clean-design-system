@@ -229,8 +229,8 @@ export function Calendar({
                 </tr>
               </thead>
               <tbody>
-                {weeks.map(week => (
-                  <tr key={toIso(week[0] as Date)}>
+                {weeks.map((week, weekIndex) => (
+                  <tr key={`${toIso(gridMonth)}-w${weekIndex}`}>
                     {week.map(date => {
                       const iso = toIso(date)
                       const outside = date.getUTCMonth() !== gridMonth.getUTCMonth()

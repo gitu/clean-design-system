@@ -58,9 +58,9 @@ const COMMANDS: CommandItem[] = [
   { id: 'q2', group: 'Saved searches', label: 'Referendum coverage', description: '312 results' },
 ]
 
-const TABLE_COLUMNS: Array<TableColumn<Article>> = [
+const TABLE_COLUMNS: TableColumn<Article>[] = [
   { key: 'id', header: 'Ref', width: '7rem', cell: row => <span className="cds-mono">{row.id}</span> },
-  { key: 'title', header: 'Title', sortable: true, cell: row => <a className="cds-link-quiet" href="#">{row.title}</a> },
+  { key: 'title', header: 'Title', sortable: true, cell: row => <a className="cds-link-quiet" href={`#${row.id}`}>{row.title}</a> },
   { key: 'section', header: 'Section', width: '8rem', sortable: true, cell: row => row.section },
   { key: 'author', header: 'Author', width: '8rem', hideBelow: 'md', cell: row => row.author },
   { key: 'published', header: 'Published', width: '8rem', sortable: true, cell: row => formatDate(row.published) },
@@ -370,7 +370,9 @@ export const LandingScreen: Story = {
         <Panel variant="sunken" padding="md" title="Recent searches">
           <Stack gap={2}>
             {['swiss private banking', 'referendum turnout 2024', 'alpine rail freight'].map(q => (
-              <a key={q} className="cds-link cds-ui-sm" href="#">{q}</a>
+              <a key={q} className="cds-link cds-ui-sm" href={`#q-${encodeURIComponent(q)}`}>
+                {q}
+              </a>
             ))}
           </Stack>
         </Panel>
@@ -388,7 +390,6 @@ export const LandingScreen: Story = {
  * inside it. An iframe has its own viewport.
  */
 export const Mobile: Story = {
-  name: 'Mobile',
   parameters: {
     layout: 'padded',
     // The frame is a scaled-down copy of another story; running axe over it

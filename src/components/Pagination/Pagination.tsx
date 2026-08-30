@@ -21,13 +21,13 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onCh
  * Builds the page list with ellipses: always the first and last page, plus a
  * window around the current one. Returns `null` entries for the gaps.
  */
-function buildRange(page: number, pageCount: number, siblings: number): Array<number | null> {
+function buildRange(page: number, pageCount: number, siblings: number): (number | null)[] {
   const window = siblings * 2 + 5
   if (pageCount <= window) return Array.from({ length: pageCount }, (_, i) => i + 1)
 
   const left = Math.max(page - siblings, 2)
   const right = Math.min(page + siblings, pageCount - 1)
-  const out: Array<number | null> = [1]
+  const out: (number | null)[] = [1]
 
   if (left > 2) out.push(null)
   for (let i = left; i <= right; i++) out.push(i)

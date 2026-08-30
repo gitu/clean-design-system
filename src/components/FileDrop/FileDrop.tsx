@@ -82,8 +82,8 @@ export function FileDrop({
         if (field.disabled) return
         event.preventDefault()
         setDragging(false)
-        const dropped = event.dataTransfer?.files
-        if (!dropped?.length) return
+        const dropped = event.dataTransfer.files
+        if (dropped.length === 0) return
         // Put them on the input too, so a plain form submit carries them.
         if (inputRef.current) inputRef.current.files = dropped
         onFiles?.(dropped)

@@ -56,6 +56,8 @@
   "scripts": {
     "build": "tsup && node scripts/postbuild.mjs",
     "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
     "storybook": "pnpm registry && storybook dev -p 6006 --no-open",
     "build-storybook": "pnpm registry && storybook build",
@@ -68,7 +70,7 @@
     "check-tokens": "node scripts/check-tokens.mjs",
     "check-palette": "node scripts/check-series-palette.mjs",
     "shots": "node scripts/screenshot-stories.mjs --port 6006",
-    "verify": "pnpm typecheck && pnpm check-tokens && pnpm check-palette && pnpm build && pnpm smoke && pnpm test",
+    "verify": "pnpm lint && pnpm typecheck && pnpm check-tokens && pnpm check-palette && pnpm build && pnpm smoke && pnpm test",
     "prepublishOnly": "pnpm build && pnpm smoke && pnpm check-package"
   },
   "peerDependencies": {
@@ -76,6 +78,7 @@
     "react-dom": "^18.2.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@storybook/addon-a11y": "^10.5.10",
     "@storybook/addon-docs": "^10.5.10",
     "@storybook/addon-vitest": "^10.5.10",
@@ -86,6 +89,12 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-storybook": "^10.5.10",
+    "globals": "^17.11.0",
     "maplibre-gl": "^6.6.0",
     "playwright": "^1.62.1",
     "react": "^19.0.0",
@@ -93,6 +102,7 @@
     "storybook": "^10.5.10",
     "tsup": "^8.4.0",
     "typescript": "^5.7.3",
+    "typescript-eslint": "^8.68.0",
     "vite": "^8.2.2",
     "vitest": "^4.1.11"
   },

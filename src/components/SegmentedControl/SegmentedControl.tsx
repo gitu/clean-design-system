@@ -14,7 +14,7 @@ export interface SegmentedOption<T extends string = string> {
 }
 
 export interface SegmentedControlProps<T extends string = string> {
-  options: Array<SegmentedOption<T>>
+  options: SegmentedOption<T>[]
   value?: T
   defaultValue?: T
   onChange?: (value: T) => void

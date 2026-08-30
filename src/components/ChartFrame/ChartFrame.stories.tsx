@@ -22,7 +22,7 @@ const chart = (
   />
 )
 
-const columns: Array<Column<QueryWeek>> = [
+const columns: Column<QueryWeek>[] = [
   { key: 'week', header: 'Week', cell: row => row.week },
   {
     key: 'searches',

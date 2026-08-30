@@ -82,7 +82,7 @@ export const InATable: Story = {
       { id: 'gazette', name: 'Federal gazette', documents: 41288, trend: [8, 9, 8, 11, 10, 12, 12] },
       { id: 'photo', name: 'Photo desk', documents: 22940, trend: [30, 31, 29, 32, 30, 31, 30] },
     ]
-    const columns: Array<Column<Source>> = [
+    const columns: Column<Source>[] = [
       { key: 'name', header: 'Source', cell: row => row.name },
       {
         key: 'documents',

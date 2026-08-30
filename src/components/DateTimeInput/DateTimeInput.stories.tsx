@@ -40,13 +40,13 @@ export const Default: Story = {
     const time = canvas.getByLabelText('Embargo lifts — time')
     await userEvent.clear(time)
     await userEvent.type(time, '18:30{Enter}')
-    expect(value()).toBe('2024-07-12T18:30')
+    await expect(value()).toBe('2024-07-12T18:30')
 
     // Clearing the date clears the moment: a time on its own is not one.
     const date = canvas.getByLabelText('Embargo lifts — date')
     await userEvent.clear(date)
     await userEvent.tab()
-    expect(value()).toBe('—')
+    await expect(value()).toBe('—')
   },
 }
 

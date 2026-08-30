@@ -51,11 +51,8 @@ export function useChartInteraction<Datum>(props: ChartInteractionProps<Datum>) 
   )
 
   const selected =
-    props.selected !== undefined
-      ? props.selected
-      : syncs('selection') && group
-        ? group.selected
-        : ownSelected
+    props.selected ??
+    (syncs('selection') && group ? group.selected : ownSelected)
 
   const setSelected = useCallback(
     (keys: ChartKey[]) => {
@@ -69,11 +66,8 @@ export function useChartInteraction<Datum>(props: ChartInteractionProps<Datum>) 
   )
 
   const hiddenSeries =
-    props.hiddenSeries !== undefined
-      ? props.hiddenSeries
-      : syncs('series') && group
-        ? group.hiddenSeries
-        : ownHidden
+    props.hiddenSeries ??
+    (syncs('series') && group ? group.hiddenSeries : ownHidden)
 
   const setHiddenSeries = useCallback(
     (keys: string[]) => {

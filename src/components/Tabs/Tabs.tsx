@@ -69,6 +69,8 @@ export function Tabs({
 
   return (
     <div className={cx('cds-tabs', `cds-tabs--${variant}`, `cds-tabs--${size}`, className)}>
+      {/* Roving focus: the tabs are the tab stops, the list is not. */}
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
       <div
         ref={listRef}
         role="tablist"
@@ -116,8 +118,8 @@ export function Tabs({
       {children && (
         <div
           role="tabpanel"
-          id={`${uid}-panel-${active}`}
-          aria-labelledby={`${uid}-tab-${active}`}
+          id={`${uid}-panel-${active ?? ''}`}
+          aria-labelledby={`${uid}-tab-${active ?? ''}`}
           className="cds-tabs__panel"
           tabIndex={0}
         >
