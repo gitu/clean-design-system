@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Examples — Clean Design System</title>
+    <meta
+      name="description"
+      content="Whole applications built from the Clean Design System — faceted search, a task tracker, an analytics dashboard, a document reader and more, each running at its own address."
+    />
+    <link rel="icon" href="../favicon.svg" />
+    <!--
+      Paints the stored theme before the first frame. The provider restores it
+      in an effect, which is one frame too late: without this, a reader who
+      chose dark gets a white flash on every navigation across the site.
+      `system` deliberately writes nothing — the absence of the attribute is
+      what lets the media query decide.
+    -->
+    <script>
+      try {
+        var t = localStorage.getItem('cds-site-theme')
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-cds-theme', t)
+      } catch (e) {
+        /* Storage disabled. The default theme is a fine outcome. */
+      }
+    </script>
+    <script type="module" src="/src/examples.tsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

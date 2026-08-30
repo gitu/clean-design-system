@@ -1,11 +1,18 @@
 node_modules/
 dist/
-storybook-static/
 .ds-sync/
 ds-bundle/
 *.log
 .DS_Store
 .shots/
-# Generated from src/ by scripts/build-registry.mjs and served with the
-# Storybook. The source tree is the source of truth; this is a build artefact.
+# Generated from src/ by scripts/build-registry.mjs and copied to the root of
+# the published site. The source tree is the source of truth; this is output.
 registry/
+
+# One directory per sample application, written by site/vite.config.ts from
+# site/src/catalog.ts. The catalog is the source of truth; these are output.
+site/examples/*/
+
+# The built site: the landing page, the examples, the Storybook under
+# /storybook/, and the shadcn registry at the root.
+site-dist/

@@ -14,10 +14,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["src", ".storybook/**/*"],
-  "exclude": ["node_modules", "dist", "storybook-static"]
+  "include": ["src", ".storybook/**/*", "site/src", "site/vite.config.ts"],
+  "exclude": ["node_modules", "dist", "site-dist"]
 }

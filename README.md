@@ -8,9 +8,16 @@ interface chrome, hairline rules instead of boxes and shadows, generous
 whitespace, and exactly one loud colour. Its job, though, is dense application
 work: faceted search, long result lists, sortable tables, saved queries.
 
-**[Browse the Storybook →](https://gitu.github.io/clean-design-system/)** — every
-component with its states and a props table generated from the source, plus
-fourteen example applications built from the system.
+**[gitu.github.io/clean-design-system →](https://gitu.github.io/clean-design-system/)**
+— one landing page over three things:
+
+- **[/storybook/](https://gitu.github.io/clean-design-system/storybook/)** — every
+  component with its states and a props table generated from the source
+- **[/examples/](https://gitu.github.io/clean-design-system/examples/)** — the
+  pattern stories running as standalone pages, one per address, with no
+  Storybook chrome around them
+- **[/r/*.json](https://gitu.github.io/clean-design-system/r/button.json)** — the
+  shadcn registry, plain JSON over HTTPS and no account needed
 
 - 72 React components, TypeScript throughout
 - Plain CSS with custom properties — no runtime, no CSS framework, no build plugin
@@ -66,7 +73,7 @@ is reading the same scan that produced the files it will install.
 The registry is **generated from `src/` on every build** (`scripts/build-registry.mjs`),
 so it cannot drift from the package. Browse it at
 [`/registry.json`](https://gitu.github.io/clean-design-system/registry.json), or
-read the [Installation page](https://gitu.github.io/clean-design-system/?path=/docs/foundations-installation--docs)
+read the [Installation page](https://gitu.github.io/clean-design-system/storybook/?path=/docs/foundations-installation--docs)
 for the `components.json` you need and what the trade costs.
 
 No Tailwind. This is plain CSS with custom properties, and the reset is wrapped
@@ -287,7 +294,8 @@ controls table.
 
 ```bash
 pnpm install
-pnpm storybook       # http://localhost:6006
+pnpm storybook       # http://localhost:6006 — the component documentation
+pnpm site            # http://localhost:5173 — the landing page and the examples
 pnpm build           # dist/ — ESM, CJS, .d.ts and a single stylesheet
 pnpm typecheck
 pnpm test            # every story, in a real browser
@@ -339,6 +347,77 @@ One PNG per story, in both themes, failing on any console or page error. The
 browser emulates `prefers-reduced-motion`, so every duration token collapses to
 `0ms` and animated stories land on their final frame instead of being caught
 mid-flight — which is what makes the images comparable between runs.
+
+### The published site
+
+`pnpm build-site` produces one directory, `site-dist/`, which is what GitHub
+Pages serves:
+
+```
+/                    the landing page — where to go, and why
+/examples/           the index of sample applications
+/examples/<slug>/    one whole application per directory
+/storybook/          the component documentation
+/r/*.json            the shadcn registry
+/llms.txt            the index for agents
+```
+
+Two things about that layout are decisions rather than accidents.
+
+**The Storybook is not at the root.** It used to be, which made the front door
+of the project a sidebar full of component names — the right thing for someone
+already using the system and the wrong thing for someone deciding whether to.
+The landing page in front of it costs one page and answers the question that
+was actually being asked.
+
+**The registry is still at the root.** `npx shadcn add
+https://gitu.github.io/clean-design-system/r/button.json` is a public contract:
+it is in this README, in `llms.txt`, and in whatever `components.json` anyone
+has already written. It used to be served by Storybook's `staticDirs`, which
+would have moved it to `/storybook/r/…` along with everything else, so
+`site/vite.config.ts` now copies it to the site root and `.storybook/main.ts`
+has nothing to do with it.
+
+```bash
+pnpm site              # dev server, same URLs as the deployed site
+pnpm build-pages       # landing page, examples and registry into site-dist/
+pnpm build-storybook   # the Storybook into site-dist/storybook/
+pnpm build-site        # both, in that order
+pnpm check-site        # opens every built page in a browser
+```
+
+`pnpm site` and `pnpm storybook` are two servers on two ports, so in development
+the links between them do not resolve — `/storybook/` and `/r/` only exist once
+the pieces are in the same directory. To click through the site as it will be
+published, build it and serve `site-dist/`.
+
+### The sample applications
+
+Every **Patterns** story is published twice: inside the Storybook, and as a page
+of its own under [`/examples/`](https://gitu.github.io/clean-design-system/examples/).
+The second is not a copy — the pages import `src/stories/*.stories.tsx`
+directly, so a story and its application are the same code and cannot drift.
+
+The reason for having both is that they answer different questions. Storybook
+answers *how does this component behave*; a page at its own address answers
+*what is it like to use this*. The addon panels, the iframe and the sidebar all
+get in the way of the second one, and none of them can be resized to a phone or
+sent to somebody as a link.
+
+`site/src/catalog.ts` is the whole configuration: slug, title, blurb, and the
+story to render. `site/vite.config.ts` turns each entry into a directory with an
+`index.html` before the build starts, so adding an example is one entry and
+nothing else. Those directories are generated and gitignored.
+
+`check-site` is the gate worth explaining. A story whose `render` calls
+`useState` is a component, not a function — Storybook mounts it, and code that
+*calls* it instead takes the page down with a null-hook error that `tsc`, ESLint
+and the build itself all pass cleanly. So the check serves the built output and
+opens all twenty-one pages: each must mount something, apply the system's
+canvas, and log nothing. It then asserts that the registry, `llms.txt`, the
+favicon and the Storybook's own entry point are where the links say they are —
+none of which any page load would notice. It runs on every pull request and
+before every Pages deploy.
 
 ## Releasing
 
