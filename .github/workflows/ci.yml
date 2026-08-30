@@ -56,15 +56,13 @@ jobs:
       # Every story, with axe violations as failures.
       - run: pnpm test
 
-      # Not uploaded anywhere — built because the Storybook is this package's
-      # documentation, and a change that breaks the docs build should fail here
-      # rather than on the deploy that follows the merge.
-      - run: pnpm build-storybook
+      # Not uploaded anywhere — built because this site is the package's
+      # documentation, and a change that breaks it should fail here rather than
+      # on the deploy that follows the merge. The same two steps the Pages
+      # workflow runs.
+      - run: pnpm build-site
 
-      # The pattern stories again, this time as the standalone pages published
-      # under /examples/. `check-examples` opens every one of them in the
-      # browser installed above: the failure this catches — a story that mounts
-      # under Storybook and throws as a page — is invisible to lint, to tsc and
-      # to the build itself.
-      - run: pnpm build-examples
-      - run: pnpm check-examples
+      # Then every page of it is opened in the browser installed above. The
+      # failure this catches — a story that mounts under Storybook and throws as
+      # a standalone page — is invisible to lint, to tsc and to the build itself.
+      - run: pnpm check-site

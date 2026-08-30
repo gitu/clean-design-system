@@ -22,12 +22,13 @@ interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * pattern stories is a demo that does nothing, so the question never came up
  * there.
  *
- * On the index it does: every one of these is a real navigation to another
- * page, and a `<button>` with an onClick that sets `location.href` would take
- * away middle-click, open-in-new-tab and the status bar. So this borrows the
- * button's class names for an anchor — which works because the button styles
- * are written as plain classes with no element selector in them. It lives here,
- * in the examples, rather than being proposed as a component.
+ * On the pages in front of them it does: every one of these is a real
+ * navigation to another page, and a `<button>` with an onClick that sets
+ * `location.href` would take away middle-click, open-in-new-tab and the status
+ * bar. So this borrows the button's class names for an anchor — which works
+ * because the button styles are written as plain classes with no element
+ * selector in them. It lives here, in the site, rather than being proposed as a
+ * component.
  */
 export function LinkButton({
   variant = 'secondary',
@@ -40,7 +41,7 @@ export function LinkButton({
 }: LinkButtonProps) {
   return (
     <a
-      className={cx('cds-btn', `cds-btn--${variant}`, `cds-btn--${size}`, 'ex-link-btn', className)}
+      className={cx('cds-btn', `cds-btn--${variant}`, `cds-btn--${size}`, 'site-link-btn', className)}
       {...rest}
     >
       {iconStart && <span className="cds-btn__icon">{iconStart}</span>}

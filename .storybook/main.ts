@@ -11,11 +11,12 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
-  // The shadcn-compatible registry is served from the root of the docs site, so
-  // `https://<host>/r/button.json` is a real URL that the shadcn CLI can install
-  // from. It is generated from src/ by scripts/build-registry.mjs, which both
-  // the `storybook` and `build-storybook` scripts run first.
-  staticDirs: [{ from: '../registry', to: '/' }],
+  // No `staticDirs`. The shadcn registry used to ride along here, which put it
+  // at the root of whatever the Storybook was served from — fine while that was
+  // the whole site, and wrong the moment the Storybook moved under /storybook/.
+  // `https://<host>/r/button.json` is a public contract, so the registry is now
+  // copied to the site root by site/vite.config.ts instead, and this build has
+  // nothing to do with it.
   viteFinal: config => ({
     ...config,
     optimizeDeps: {

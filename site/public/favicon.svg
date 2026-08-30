@@ -1,0 +1,19 @@
+<!--
+  The wordmark reduced to its last glyph.
+
+  Every masthead in this system ends in an underscore — a terminal prompt
+  rather than a logo — so at sixteen pixels that is the only part still worth
+  drawing. The colours are `--cds-color-brand-mark` in each theme, written as
+  literals because a favicon is fetched outside the page and inherits none of
+  its custom properties; `prefers-color-scheme` still applies to an SVG the
+  browser renders as an icon.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <style>
+    rect { fill: #1668c9 }
+    @media (prefers-color-scheme: dark) {
+      rect { fill: #4d9bf5 }
+    }
+  </style>
+  <rect x="5" y="21" width="22" height="4" rx="1" />
+</svg>

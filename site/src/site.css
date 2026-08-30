@@ -1,11 +1,12 @@
 /* ---------------------------------------------------------------------------
- * The only styles that belong to the examples site itself.
+ * The only styles that belong to the site itself.
  *
  * Everything else on these pages — the masthead, the board, the reader column,
- * the landing layout the index borrows — comes from `.storybook/preview.css`,
- * which is the story chrome the patterns were written against. This file adds
- * the two things that exist only here: the corner link back to the index, and
- * the grid of cards on it.
+ * the landing layout the two index pages borrow — comes from
+ * `.storybook/preview.css`, which is the story chrome the patterns were written
+ * against. This file adds the few things that exist only here: the corner link
+ * back out of a sample application, and the grid of cards on the pages in front
+ * of them.
  *
  * Tokens only, no literal colours, so both themes come out for free.
  * ------------------------------------------------------------------------- */
@@ -32,7 +33,7 @@ html {
  * Below `--cds-z-toast` and below the overlay layer on purpose: a dialog's
  * scrim should cover this, because while a modal is open this is not
  * something you may click. */
-.ex-return {
+.site-return {
   position: fixed;
   left: var(--cds-space-3);
   bottom: var(--cds-space-3);
@@ -63,7 +64,7 @@ html {
 
 /* Clipped, not hidden: `display: none` or `visibility: hidden` would take the
  * link's accessible name with it. */
-.ex-return__label {
+.site-return__label {
   max-width: 0;
   overflow: hidden;
   opacity: 0;
@@ -72,36 +73,71 @@ html {
     opacity var(--cds-duration-fast) var(--cds-ease-standard);
 }
 
-.ex-return:hover,
-.ex-return:focus-visible {
+.site-return:hover,
+.site-return:focus-visible {
   opacity: 1;
   color: var(--cds-color-text);
   border-color: var(--cds-color-rule-strong);
 }
 
-.ex-return:hover .ex-return__label,
-.ex-return:focus-visible .ex-return__label {
+.site-return:hover .site-return__label,
+.site-return:focus-visible .site-return__label {
   max-width: 10rem;
   opacity: 1;
   padding-inline-end: var(--cds-space-1);
 }
 
 @media print {
-  .ex-return {
+  .site-return {
     display: none;
   }
 }
 
-/* --- The index ----------------------------------------------------------- */
+/* --- The pages in front: the landing page and the examples index --------- */
 
-.ex-grid {
+/* The wordmark is a link home on every page. It keeps the masthead's colour and
+ * loses the underline; the hairline appears only on hover, so the bar does not
+ * read as having a link in it until you are looking for one. */
+.site-brand {
+  text-decoration: none;
+  border-bottom: var(--cds-hairline) solid transparent;
+}
+
+.site-brand:hover {
+  border-bottom-color: currentColor;
+}
+
+/* The one line on the site meant to be copied into a terminal. Wraps rather
+ * than scrolls: a command you cannot see the end of is a command you will
+ * paste half of. */
+.site-command {
+  font-family: var(--cds-font-mono);
+  font-size: var(--cds-text-sm);
+  line-height: 1.6;
+  color: var(--cds-color-text);
+  overflow-wrap: anywhere;
+}
+
+
+.site-grid {
   display: grid;
+  /* `auto-fill` rather than `auto-fit`: the examples index has groups of two
+   * as well as groups of six, and a group of two stretched across a 1440px
+   * row would give those two cards a measure nothing else on the page has. An
+   * empty track at the end is the better shape. */
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
   gap: var(--cds-space-4);
   margin-top: var(--cds-space-6);
 }
 
-.ex-card {
+/* The landing page has exactly three cards and wants them to be the row, not
+ * three-quarters of it. Here `auto-fit` is right: there is no group of two to
+ * protect, and the three collapse to two and then one as the viewport narrows. */
+.site-grid--fill {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+}
+
+.site-card {
   display: flex;
   flex-direction: column;
   gap: var(--cds-space-2);
@@ -116,12 +152,12 @@ html {
     background-color var(--cds-duration-fast) var(--cds-ease-standard);
 }
 
-.ex-card:hover {
+.site-card:hover {
   border-color: var(--cds-color-rule-strong);
   background-color: var(--cds-color-surface-hover);
 }
 
-.ex-card__title {
+.site-card__title {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -131,18 +167,18 @@ html {
 
 /* The arrow leans out on hover. A three-pixel move, which is all a card of this
  * weight can carry without turning into an advertisement. */
-.ex-card__arrow {
+.site-card__arrow {
   flex: none;
   color: var(--cds-color-text-subtle);
   transition: transform var(--cds-duration-fast) var(--cds-ease-standard);
 }
 
-.ex-card:hover .ex-card__arrow {
+.site-card:hover .site-card__arrow {
   transform: translateX(3px);
   color: var(--cds-color-text-accent);
 }
 
-.ex-card__summary {
+.site-card__summary {
   margin: 0;
   color: var(--cds-color-text-muted);
   /* Pushes the source line to the bottom so the cards' footers line up even
@@ -150,25 +186,25 @@ html {
   flex: 1;
 }
 
-.ex-card__source {
+.site-card__meta {
   font-size: var(--cds-text-xs);
   color: var(--cds-color-text-subtle);
 }
 
 /* An anchor wearing the button's classes. The button styles are element-blind,
  * so the only thing that leaks through is the anchor's own underline. */
-.ex-link-btn {
+.site-link-btn {
   text-decoration: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ex-return,
-  .ex-return__label,
-  .ex-card,
-  .ex-card__arrow {
+  .site-return,
+  .site-return__label,
+  .site-card,
+  .site-card__arrow {
     transition: none;
   }
-  .ex-card:hover .ex-card__arrow {
+  .site-card:hover .site-card__arrow {
     transform: none;
   }
 }

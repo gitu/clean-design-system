@@ -11,7 +11,7 @@ import { EXAMPLES } from './catalog'
 import '../../fonts/fonts.css'
 import '../../src/styles/index.css'
 import '../../.storybook/preview.css'
-import './examples.css'
+import './site.css'
 
 /**
  * The shape of a story module, reduced to what a page actually needs.

@@ -19,6 +19,6 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["src", ".storybook/**/*", "examples/src", "examples/vite.config.ts"],
-  "exclude": ["node_modules", "dist", "storybook-static"]
+  "include": ["src", ".storybook/**/*", "site/src", "site/vite.config.ts"],
+  "exclude": ["node_modules", "dist", "site-dist"]
 }

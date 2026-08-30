@@ -33,9 +33,10 @@ export default tseslint.config(
       'coverage/**',
       'node_modules/**',
       '.shots/**',
-      // Generated page shells, written by examples/vite.config.ts. They hold
-      // no JavaScript beyond a two-line import of examples/src/boot.tsx.
-      'examples/*/index.html',
+      // Generated page shells, written by site/vite.config.ts. They hold no
+      // JavaScript beyond a two-line import of site/src/boot.tsx.
+      'site/examples/*/index.html',
+      'site-dist/**',
     ],
   },
 
@@ -137,7 +138,7 @@ export default tseslint.config(
 
   // Browser code: everything shipped, plus the Storybook config.
   {
-    files: ['src/**/*.{ts,tsx}', '.storybook/**/*.{ts,tsx}', 'examples/src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}', '.storybook/**/*.{ts,tsx}', 'site/src/**/*.{ts,tsx}'],
     languageOptions: {
       globals: { ...globals.browser },
     },
@@ -176,12 +177,12 @@ export default tseslint.config(
     },
   },
 
-  // `check-examples.mjs` drives a browser. The callbacks it hands to
+  // `check-site.mjs` drives a browser. The callbacks it hands to
   // `page.evaluate` are serialised and run *in the page*, so `document` and
   // friends really are in scope — in those functions, and only those. Node's
   // globals come from the block above and stay.
   {
-    files: ['scripts/check-examples.mjs'],
+    files: ['scripts/check-site.mjs'],
     languageOptions: {
       globals: { ...globals.browser },
     },
@@ -189,7 +190,7 @@ export default tseslint.config(
 
   // Config files at the repo root run in Node.
   {
-    files: ['*.config.{ts,js}', 'eslint.config.js', 'examples/vite.config.ts'],
+    files: ['*.config.{ts,js}', 'eslint.config.js', 'site/vite.config.ts'],
     languageOptions: {
       globals: { ...globals.node },
     },

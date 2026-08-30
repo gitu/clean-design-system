@@ -1,13 +1,21 @@
 import { createRoot } from 'react-dom/client'
-import { Badge, Icon, Stack, Tag, ThemeToggle } from '../../src/index'
+import { Badge, Icon, Stack, Tag } from '../../src/index'
+import { Card, SiteBar, SiteFooter, type SiteLinks } from './Chrome'
 import { LinkButton } from './LinkButton'
 import { Shell } from './Shell'
 import { EXAMPLES, GROUPS, type Group } from './catalog'
-// Same imports, same order, as `boot.tsx` and `.storybook/preview.tsx`.
+// Same imports, in the same order, as `.storybook/preview.tsx`.
 import '../../fonts/fonts.css'
 import '../../src/styles/index.css'
 import '../../.storybook/preview.css'
-import './examples.css'
+import './site.css'
+
+const LINKS: SiteLinks = {
+  home: '../',
+  storybook: '../storybook/',
+  examples: './',
+  install: '../storybook/?path=/docs/foundations-installation--docs',
+}
 
 /** A line under each section heading, saying what the section is about. */
 const GROUP_NOTES: Record<Group, string> = {
@@ -18,56 +26,23 @@ const GROUP_NOTES: Record<Group, string> = {
 }
 
 /**
- * One example, as a card.
- *
- * The source file is printed on it deliberately. Every one of these pages is a
- * story that already exists in `src/stories`, and the fastest thing a reader
- * can be given is the name of the file to open.
- */
-function ExampleCard({ slug, title, summary, module: file }: (typeof EXAMPLES)[number]) {
-  return (
-    <a className="ex-card" href={`./${slug}/`}>
-      <span className="cds-title ex-card__title">
-        {title}
-        <Icon name="arrow-right" size={16} className="ex-card__arrow" />
-      </span>
-      <p className="cds-body-sm ex-card__summary">{summary}</p>
-      <span className="cds-mono ex-card__source">{file}.stories.tsx</span>
-    </a>
-  )
-}
-
-/**
- * The index.
+ * The index of sample applications.
  *
  * It reuses the Landing pattern's own layout classes rather than inventing a
  * second set — same bar, same hero measure, same section rhythm, same footer
- * rule. That is the point of putting it here: a directory of demos that did
- * not itself look like the system would be the one page on the site arguing
- * against it.
+ * rule. That is the point of putting it here: a directory of demos that did not
+ * itself look like the system would be the one page on the site arguing against
+ * it.
  */
-function Index() {
+function Examples() {
   return (
     <Shell layout="fullscreen">
       <div className="sb-landing">
-        <header className="sb-landing__bar">
-          <span className="sb-masthead__brand">clean_</span>
-          <span className="sb-masthead__section cds-kicker">Examples</span>
-          <div className="sb-landing__bar-actions">
-            <ThemeToggle />
-            <LinkButton variant="ghost" size="sm" href="../">
-              Storybook
-            </LinkButton>
-            <LinkButton
-              variant="secondary"
-              size="sm"
-              href="https://github.com/gitu/clean-design-system"
-              iconEnd={<Icon name="external" size={14} />}
-            >
-              GitHub
-            </LinkButton>
-          </div>
-        </header>
+        <SiteBar section="Examples" links={LINKS}>
+          <LinkButton variant="ghost" size="sm" href={LINKS.storybook}>
+            Storybook
+          </LinkButton>
+        </SiteBar>
 
         <main>
           <section className="sb-landing__hero">
@@ -88,13 +63,17 @@ function Index() {
                 resize it, tab through it and read its source.
               </p>
               <div className="sb-landing__cta">
-                <LinkButton variant="primary" size="lg" href={`./${EXAMPLES[0]?.slug ?? ''}/`}>
+                <LinkButton
+                  variant="primary"
+                  size="lg"
+                  href={`./${EXAMPLES[0]?.slug ?? ''}/`}
+                >
                   Open the search application
                 </LinkButton>
                 <LinkButton
                   variant="secondary"
                   size="lg"
-                  href="../"
+                  href={LINKS.storybook}
                   iconStart={<Icon name="document" size={15} />}
                 >
                   Component documentation
@@ -142,9 +121,20 @@ function Index() {
                     {GROUP_NOTES[group]}
                   </p>
                 </Stack>
-                <div className="ex-grid">
+                <div className="site-grid">
                   {inGroup.map(example => (
-                    <ExampleCard key={example.slug} {...example} />
+                    // The source file is on the card deliberately. Every one of
+                    // these pages is a story that already exists in
+                    // `src/stories`, and the fastest thing a reader can be
+                    // given is the name of the file to open.
+                    <Card
+                      key={example.slug}
+                      href={`./${example.slug}/`}
+                      title={example.title}
+                      meta={`${example.module}.stories.tsx`}
+                    >
+                      {example.summary}
+                    </Card>
                   ))}
                 </div>
               </section>
@@ -152,27 +142,11 @@ function Index() {
           })}
         </main>
 
-        <footer className="sb-landing__footer">
-          <span className="cds-body-sm" style={{ color: 'var(--cds-color-text-subtle)' }}>
-            Built from{' '}
-            <a className="cds-link" href="https://github.com/gitu/clean-design-system">
-              @gitu/clean-design-system
-            </a>
-            . The components are documented in the{' '}
-            <a className="cds-link" href="../">
-              Storybook
-            </a>
-            , and installable from the{' '}
-            <a className="cds-link" href="../r/button.json">
-              shadcn registry
-            </a>{' '}
-            beside it.
-          </span>
-        </footer>
+        <SiteFooter links={LINKS} />
       </div>
     </Shell>
   )
 }
 
 const root = document.getElementById('root')
-if (root) createRoot(root).render(<Index />)
+if (root) createRoot(root).render(<Examples />)

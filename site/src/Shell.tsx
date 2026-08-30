@@ -2,12 +2,15 @@ import type { ReactNode } from 'react'
 import { Icon, ThemeProvider } from '../../src/index'
 
 /**
- * Where the theme choice is kept. One key for every page under `/examples/`,
- * so switching to dark in the task tracker and then opening the landing page
- * lands you in dark — they are the same site, and a demo that forgets its own
- * theme on every navigation reads as broken.
+ * Where the theme choice is kept. One key for the whole site — landing page,
+ * examples index and every sample application — so switching to dark in the
+ * task tracker and then going back to the front page lands you in dark. A site
+ * that forgets its own theme on every navigation reads as broken.
+ *
+ * The inline script in each page's `<head>` reads the same key before the first
+ * frame; keep them in step.
  */
-const THEME_KEY = 'cds-examples-theme'
+const THEME_KEY = 'cds-site-theme'
 
 interface ShellProps {
   /** Rendered inside the canvas. A whole application, usually. */
@@ -46,12 +49,12 @@ export function Shell({ children, layout = 'fullscreen', indexHref }: ShellProps
         {children}
       </div>
       {indexHref && (
-        <a className="ex-return" href={indexHref}>
+        <a className="site-return" href={indexHref}>
           <Icon name="chevron-left" size={14} />
           {/* Clipped rather than removed: the link's accessible name is this
               text, and an icon-only link back to a page called "Examples"
               would have to invent one. */}
-          <span className="ex-return__label">All examples</span>
+          <span className="site-return__label">All examples</span>
         </a>
       )}
     </ThemeProvider>

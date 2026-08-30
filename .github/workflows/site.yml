@@ -1,12 +1,13 @@
 # Publishes the documentation site to GitHub Pages on every push to the default
-# branch: the Storybook at the root, and the sample applications under
-# /examples/.
+# branch: a landing page at the root, the component documentation under
+# /storybook/, the sample applications under /examples/, and the shadcn registry
+# at /r/ — one artefact, one deploy.
 #
 # The Storybook *is* the documentation for this package: every component's props
 # table is generated from its JSDoc, and the Patterns stories are the only place
 # the system is shown composing into real screens. A design system whose docs
 # only run on the author's laptop is a design system nobody adopts.
-name: Storybook
+name: Site
 
 on:
   push:
@@ -56,26 +57,22 @@ jobs:
       # Every story, with axe violations as failures.
       - run: pnpm test
 
-      # Generates the shadcn registry from src/ and builds the Storybook around
-      # it, so the docs site and the registry it serves are always the same
-      # commit. `pnpm build-storybook` runs the generator itself.
-      - run: pnpm build-storybook
+      # Builds site-dist/ in one go: the registry is generated from src/, the
+      # landing page and the examples are built around it, and the Storybook
+      # goes in underneath at /storybook/. Everything published therefore comes
+      # from one commit, which is the only way the registry and the docs
+      # describing it can be trusted to agree.
+      - run: pnpm build-site
 
-      # The pattern stories as standalone pages, built *into* the Storybook's
-      # output at storybook-static/examples/ so the whole site stays one
-      # artefact and one deploy. Strictly after the line above, which empties
-      # that directory.
-      - run: pnpm build-examples
-
-      # Then opened, one at a time, in the browser installed above. A story
-      # that renders under Storybook and throws as a page is invisible to every
-      # other gate here, and a Pages deploy of twenty blank screens is a worse
-      # outcome than a red build.
-      - run: pnpm check-examples
+      # Then every page of it is opened, one at a time, in the browser installed
+      # above. A story that renders under Storybook and throws as a standalone
+      # page is invisible to every other gate here, and a Pages deploy of
+      # twenty-one blank screens is a worse outcome than a red build.
+      - run: pnpm check-site
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-static
+          path: site-dist
 
   deploy:
     needs: build
