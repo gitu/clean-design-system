@@ -1,4 +1,4 @@
-import { useId, useRef, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { cx } from '../../utils/cx'
 import { useControllableState } from '../../utils/useControllableState'
 import './Tabs.css'
@@ -56,6 +56,42 @@ export function Tabs({
   const uid = useId()
   const listRef = useRef<HTMLDivElement>(null)
 
+  // The tablist scrolls when it does not fit, and its scrollbar is hidden —
+  // which leaves a row of tabs cut off mid-word with nothing to say there
+  // are more. Arrow keys and a swipe both reach them; a reader with a mouse
+  // on a narrow window has no way to know they are there.
+  //
+  // So: fade whichever edge has more beyond it. Purely decorative, and it
+  // costs nothing when everything fits.
+  const [edges, setEdges] = useState({ start: false, end: false })
+
+  const measure = useCallback(() => {
+    const el = listRef.current
+    if (!el) return
+    // A couple of pixels of slack, or sub-pixel rounding leaves the fade on
+    // at the very end of the scroll.
+    const max = el.scrollWidth - el.clientWidth
+    const x = Math.abs(el.scrollLeft)
+    setEdges({ start: x > 2, end: x < max - 2 })
+  }, [])
+
+  useLayoutEffect(() => {
+    const el = listRef.current
+    if (!el) return undefined
+    measure()
+    el.addEventListener('scroll', measure, { passive: true })
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => {
+      el.removeEventListener('scroll', measure)
+      observer.disconnect()
+    }
+  }, [measure])
+
+  // Re-measure when the tabs themselves change: a different set is a
+  // different width, and nothing above fires for that.
+  useEffect(measure, [measure, items])
+
   function move(delta: number) {
     const enabled = items.filter(i => !i.disabled)
     const index = enabled.findIndex(i => i.value === active)
@@ -76,6 +112,8 @@ export function Tabs({
         role="tablist"
         aria-label={label}
         className={cx('cds-tabs__list', fullWidth && 'cds-tabs__list--full')}
+        data-overflow-start={edges.start || undefined}
+        data-overflow-end={edges.end || undefined}
         onKeyDown={event => {
           if (event.key === 'ArrowRight') {
             event.preventDefault()

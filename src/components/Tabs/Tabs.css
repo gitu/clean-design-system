@@ -16,6 +16,25 @@
 .cds-tabs__list::-webkit-scrollbar {
   display: none;
 }
+
+/* Fade whichever edge still has tabs beyond it. A mask rather than an
+ * overlaid gradient, so it cannot sit on top of a tab and swallow a click,
+ * and so it works on any ground the tablist happens to be on. */
+.cds-tabs__list[data-overflow-start] {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--cds-space-6));
+}
+.cds-tabs__list[data-overflow-end] {
+  mask-image: linear-gradient(to left, transparent 0, #000 var(--cds-space-6));
+}
+.cds-tabs__list[data-overflow-start][data-overflow-end] {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--cds-space-6),
+    #000 calc(100% - var(--cds-space-6)),
+    transparent 100%
+  );
+}
 .cds-tabs__list--full > .cds-tabs__tab {
   flex: 1;
   justify-content: center;

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, waitFor, within } from 'storybook/test'
 import { Tabs } from './Tabs'
 import { Icon } from '../Icon/Icon'
 
@@ -55,4 +56,40 @@ export const WithIcons: Story = {
 
 export const FullWidth: Story = {
   args: { fullWidth: true, items: ITEMS.slice(0, 4) },
+}
+
+/**
+ * More tabs than fit.
+ *
+ * The tablist scrolls and its scrollbar is hidden, which on a narrow window
+ * left a row cut off mid-word with nothing to say there was more — reachable
+ * by arrow key or a swipe, but only if you already knew to try. The edge
+ * with more beyond it is faded now.
+ *
+ * Rendered in a deliberately narrow box so the case is visible in the
+ * Storybook canvas rather than only on a phone.
+ */
+export const Overflowing: Story = {
+  render: args => {
+    const [value, setValue] = useState('all')
+    return (
+      <div style={{ maxWidth: 320 }}>
+        <Tabs {...args} value={value} onChange={setValue}>
+          <p className="cds-body">Showing the “{value}” scope.</p>
+        </Tabs>
+      </div>
+    )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const list = canvas.getByRole('tablist')
+
+    // Only the trailing edge to begin with: nothing is off the start yet.
+    await waitFor(() => expect(list).toHaveAttribute('data-overflow-end'))
+    await expect(list).not.toHaveAttribute('data-overflow-start')
+
+    list.scrollLeft = list.scrollWidth
+    await waitFor(() => expect(list).toHaveAttribute('data-overflow-start'))
+    await expect(list).not.toHaveAttribute('data-overflow-end')
+  },
 }
