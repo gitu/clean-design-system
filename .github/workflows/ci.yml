@@ -1,0 +1,62 @@
+# Runs the gates on every pull request.
+#
+# Until now nothing ran until merge: the Storybook workflow fires on a push to
+# the default branch, and the release workflow on a tag. Both run the same
+# checks, so a broken change was caught — just after it had landed, by a red
+# deploy rather than a red pull request.
+#
+# This is deliberately the same list, in the same order, as the build job in
+# storybook.yml, which is what runs the moment this merges. A pull request that
+# is green here and red there would be worse than no check at all.
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Superseded runs are cancelled: on a branch that is being pushed to, only the
+# result for the tip is worth waiting for. The opposite of the Pages workflow,
+# where a queued deploy has to finish.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      # Node 22, matching storybook.yml — the workflow this pull request will
+      # hand off to on merge. (release.yml pins 24; worth aligning one day.)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The story tests run in a real browser, so it has to be fetched. Only
+      # Chromium — the a11y and interaction assertions are not browser-specific,
+      # and three engines would triple the wait for no extra signal.
+      - run: pnpm exec playwright install --with-deps chromium
+
+      # Spelled out rather than `pnpm verify`, so a failure names the gate.
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm check-tokens
+      - run: pnpm check-palette
+      - run: pnpm build
+      - run: pnpm smoke
+      # Every story, with axe violations as failures.
+      - run: pnpm test
+
+      # Not uploaded anywhere — built because the Storybook is this package's
+      # documentation, and a change that breaks the docs build should fail here
+      # rather than on the deploy that follows the merge.
+      - run: pnpm build-storybook
