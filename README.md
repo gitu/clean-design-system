@@ -9,8 +9,11 @@ whitespace, and exactly one loud colour. Its job, though, is dense application
 work: faceted search, long result lists, sortable tables, saved queries.
 
 **[Browse the Storybook →](https://gitu.github.io/clean-design-system/)** — every
-component with its states and a props table generated from the source, plus
-fourteen example applications built from the system.
+component with its states and a props table generated from the source.
+
+**[Open the sample applications →](https://gitu.github.io/clean-design-system/examples/)**
+— the same pattern stories running as standalone pages, one per address, with
+no Storybook chrome around them.
 
 - 72 React components, TypeScript throughout
 - Plain CSS with custom properties — no runtime, no CSS framework, no build plugin
@@ -288,6 +291,7 @@ controls table.
 ```bash
 pnpm install
 pnpm storybook       # http://localhost:6006
+pnpm examples        # http://localhost:5173 — the sample applications
 pnpm build           # dist/ — ESM, CJS, .d.ts and a single stylesheet
 pnpm typecheck
 pnpm test            # every story, in a real browser
@@ -339,6 +343,39 @@ One PNG per story, in both themes, failing on any console or page error. The
 browser emulates `prefers-reduced-motion`, so every duration token collapses to
 `0ms` and animated stories land on their final frame instead of being caught
 mid-flight — which is what makes the images comparable between runs.
+
+### The examples site
+
+Every **Patterns** story is published twice: inside the Storybook, and as a page
+of its own under [`/examples/`](https://gitu.github.io/clean-design-system/examples/)
+with an index in front of it. The second is not a copy — the pages import
+`src/stories/*.stories.tsx` directly, so a story and its application are the
+same code and cannot drift.
+
+The reason for having both is that they answer different questions. Storybook
+answers *how does this component behave*; a page at its own address answers
+*what is it like to use this*. The addon panels, the iframe and the sidebar all
+get in the way of the second one, and none of them can be resized to a phone or
+sent to somebody as a link.
+
+```bash
+pnpm examples          # dev server, same URLs as the deployed site
+pnpm build-examples    # into storybook-static/examples/
+pnpm check-examples    # opens every built page in a browser
+pnpm build-site        # Storybook first, then the examples into it
+```
+
+`examples/src/catalog.ts` is the whole configuration: slug, title, blurb, and
+the story to render. `examples/vite.config.ts` turns each entry into a
+directory with an `index.html` before the build starts, so adding an example is
+one entry and nothing else. Those directories are generated and gitignored.
+
+`check-examples` is the gate worth explaining. A story whose `render` calls
+`useState` is a component, not a function — Storybook mounts it, and code that
+*calls* it instead takes the page down with a null-hook error that `tsc`, ESLint
+and the build itself all pass cleanly. So the check serves the built output and
+opens all twenty pages: each must mount something, apply the system's canvas,
+and log nothing. It runs on every pull request and before every Pages deploy.
 
 ## Releasing
 

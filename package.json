@@ -61,6 +61,10 @@
     "typecheck": "tsc --noEmit",
     "storybook": "pnpm registry && storybook dev -p 6006 --no-open",
     "build-storybook": "pnpm registry && storybook build",
+    "examples": "vite --config examples/vite.config.ts",
+    "build-examples": "vite build --config examples/vite.config.ts",
+    "build-site": "pnpm build-storybook && pnpm build-examples",
+    "check-examples": "node scripts/check-examples.mjs",
     "clean": "rm -rf dist storybook-static",
     "smoke": "node scripts/smoke.mjs",
     "check-package": "node scripts/check-package.mjs",
@@ -70,7 +74,7 @@
     "check-tokens": "node scripts/check-tokens.mjs",
     "check-palette": "node scripts/check-series-palette.mjs",
     "shots": "node scripts/screenshot-stories.mjs --port 6006",
-    "verify": "pnpm lint && pnpm typecheck && pnpm check-tokens && pnpm check-palette && pnpm build && pnpm smoke && pnpm test",
+    "verify": "pnpm lint && pnpm typecheck && pnpm check-tokens && pnpm check-palette && pnpm build && pnpm smoke && pnpm test && pnpm build-examples && pnpm check-examples",
     "prepublishOnly": "pnpm build && pnpm smoke && pnpm check-package"
   },
   "peerDependencies": {

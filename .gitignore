@@ -9,3 +9,8 @@ ds-bundle/
 # Generated from src/ by scripts/build-registry.mjs and served with the
 # Storybook. The source tree is the source of truth; this is a build artefact.
 registry/
+
+# One directory per sample application, written by examples/vite.config.ts from
+# examples/src/catalog.ts. The catalog is the source of truth; these are output.
+examples/*/
+!examples/src/
