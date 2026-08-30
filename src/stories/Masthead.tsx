@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { ThemeToggle } from '../index'
+import { BrandMark } from './BrandMark'
 
 interface MastheadProps {
   /** The section name, set as a kicker beside the wordmark. */
@@ -42,11 +43,7 @@ export function Masthead({
 }: MastheadProps) {
   return (
     <div className="sb-masthead">
-      {/* Lowercase, monospace, trailing underscore — a terminal prompt rather
-          than a masthead. Static, not blinking: content that flashes for more
-          than five seconds needs a way to stop it (WCAG 2.2.2), and a logo is
-          not the place to owe the reader a control. */}
-      <span className="sb-masthead__brand">{brand}</span>
+      <BrandMark brand={brand} />
       <span className="sb-masthead__section cds-kicker">{section}</span>
       {nav && <div className="sb-masthead__nav">{nav}</div>}
       {children && <div className="sb-masthead__slot">{children}</div>}

@@ -40,6 +40,7 @@ import {
   formatDate,
   type Article,
 } from './fixtures'
+import { BrandMark } from './BrandMark'
 import { PhoneFrame } from './PhoneFrame'
 
 const meta = {
@@ -80,16 +81,7 @@ function Masthead({ query, onQuery, onCommand }: { query: string; onQuery: (v: s
         margin: '0 auto',
       }}
     >
-      <span
-        className="cds-mono"
-        style={{
-          fontSize: 19,
-          fontWeight: 'var(--cds-weight-medium)',
-          color: 'var(--cds-color-brand-mark)',
-          letterSpacing: '-0.01em',
-          flex: 'none',
-        }}
-      >archiv_</span>
+      <BrandMark brand="archiv_" />
       <span className="cds-kicker" style={{ flex: 'none' }}>Document search</span>
       <div style={{ flex: 1, maxWidth: 560 }}>
         <SearchInput size="md" value={query} onValueChange={onQuery} shortcut="/" placeholder="Search 4.6 million documents" />

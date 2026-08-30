@@ -13,6 +13,7 @@ import {
   Stack,
   ThemeToggle,
 } from '../index'
+import { BrandMark } from './BrandMark'
 import { PhoneFrame } from './PhoneFrame'
 
 const meta = {
@@ -27,7 +28,7 @@ function AuthPage({ children }: { children: React.ReactNode }) {
   return (
     <div className="sb-auth">
       <div className="sb-auth__bar">
-        <span className="sb-masthead__brand">archiv_</span>
+        <BrandMark brand="archiv_" />
         <ThemeToggle />
       </div>
       <main className="sb-auth__main">

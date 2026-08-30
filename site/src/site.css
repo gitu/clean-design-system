@@ -95,18 +95,6 @@ html {
 
 /* --- The pages in front: the landing page and the examples index --------- */
 
-/* The wordmark is a link home on every page. It keeps the masthead's colour and
- * loses the underline; the hairline appears only on hover, so the bar does not
- * read as having a link in it until you are looking for one. */
-.site-brand {
-  text-decoration: none;
-  border-bottom: var(--cds-hairline) solid transparent;
-}
-
-.site-brand:hover {
-  border-bottom-color: currentColor;
-}
-
 /* The one line on the site meant to be copied into a terminal. Wraps rather
  * than scrolls: a command you cannot see the end of is a command you will
  * paste half of. */

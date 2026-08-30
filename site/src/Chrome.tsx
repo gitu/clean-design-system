@@ -40,7 +40,7 @@ export function SiteBar({
 }) {
   return (
     <header className="sb-landing__bar">
-      <a className="site-brand sb-masthead__brand" href={links.home}>
+      <a className="sb-masthead__brand sb-masthead__brand--link" href={links.home}>
         clean_
       </a>
       <span className="sb-masthead__section cds-kicker">{section}</span>
