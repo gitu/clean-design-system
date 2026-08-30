@@ -45,6 +45,7 @@ jobs:
 
       # The same gates that run locally. A Storybook that deploys green while
       # the token or palette checks are failing is worse than no deploy.
+      - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm check-tokens
       - run: pnpm check-palette

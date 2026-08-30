@@ -49,6 +49,7 @@ jobs:
       # The same gates the docs site deploys behind. A release is the one moment
       # where "it built" is not good enough — a published version cannot be
       # taken back, only superseded.
+      - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm check-tokens
       - run: pnpm check-palette
