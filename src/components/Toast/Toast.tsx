@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cx } from '../../utils/cx'
 import { Icon } from '../Icon/Icon'
@@ -11,8 +11,14 @@ export interface ToastMessage {
   title: ReactNode
   description?: ReactNode
   tone?: 'default' | 'success' | 'warning' | 'danger'
-  /** A single follow-up — "Undo", usually. */
+  /** A single follow-up — "Undo", usually. Suppresses auto-dismiss. */
   action?: { label: string; onClick: () => void }
+  /**
+   * Milliseconds before this dismisses itself. Defaults to the provider's
+   * `duration`. Pass `null` to keep it until dismissed — do that for anything
+   * the reader has to act on.
+   */
+  duration?: number | null
 }
 
 interface ToastContextValue {
@@ -27,21 +33,32 @@ export interface ToastProviderProps {
   children: ReactNode
   /** Oldest messages drop off beyond this. */
   max?: number
+  /**
+   * How long a message without an action stays. `null` keeps every message
+   * until dismissed, which is what this component used to do unconditionally.
+   */
+  duration?: number | null
 }
 
 /**
  * Announces what just happened, without stealing focus.
  *
- * Deliberately not auto-dismissing. A message that disappears on a timer is
- * unreadable to anyone who reads slowly, and if it carried an "Undo" it has
- * taken the undo away with it — so these stay until dismissed. That also means
- * this is the wrong component for anything high-frequency.
+ * A plain confirmation clears itself after `duration`. Anything carrying an
+ * action does not: a message that takes its own "Undo" away on a timer is
+ * worse than no message. Hovering or focusing the stack holds every timer,
+ * so reading slowly never costs you the message.
+ *
+ * This used to keep everything until dismissed, for the reason above. That is
+ * right for the actionable ones and wrong for the other ninety-odd percent —
+ * "Copied", "Role updated", "Plan uploaded" — which simply pile up until the
+ * reader clears them by hand.
  */
-export function ToastProvider({ children, max = 4 }: ToastProviderProps) {
+export function ToastProvider({ children, max = 4, duration = 6000 }: ToastProviderProps) {
   const [messages, setMessages] = useState<ToastMessage[]>([])
   // A ref, not state: bumping it must not itself schedule a render, and the
   // value is only ever read at the moment a toast is pushed.
   const nextId = useRef(0)
+  const [held, setHeld] = useState(false)
 
   const dismiss = useCallback((id: string) => {
     setMessages(current => current.filter(message => message.id !== id))
@@ -59,6 +76,21 @@ export function ToastProvider({ children, max = 4 }: ToastProviderProps) {
     [max]
   )
 
+  // One timer per message, all of them paused while the stack is hovered or
+  // holds focus. Re-running on `held` restarts the survivors from full, which
+  // is the forgiving direction to round in.
+  useEffect(() => {
+    if (held) return undefined
+    const timers = messages
+      .map(message => {
+        const ms = message.duration === undefined ? duration : message.duration
+        if (ms == null || message.action) return null
+        return window.setTimeout(() => dismiss(message.id), ms)
+      })
+      .filter((t): t is number => t !== null)
+    return () => timers.forEach(id => window.clearTimeout(id))
+  }, [messages, held, duration, dismiss])
+
   const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss])
 
   return (
@@ -67,7 +99,15 @@ export function ToastProvider({ children, max = 4 }: ToastProviderProps) {
       {messages.length > 0 &&
         typeof document !== 'undefined' &&
         createPortal(
-          <div className="cds-toast-layer cds-root" role="region" aria-label="Notifications">
+          <div
+            className="cds-toast-layer cds-root"
+            role="region"
+            aria-label="Notifications"
+            onMouseEnter={() => setHeld(true)}
+            onMouseLeave={() => setHeld(false)}
+            onFocusCapture={() => setHeld(true)}
+            onBlurCapture={() => setHeld(false)}
+          >
             {messages.map(message => (
               <div
                 key={message.id}
