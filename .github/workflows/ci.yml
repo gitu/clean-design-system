@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       # Node 22, matching storybook.yml — the workflow this pull request will
       # hand off to on merge. (release.yml pins 24; worth aligning one day.)
