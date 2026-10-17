@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode, Ref } from 'react'
 import { useCallback, useEffect, useId, useRef } from 'react'
 import { cx } from '../../utils/cx'
+import { isOutsideLayer, useAnchoredLayer } from '../../utils/useAnchoredLayer'
 import { useControllableState } from '../../utils/useControllableState'
 import './Popover.css'
 
@@ -51,11 +52,10 @@ export interface PopoverProps {
  * page behind stays live and usable, which is the whole point. Anything that
  * genuinely takes the page over should be a `Dialog` or a `Drawer`.
  *
- * Positioned by CSS against a relatively-placed wrapper rather than measured
- * and placed by script — the same decision `Menu` and `ChartTooltip` make, and
- * for the same reasons: it renders on a server, and there is no frame in which
- * the panel is in the wrong place. The cost is that it cannot flip itself away
- * from a viewport edge, so `align` is the manual control.
+ * Rendered in the top layer and placed by `useAnchoredLayer` before it paints,
+ * like `Menu`: nothing around it can clip it, it opens upwards when there is
+ * more room above the trigger, and on a phone it is a sheet along the bottom
+ * edge. `align` picks which edge of the trigger it lines up with.
  */
 export function Popover({
   trigger,
@@ -89,7 +89,7 @@ export function Popover({
     function onPointerDown(event: PointerEvent) {
       // No focus return: the reader has already put their attention somewhere
       // else, and yanking it back to the trigger would undo that.
-      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false)
+      if (isOutsideLayer(event, wrapperRef.current, panelRef.current)) setOpen(false)
     }
 
     // Tabbing past the last control in the panel closes it, rather than leaving
@@ -116,12 +116,16 @@ export function Popover({
   // waits a frame because a Dialog is portalled and animates in; this panel is
   // rendered inline and is already in the DOM by the time effects run, so the
   // frame would only add one in which the keyboard is in the wrong place.
+  // preventScroll: the panel is fixed, so scrolling would only shift the
+  // content of whatever clipped ancestor the trigger sits in.
   useEffect(() => {
     if (!isOpen) return
     const target =
       panelRef.current?.querySelector<HTMLElement>('[data-autofocus]') ?? panelRef.current
-    target?.focus()
+    target?.focus({ preventScroll: true })
   }, [isOpen])
+
+  useAnchoredLayer({ open: isOpen, anchorRef: wrapperRef, panelRef, align })
 
   return (
     <div

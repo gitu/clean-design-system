@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { cx } from '../../utils/cx'
+import { isOutsideLayer, useAnchoredLayer } from '../../utils/useAnchoredLayer'
 import './Menu.css'
 
 export interface MenuItem {
@@ -37,12 +38,10 @@ export interface MenuProps {
 /**
  * A dropdown of actions, anchored to whatever opens it.
  *
- * Positioned by CSS against a relatively-placed wrapper rather than measured
- * and placed by script — the same decision `ChartTooltip` makes, and for the
- * same reason: it keeps the component renderable on a server and removes an
- * entire class of "menu appears in the wrong place for one frame" bugs. The
- * cost is that it cannot flip itself away from a viewport edge; `align` is the
- * manual control for that.
+ * Rendered in the top layer and placed by `useAnchoredLayer` before it paints:
+ * a card with `overflow: hidden` cannot clip it, it opens upwards when there
+ * is more room above the trigger, and on a phone it is a sheet along the
+ * bottom edge. `align` picks which edge of the trigger it lines up with.
  */
 export function Menu({ trigger, items, align = 'start', label = 'Actions', className }: MenuProps) {
   const [open, setOpen] = useState(false)
@@ -50,6 +49,7 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
   const menuId = useId()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   const enabled = items.filter(item => !item.disabled)
@@ -65,15 +65,19 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
   useEffect(() => {
     if (!open) return undefined
     function onPointerDown(event: PointerEvent) {
-      if (!wrapperRef.current?.contains(event.target as Node)) setOpen(false)
+      if (isOutsideLayer(event, wrapperRef.current, panelRef.current)) setOpen(false)
     }
     document.addEventListener('pointerdown', onPointerDown)
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [open])
 
   useEffect(() => {
-    if (open) itemRefs.current[active]?.focus()
+    // preventScroll: the panel is fixed, so there is nothing to bring into
+    // view — and scrolling would shift a clipped ancestor's content instead.
+    if (open) itemRefs.current[active]?.focus({ preventScroll: true })
   }, [open, active])
+
+  useAnchoredLayer({ open: open && enabled.length > 0, anchorRef: wrapperRef, panelRef, align })
 
   const select = (item: MenuItem) => {
     if (item.disabled) return
@@ -126,6 +130,7 @@ export function Menu({ trigger, items, align = 'start', label = 'Actions', class
         // eslint-disable-next-line jsx-a11y/interactive-supports-focus -- roving focus lives on the menuitems
         <div
           id={menuId}
+          ref={panelRef}
           className={cx('cds-menu', `cds-menu--${align}`)}
           role="menu"
           aria-label={label}
