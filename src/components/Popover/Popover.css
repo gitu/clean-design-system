@@ -7,8 +7,12 @@
  * levels of opinion, and a reader should not be able to tell from the edge
  * treatment which one they are looking at. */
 .cds-popover {
-  position: absolute;
-  top: calc(100% + var(--cds-space-1));
+  /* Fixed and in the top layer, placed by `useAnchoredLayer` — see Menu.css. */
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  overflow-y: auto;
+  color: inherit;
   z-index: var(--cds-z-popover);
   width: var(--cds-popover-width, 18rem);
   max-width: min(var(--cds-popover-width, 18rem), calc(100vw - var(--cds-space-8)));
@@ -24,8 +28,6 @@
   outline-offset: var(--cds-focus-ring-offset);
 }
 
-.cds-popover--start { inset-inline-start: 0; }
-.cds-popover--end { inset-inline-end: 0; }
 
 .cds-popover--pad-none { padding: 0; }
 .cds-popover--pad-sm { padding: var(--cds-space-2); }
@@ -34,3 +36,36 @@
 @keyframes cds-popover-in {
   from { opacity: 0; transform: translateY(-3px); }
 }
+
+.cds-popover[data-placement='above'] {
+  animation-name: cds-popover-in-above;
+}
+
+@keyframes cds-popover-in-above {
+  from { opacity: 0; transform: translateY(3px); }
+}
+
+/* On a phone: a sheet along the bottom edge, over a soft scrim. The backdrop
+ * is the top layer's own, so the page behind needs no extra element. */
+.cds-popover[data-placement='sheet'] {
+  inset: auto 0 0 0;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  max-height: min(80dvh, calc(100dvh - var(--cds-space-12)));
+  overflow-y: auto;
+  border-width: var(--cds-hairline) 0 0;
+  border-radius: var(--cds-radius-lg) var(--cds-radius-lg) 0 0;
+  box-shadow: var(--cds-shadow-lg);
+  padding-bottom: calc(var(--cds-space-2) + env(safe-area-inset-bottom, 0px));
+  animation-name: cds-popover-sheet-in;
+}
+
+.cds-popover[data-placement='sheet']::backdrop {
+  background-color: var(--cds-color-overlay-soft);
+}
+
+@keyframes cds-popover-sheet-in {
+  from { transform: translateY(100%); }
+}
+

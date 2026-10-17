@@ -3,9 +3,15 @@
   display: inline-flex;
 }
 
+/* Fixed and in the top layer (`popover="manual"`); `useAnchoredLayer` writes
+ * `top` and `left` before the first paint and says where it went in
+ * `data-placement`. The resets undo the user agent's centred popover box. */
 .cds-menu {
-  position: absolute;
-  top: calc(100% + var(--cds-space-1));
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  overflow-y: auto;
+  color: inherit;
   z-index: var(--cds-z-popover);
   min-width: 11rem;
   max-width: 18rem;
@@ -17,11 +23,47 @@
   animation: cds-menu-in var(--cds-duration-fast) var(--cds-ease-out);
 }
 
-.cds-menu--start { inset-inline-start: 0; }
-.cds-menu--end { inset-inline-end: 0; }
-
 @keyframes cds-menu-in {
   from { opacity: 0; transform: translateY(-3px); }
+}
+
+/* Opening upwards, it should come from the trigger too. */
+.cds-menu[data-placement='above'] {
+  animation-name: cds-menu-in-above;
+}
+
+@keyframes cds-menu-in-above {
+  from { opacity: 0; transform: translateY(3px); }
+}
+
+/* On a phone: a sheet along the bottom edge, over a soft scrim. The backdrop
+ * is the top layer's own, so the page behind needs no extra element. */
+.cds-menu[data-placement='sheet'] {
+  inset: auto 0 0 0;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  max-height: min(80dvh, calc(100dvh - var(--cds-space-12)));
+  overflow-y: auto;
+  border-width: var(--cds-hairline) 0 0;
+  border-radius: var(--cds-radius-lg) var(--cds-radius-lg) 0 0;
+  box-shadow: var(--cds-shadow-lg);
+  padding-bottom: calc(var(--cds-space-2) + env(safe-area-inset-bottom, 0px));
+  animation-name: cds-menu-sheet-in;
+}
+
+.cds-menu[data-placement='sheet']::backdrop {
+  background-color: var(--cds-color-overlay-soft);
+}
+
+@keyframes cds-menu-sheet-in {
+  from { transform: translateY(100%); }
+}
+
+/* Thumb-sized rows in the sheet. */
+.cds-menu[data-placement='sheet'] .cds-menu__item {
+  padding-block: var(--cds-space-3);
+  font-size: var(--cds-text-base);
 }
 
 .cds-menu__group {

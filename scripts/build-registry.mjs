@@ -69,6 +69,13 @@ const LIB = {
     title: 'useModalLayer',
     description: 'Escape, focus trap, scroll lock and focus return — shared by Dialog, Drawer and CommandPalette.',
   },
+  useAnchoredLayer: {
+    name: 'use-anchored-layer',
+    type: 'registry:hook',
+    file: 'useAnchoredLayer.ts',
+    title: 'useAnchoredLayer',
+    description: 'Top-layer placement for Menu and Popover: below or above the trigger, clamped to the viewport, a sheet on phones.',
+  },
 }
 
 const STYLES_ITEM = 'styles'

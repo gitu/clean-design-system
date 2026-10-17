@@ -117,9 +117,8 @@ export const WithForm: Story = {
 
 /**
  * `align="end"` lines the panel up with the trailing edge of its trigger.
- *
- * This is the manual control for the one thing CSS anchoring cannot do: a
- * popover near the right edge of the viewport would otherwise overflow it.
+ * Either way the panel is kept inside the viewport; `align` decides which edge
+ * it starts from.
  */
 export const Alignment: Story = {
   render: () => (
