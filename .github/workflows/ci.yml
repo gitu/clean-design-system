@@ -34,7 +34,7 @@ jobs:
 
       # Node 22, matching storybook.yml — the workflow this pull request will
       # hand off to on merge. (release.yml pins 24; worth aligning one day.)
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
