@@ -1,5 +1,5 @@
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useId, useMemo, useRef, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { Icon } from '../Icon/Icon'
 import { IconButton } from '../IconButton/IconButton'
@@ -95,6 +95,7 @@ export function Calendar({
   const shownMonth = month ? startOfMonth(fromIso(month)) : fromIso(internalMonth)
 
   /** The day the arrow keys are on. Starts at the selection, or the 1st. */
+  const extraIdBase = useId()
   const [cursor, setCursor] = useState<IsoDate>(() => value ?? range.start ?? toIso(shownMonth))
   const gridRef = useRef<HTMLDivElement>(null)
 
@@ -267,6 +268,7 @@ export function Calendar({
                             aria-pressed={selected}
                             aria-current={today ? 'date' : undefined}
                             aria-label={dayFormat.format(date)}
+                            aria-describedby={renderDay ? `${extraIdBase}-${iso}` : undefined}
                             onClick={() => {
                               setCursor(iso)
                               select(date)
@@ -276,9 +278,33 @@ export function Calendar({
                             <span className="cds-calendar__number cds-numeric">
                               {date.getUTCDate()}
                             </span>
-                            {renderDay && <span className="cds-calendar__extra">{renderDay(iso)}</span>}
+                            {/* An invisible copy holds the space; the visible one is
+                                drawn over the button below. */}
+                            {renderDay && (
+                              <span className="cds-calendar__extra is-spacer" aria-hidden="true">
+                                {renderDay(iso)}
+                              </span>
+                            )}
                             {markedSet.has(iso) && <span className="cds-calendar__dot" aria-hidden="true" />}
                           </button>
+                          {/* The day content sits outside the button, laid over it
+                              with the same geometry. Inside, it would be visible text
+                              missing from the button's name (the full date), which is
+                              what voice control matches against; here it is the
+                              button's description instead. */}
+                          {renderDay && (
+                            <span
+                              className={cx('cds-calendar__overlay', selected && 'is-selected')}
+                              aria-hidden="true"
+                            >
+                              <span className="cds-calendar__number cds-numeric is-spacer">
+                                {date.getUTCDate()}
+                              </span>
+                              <span id={`${extraIdBase}-${iso}`} className="cds-calendar__extra">
+                                {renderDay(iso)}
+                              </span>
+                            </span>
+                          )}
                         </td>
                       )
                     })}
