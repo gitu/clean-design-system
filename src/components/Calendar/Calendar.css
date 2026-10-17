@@ -2,6 +2,8 @@
  * selection is a filled square rather than an outline. */
 
 .cds-calendar {
+  /* One day's square: the button, and the overlay drawn on top of it. */
+  --cds-calendar-day: 2.25rem;
   position: relative;
   display: inline-flex;
   flex-direction: column;
@@ -51,6 +53,7 @@
 }
 
 .cds-calendar__cell {
+  position: relative;
   padding: 0;
 }
 
@@ -61,8 +64,8 @@
   align-items: center;
   justify-content: center;
   gap: 1px;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: var(--cds-calendar-day);
+  height: var(--cds-calendar-day);
   border: 0;
   border-radius: var(--cds-radius-sm);
   background: none;
@@ -128,8 +131,31 @@
   color: var(--cds-color-text-subtle);
 }
 
-.cds-calendar__day.is-selected .cds-calendar__extra {
+.cds-calendar__overlay.is-selected .cds-calendar__extra {
   color: var(--cds-color-on-accent);
+}
+
+/* Day content is drawn outside the button (see Calendar.tsx). The overlay
+ * repeats the button's flex column with an invisible copy of the number, so
+ * the content lands where it would have been inside; the button keeps an
+ * invisible copy of the content so the number does not move. */
+.cds-calendar__overlay {
+  position: absolute;
+  /* The button's square, not the cell's: the row can be a pixel taller. */
+  inset: 0 0 auto;
+  height: var(--cds-calendar-day);
+  display: flex;
+  font-size: var(--cds-text-sm);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  pointer-events: none;
+}
+
+.cds-calendar__day .is-spacer,
+.cds-calendar__overlay .is-spacer {
+  visibility: hidden;
 }
 
 .cds-calendar__dot {

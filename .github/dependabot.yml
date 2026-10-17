@@ -1,6 +1,122 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" 
-    directory: "/" # Location of package manifests
+  # npm (pnpm) — the package and its tooling
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    # Only propose releases that have been public for at least 6 days: a
+    # compromised or hastily yanked version is usually caught by then, and
+    # never reaches a PR. pnpm-workspace.yaml applies the same age
+    # (minimumReleaseAge) to local installs.
+    cooldown:
+      default-days: 6
+    open-pull-requests-limit: 5
+    reviewers:
+      - "gitu"
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: "scope"
+    ignore:
+      # eslint-plugin-react and eslint-plugin-jsx-a11y peer on eslint ^9.
+      # Lift once both support 10.
+      - dependency-name: "eslint"
+        versions: [">=10"]
+      - dependency-name: "@eslint/js"
+        versions: [">=10"]
+      # typescript-eslint peers on typescript <6.1.
+      - dependency-name: "typescript"
+        versions: [">=6.1"]
+    # Every group takes minor and patch only, so each major still arrives as
+    # its own PR.
+    groups:
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
+          - "eslint-plugin-storybook"
+        update-types:
+          - "minor"
+          - "patch"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+        update-types:
+          - "minor"
+          - "patch"
+      visx:
+        patterns:
+          - "@visx/*"
+        update-types:
+          - "minor"
+          - "patch"
+      test:
+        patterns:
+          # vitest and its plugins pin each other's exact version, so they
+          # have to move in the same PR; playwright drives the browser.
+          - "vitest"
+          - "@vitest/*"
+          - "playwright"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-tools:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "eslint*"
+          - "@eslint/*"
+          - "typescript"
+          - "typescript-eslint"
+          - "tsup"
+          - "globals"
+          - "@types/node"
+        update-types:
+          - "minor"
+          - "patch"
+      # Catch-all: remaining minor/patch bumps in one PR. The topic groups
+      # above take precedence for their packages.
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions — every workflow under .github/workflows/ (ci.yml,
+  # release.yml, site.yml).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    cooldown:
+      default-days: 6
+    open-pull-requests-limit: 2
+    reviewers:
+      - "gitu"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      actions:
+        patterns:
+          - "actions/*"
+          - "pnpm/*"
+        update-types:
+          - "minor"
+          - "patch"
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
