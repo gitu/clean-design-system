@@ -70,7 +70,7 @@ jobs:
       # twenty-one blank screens is a worse outcome than a red build.
       - run: pnpm check-site
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site-dist
 
